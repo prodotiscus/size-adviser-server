@@ -1,0 +1,50 @@
+<html>
+<head>
+    <link rel="stylesheet" href="st/tables.css">
+    <meta charset="utf-8">
+</head>
+<body>
+<form autocomplete='off' class='form' action='/upload-file' method='POST' enctype="multipart/form-data">
+  <div class='control'>
+    <h1>
+      Обновить размерные таблицы
+    </h1>
+  </div>
+  <div class='control block-cube block-input'>
+    <input name='file' type='file'>
+  </div>
+
+  <button class='btn block-cube block-cube-hover' type='button' onclick='document.forms[0].submit()'>
+    <div class='bg-top'>
+      <div class='bg-inner'></div>
+    </div>
+    <div class='bg-right'>
+      <div class='bg-inner'></div>
+    </div>
+    <div class='bg'>
+      <div class='bg-inner'></div>
+    </div>
+    <div class='text'>
+      Обновить таблицу из файла
+    </div>
+  </button>
+    <br><br>
+  <script>url = "/current_table" + (Math.floor(Math.random() * (99999 - 11111)) + 11111) + ".xlsx";</script>
+  <button class='btn block-cube block-cube-hover' type='button' onclick='window.location.replace(url)'>
+    <div class='bg-top'>
+      <div class='bg-inner'></div>
+    </div>
+    <div class='bg-right'>
+      <div class='bg-inner'></div>
+    </div>
+    <div class='bg'>
+      <div class='bg-inner'></div>
+    </div>
+    <div class='text'>
+      Текущая версия
+    </div>
+  </button>
+</form>
+
+</body>
+</html>
