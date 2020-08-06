@@ -61,7 +61,7 @@ def load_sheet(tname=None):
 
     num = random.randrange(111111, 999999)
     copyname = "%s:%d.XLSX" % (tname, num)
-    copyfile(os.path.join("sheets", tname), os.path.join("copied", copyname))
+    copyfile(os.path.join("sheets", "brands", tname), os.path.join("copied", copyname))
 
     return send_from_directory("copied", "%s:%d.XLSX" % (tname, num))
 
