@@ -56,14 +56,18 @@ def download(randomid):
 def load_sheet(tname=None):
     if tname is None and "sheet-code" in request.form:
         tname = request.form["sheet-code"] + ".xlsx"
+
     elif tname is None:
         return redirect("/sheets")
 
-    num = random.randrange(111111, 999999)
-    copyname = "%s:%d.XLSX" % (tname, num)
-    copyfile(os.path.join("sheets", "brands", tname), os.path.join("copied", copyname))
+    elif not ":" in tname:
+        num = random.randrange(111111, 999999)
+        copyname = "%s:%d.XLSX" % (tname, num)
+        copyfile(os.path.join("sheets", "brands", tname), os.path.join("copied", copyname))
+        return redirect("/sheet_acquire/" + copyname)
 
-    return send_from_directory("copied", "%s:%d.XLSX" % (tname, num))
+    else:
+        return send_from_directory("copied", tname)
 
 
 @app.route("/upload-file", methods=["GET", "POST"])
