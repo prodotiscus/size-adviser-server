@@ -60,7 +60,7 @@ def load_sheet(tname=None):
     elif tname is None:
         return redirect("/sheets")
 
-    elif not ":" in tname:
+    if not ":" in tname:
         num = random.randrange(111111, 999999)
         copyname = "%s:%d.XLSX" % (tname, num)
         copyfile(os.path.join("sheets", "brands", tname), os.path.join("copied", copyname))
