@@ -1,8 +1,15 @@
+<h2>Index of sheets</h2>
+<br>
+<form action="/load_sheet" method="POST">
+    <label for="sheet-code">Number of file to download: </label><input type="text" id="sheet-code" name="sheet-code">
+    <input type="submit" value="Download">
+</form>
+<br>
 <ul>
     {% for file in files %}
     <li>
-        <a href="{{ (request.path + '/' if request.path != '/' else '') + file }}">
-            {{ (request.path + '/' if request.path != '/' else '') + file }}
+        <a href="{{ ('sheet_acquire/') + file }}">
+            {{ file }}
         </a>
     </li>
     {% endfor %}
