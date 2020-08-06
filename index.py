@@ -61,15 +61,21 @@ def load_sheet(tname=None):
         return redirect("/sheets")
 
     if ":" not in tname:
-        print(1)
         num = random.randrange(111111, 999999)
         copyname = "%s:%d.XLSX" % (tname, num)
-        copyfile(os.path.join("sheets", "brands", tname), os.path.join("copied", copyname))
+        try:
+            copyfile(os.path.join("sheets", "brands", tname), os.path.join("copied", copyname))
+        except FileNotFoundError:
+            return redirect("/error/%s/%s" % ("No file holding the given number found", "sheets"))
         return redirect("/sheet_acquire/" + copyname)
 
     else:
-        print(2)
         return send_from_directory("copied", tname)
+
+
+@app.route("/error/<text>/<path:returnto>")
+def throw_error(text, returnto):
+    return render_template("error.html", text=text, returnto=returnto)
 
 
 @app.route("/upload-file", methods=["GET", "POST"])
