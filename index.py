@@ -70,8 +70,10 @@ def upload_file():
 
 @app.route("/sheets")
 def list_sheets():
-    files = os.listdir("./sheets")
-    return render_template("static/files.html", files=files)
+    path = os.path.abspath(".")
+    files = os.listdir(os.path.join(path, "sheets"))
+    static = os.path.join(path, "static")
+    return render_template(os.path.join(static, "files.html"), files=files)
 
 
 @app.route("/upload-bm-file", methods=["GET", "POST"])
