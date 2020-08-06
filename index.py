@@ -4,6 +4,7 @@ from flask import Flask
 from flask import jsonify
 from flask import make_response
 from flask import redirect
+from flask import render_template
 from flask import request
 from flask import send_from_directory
 
@@ -65,6 +66,12 @@ def upload_file():
             file.save(os.path.join(app.root_path, "files", "LAST_UPLOADED.XLSX"))
             table.update_metatable("files/LAST_UPLOADED.XLSX")
             return redirect("/p?success=1")
+
+
+@app.route("/sheets")
+def list_sheets():
+    files = os.listdir("./sheets")
+    return render_template("static/files.html", files=files)
 
 
 @app.route("/upload-bm-file", methods=["GET", "POST"])
