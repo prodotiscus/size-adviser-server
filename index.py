@@ -71,7 +71,7 @@ def upload_file():
 @app.route("/sheets")
 def list_sheets():
     path = os.path.abspath(".")
-    files = os.listdir(os.path.join(path, "sheets"))
+    files = os.listdir(os.path.join(path, "sheets", "brands"))
     return render_template("files.html", files=files)
 
 
