@@ -72,6 +72,7 @@ def upload_file():
 def list_sheets():
     path = os.path.abspath(".")
     files = os.listdir(os.path.join(path, "sheets", "brands"))
+    files = ["catalogue.xlsx"] + [f for f in files if not "catalogue" in f]
     return render_template("files.html", files=files)
 
 
