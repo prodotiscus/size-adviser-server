@@ -72,8 +72,7 @@ def upload_file():
 def list_sheets():
     path = os.path.abspath(".")
     files = os.listdir(os.path.join(path, "sheets"))
-    static = os.path.join(path, "static")
-    return render_template(os.path.join(static, "files.html"), files=files)
+    return render_template("files.html", files=files)
 
 
 @app.route("/upload-bm-file", methods=["GET", "POST"])
