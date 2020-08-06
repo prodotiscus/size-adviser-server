@@ -8,6 +8,8 @@ from flask import render_template
 from flask import request
 from flask import send_from_directory
 
+from shutil import copyfile
+
 import admin
 import os
 import photos
@@ -47,6 +49,21 @@ def download(randomid):
     rn = random.randrange(111111, 999999)
     table.build_table("files/ADMIN_TABLE_%d.XLSX" % rn)
     return send_from_directory("files", "ADMIN_TABLE_%d.XLSX" % rn)
+
+
+@app.route("/load_sheet", methods=["GET", "POST"])
+@app.route("/sheet_acquire/<tname>")
+def load_sheet(tname=None):
+    if tname is None and "sheet-code" in request.form:
+        tname = request.form["sheet-code"] + ".xlsx"
+    elif tname is None:
+        return redirect("/sheets")
+
+    num = random.randrange(111111, 999999)
+    copyname = "%s:%d.XLSX" % (tname, num)
+    copyfile(os.path.join("sheets", tname), os.path.join("copied", copyname))
+
+    return send_from_directory("copied", "%s:%d.XLSX" % (tname, num))
 
 
 @app.route("/upload-file", methods=["GET", "POST"])
