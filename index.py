@@ -70,6 +70,11 @@ def upload_file():
 
 @app.route("/sheets")
 def list_sheets():
+    adb = admin.AdminDatabase()
+    istrue = adb.check_token(request.cookies.get('adminun'), request.cookies.get('admintkn'))
+    adb.exit()
+    if not istrue:
+        return redirect("/admin-signin")
     path = os.path.abspath(".")
     files = os.listdir(os.path.join(path, "sheets", "brands"))
     files = ["catalogue.xlsx"] + [f for f in files if not "catalogue" in f]
