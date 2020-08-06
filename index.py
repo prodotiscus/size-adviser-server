@@ -100,7 +100,7 @@ def list_sheets():
         return redirect("/admin-signin")
     path = os.path.abspath(".")
     files = os.listdir(os.path.join(path, "sheets", "brands"))
-    files = ["catalogue.xlsx"] + [f for f in files if not "catalogue" in f]
+    files = ["CATALOGUE.XLSX"] + [f for f in files if "CATALOGUE" not in f]
     return render_template("files.html", files=files)
 
 
