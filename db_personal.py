@@ -65,3 +65,11 @@ class FittingSession:
 
     def stop(self):
         self.db.close()
+
+
+def save_user_props(user_id, gender):
+    db = sqlite3.connect("databases/personal.sqlite3")
+    c = db.cursor()
+    c.execute("INSERT INTO user_props VALUES (?,?)", (user_id, gender))
+    db.commit()
+    db.close()
