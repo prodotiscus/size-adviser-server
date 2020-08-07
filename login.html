@@ -2,6 +2,13 @@
 <head>
     <link rel="stylesheet" href="st/credentials.css">
     <meta charset="utf-8">
+    <script>
+      function enterSubmit(e) {
+        if (e.keyCode === 13) {
+          document.forms[0].submit();
+        }
+      };
+    </script>
 </head>
 <body>
 <form autocomplete="off" class="form" action="/admin-signin-submission" method="POST">
@@ -11,7 +18,7 @@
     </h1>
   </div>
   <div class="control block-cube block-input">
-    <input name="username" placeholder="Имя пользователя" type="text">
+    <input name="username" placeholder="Имя пользователя" type="text" onkeypress="enterSubmit(event)">
     <div class="bg-top">
       <div class="bg-inner"></div>
     </div>
@@ -23,7 +30,7 @@
     </div>
   </div>
   <div class="control block-cube block-input">
-    <input name="password" placeholder="Пароль" type="password">
+    <input name="password" placeholder="Пароль" type="password" onkeypress="eventSubmit(event)">
     <div class="bg-top">
       <div class="bg-inner"></div>
     </div>
