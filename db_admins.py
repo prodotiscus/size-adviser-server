@@ -10,18 +10,18 @@ class AdminDatabase:
         self.c = self.db.cursor()
 
     def check_token(self, username, token):
-        res = self.c.execute("select username, token from admins where username='%s'" % username).fetchall()
+        res = self.c.execute("SELECT username, token FROM admins WHERE username='%s'" % username).fetchall()
         if not res:
             return False
         return res[0][1] == token
 
     def get_token(self, username, password):
-        res = self.c.execute("select username, password from admins where username='%s'" % username).fetchall()
+        res = self.c.execute("SELECT username, password FROM admins WHERE username='%s'" % username).fetchall()
         if not res or res[0][1] != password:
             return "notoken"
         else:
             token = "t" + str(random.randrange(100000, 999999))
-            self.c.execute("update admins set token='%s' where username='%s'" % (token, username))
+            self.c.execute("UPDATE admins SET token='%s' WHERE username='%s'" % (token, username))
             return token
 
     def exit(self):
