@@ -19,10 +19,10 @@ class FittingSession:
     def make_photo_id():
         return str(randint(10**(8-1), (10**8)-1))
 
-    def fs_media_adding(self, binary, extension):
+    def fs_media_adding(self, binary, extension, folder="media"):
         _id = self.make_photo_id()
         self.db_media_adding("%s.%s" % (_id, extension))
-        fl = open("%s.%s" % (_id, extension), "wb")
+        fl = open(folder + "/%s.%s" % (_id, extension), "wb")
         fl.write(binary)
         fl.close()
 
