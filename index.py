@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from db_admins import AdminDatabase
 from flask import Flask
 from flask import jsonify
 from flask import make_response
@@ -7,10 +8,8 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import send_from_directory
-
 from shutil import copyfile
 
-import admin
 import os
 import photos
 import table
@@ -30,7 +29,7 @@ def admin_signin():
 def admin_signin_submission():
     username = request.form["username"]
     pwd = request.form["password"]
-    adb = admin.AdminDatabase()
+    adb = AdminDatabase()
     token = adb.get_token(username, pwd)
     adb.exit()
     resp = make_response(redirect("/p" if token != "notoken" else "/admin-signin"))
@@ -41,7 +40,7 @@ def admin_signin_submission():
 
 @app.route("/current_table<int:randomid>.xlsx")
 def download(randomid):
-    adb = admin.AdminDatabase()
+    adb = AdminDatabase()
     istrue = adb.check_token(request.cookies.get('adminun'), request.cookies.get('admintkn'))
     adb.exit()
     if not istrue:
@@ -80,7 +79,7 @@ def throw_error(text, returnto):
 
 @app.route("/upload-file", methods=["GET", "POST"])
 def upload_file():
-    adb = admin.AdminDatabase()
+    adb = AdminDatabase()
     istrue = adb.check_token(request.cookies.get('adminun'), request.cookies.get('admintkn'))
     adb.exit()
     if not istrue:
@@ -99,7 +98,7 @@ def upload_file():
 
 @app.route("/sheets")
 def list_sheets():
-    adb = admin.AdminDatabase()
+    adb = AdminDatabase()
     istrue = adb.check_token(request.cookies.get('adminun'), request.cookies.get('admintkn'))
     adb.exit()
     if not istrue:
@@ -153,7 +152,7 @@ def upload_bm_files():
 
 @app.route("/p")
 def panel():
-    adb = admin.AdminDatabase()
+    adb = AdminDatabase()
     istrue = adb.check_token(request.cookies.get('adminun'), request.cookies.get('admintkn'))
     adb.exit()
     if not istrue:
