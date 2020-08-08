@@ -148,11 +148,20 @@ def panel():
     return send_from_directory("static", "tables.html")
 
 
-@app.route("/_app_range_on_brand")
-def _app_range_on_brand():
+@app.route("/_app_systems_of_size")
+def _app_systems_of_size():
     return jsonify(
-        ComputationsDbSession().range_on_brand(
+        ComputationsDbSession().systems_of_size(
             request.args["brand"], int(request.args["gender_int"]), request.args["standard"], request.args["size"]
+        )
+    )
+
+
+@app.route("/_app_range_of_system")
+def __app_range_of_system():
+    return jsonify(
+        ComputationsDbSession().range_of_system(
+            request.args["brand"], int(request.args["gender_int"]), request.args["system"]
         )
     )
 

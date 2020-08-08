@@ -45,11 +45,17 @@ class ComputationsDbSession:
         self.db = sqlite3.connect("databases/computations.sqlite3")
         self.c = self.db.cursor()
 
-    def range_on_brand(self, brand, gender_int, standard, size):
+    def systems_of_size(self, brand, gender_int, standard, size):
         query = "SELECT systems FROM from_sheets WHERE brand='%s' AND gender=%d " \
                 "AND json_extract(systems, '$.%s')='%s'" % (brand, gender_int, standard, size)
 
         return json.loads(self.c.execute(query).fetchone()[0])
+
+    def range_of_system(self, brand, gender_int, system):
+        query = "SELECT json_extract(systems, '$.%s') FROM from_sheets WHERE brand='%s' " \
+                "AND gender=%d" % (system, brand, gender_int)
+
+        return dict(data=[s[0] for s in self.c.execute(query).fetchall()])
 
     def stop(self):
         self.db.commit()
