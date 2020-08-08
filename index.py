@@ -158,11 +158,23 @@ def _app_systems_of_size():
 
 
 @app.route("/_app_range_of_system")
-def __app_range_of_system():
+def _app_range_of_system():
     return jsonify(
         ComputationsDbSession().range_of_system(
             request.args["brand"], int(request.args["gender_int"]), request.args["system"]
         )
+    )
+
+
+@app.route("/_app_recommended_size")
+def _app_recommended_size():
+    brand = request.args["brand"]
+    gender_int = request.args["gender_int"]
+    s = ComputationsDbSession()
+    # FIX IT !!!
+    _recommended = ["UK", "4.5"]
+    return jsonify(
+        s.systems_of_size(brand, gender_int, *_recommended)
     )
 
 
