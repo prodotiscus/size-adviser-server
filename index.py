@@ -170,6 +170,7 @@ def _app_range_of_system():
 def _app_recommended_size():
     brand = request.args["brand"]
     gender_int = request.args["gender_int"]
+    user_id = request.args["user_id"]
     s = ComputationsDbSession()
     # FIX IT !!!
     _recommended = ["UK", "4.5"]
