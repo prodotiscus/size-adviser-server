@@ -149,9 +149,11 @@ def panel():
 
 
 @app.route("/_app_range_on_brand")
-def _app_range_on_brand(brand, gender_int, standard, size):
+def _app_range_on_brand():
     return jsonify(
-        ComputationsDbSession().range_on_brand(brand, gender_int, standard, size)
+        ComputationsDbSession().range_on_brand(
+            request.args["brand"], request.args["gender_int"], request.args["standard"], request.args["size"]
+        )
     )
 
 
