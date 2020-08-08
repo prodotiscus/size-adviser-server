@@ -25,7 +25,7 @@ def sheet_records(dirname="sheets/brands", mgender=0):
                 if j < 2:
                     continue
                 if c.value:
-                    record[-1][systems[j]] = str(c.internal_value).strip('"=\'')
+                    record[-1][systems[j]] = c.cached_value if c.cached_value else str(c.value)
             record[-1] = json.dumps(record[-1])
             yield record
 

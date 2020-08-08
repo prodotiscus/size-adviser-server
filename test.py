@@ -19,7 +19,7 @@ for row in all_rows[1:]:
         if j < 2:
             continue
         if c.value:
-            record[-1][systems[j]] = str(c.internal_value).strip('"=\'')
+            record[-1][systems[j]] = c.cached_value if c.cached_value else c.value
     record[-1] = json.dumps(record[-1])
     records.append(record)
 print(records)
