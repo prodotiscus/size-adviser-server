@@ -47,7 +47,7 @@ class ComputationsDbSession:
 
     def range_on_brand(self, brand, gender_int, standard, size):
         query = "SELECT system FROM from_sheets WHERE brand='%s' AND gender=%d " \
-                "AND json_extract(system, '$.%s')='%s'" % (brand, gender_int, standard, size)
+                "AND json_extract(systems, '$.%s')='%s'" % (brand, gender_int, standard, size)
 
         return json.loads(self.c.execute(query).fetchone()[0])
 
