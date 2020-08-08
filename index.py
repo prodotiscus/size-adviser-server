@@ -38,18 +38,6 @@ def admin_signin_submission():
     return resp
 
 
-@app.route("/current_table<int:randomid>.xlsx")
-def download(randomid):
-    adb = AdminDatabase()
-    istrue = adb.check_token(request.cookies.get('adminun'), request.cookies.get('admintkn'))
-    adb.exit()
-    if not istrue:
-        return make_response(redirect("/admin-signin"))
-    rn = random.randrange(111111, 999999)
-    table.build_table("files/ADMIN_TABLE_%d.XLSX" % rn)
-    return send_from_directory("files", "ADMIN_TABLE_%d.XLSX" % rn)
-
-
 @app.route("/load_sheet", methods=["GET", "POST"])
 @app.route("/sheet_acquire/<tname>")
 def load_sheet(tname=None):
@@ -77,6 +65,19 @@ def throw_error(text, returnto):
     return render_template("error.html", text=text, returnto=returnto)
 
 
+@app.route("/sheets")
+def list_sheets():
+    adb = AdminDatabase()
+    istrue = adb.check_token(request.cookies.get('adminun'), request.cookies.get('admintkn'))
+    adb.exit()
+    if not istrue:
+        return redirect("/admin-signin")
+    path = os.path.abspath(".")
+    files = os.listdir(os.path.join(path, "sheets", "brands"))
+    files = ["CATALOGUE.XLSX"] + [f for f in files if "CATALOGUE" not in f]
+    return render_template("files.html", files=files)
+
+
 @app.route("/upload-file", methods=["GET", "POST"])
 def upload_file():
     adb = AdminDatabase()
@@ -94,19 +95,6 @@ def upload_file():
             file.save(os.path.join(app.root_path, "files", "LAST_UPLOADED.XLSX"))
             table.update_metatable("files/LAST_UPLOADED.XLSX")
             return redirect("/p?success=1")
-
-
-@app.route("/sheets")
-def list_sheets():
-    adb = AdminDatabase()
-    istrue = adb.check_token(request.cookies.get('adminun'), request.cookies.get('admintkn'))
-    adb.exit()
-    if not istrue:
-        return redirect("/admin-signin")
-    path = os.path.abspath(".")
-    files = os.listdir(os.path.join(path, "sheets", "brands"))
-    files = ["CATALOGUE.XLSX"] + [f for f in files if "CATALOGUE" not in f]
-    return render_template("files.html", files=files)
 
 
 @app.route("/upload-bm-file", methods=["GET", "POST"])
