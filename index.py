@@ -1,6 +1,11 @@
 #!/usr/bin/python3
 
 from db_admins import AdminDatabase
+from db_computations import ComputationsDbSession
+from db_computations import db_load_sheets
+from db_computations import sheet_records
+from db_personal import FittingSession
+from db_personal import save_user_props
 from flask import Flask
 from flask import jsonify
 from flask import make_response
@@ -11,8 +16,6 @@ from flask import send_from_directory
 from shutil import copyfile
 
 import os
-import photos
-import table
 import random
 
 app = Flask(__name__)
@@ -38,6 +41,19 @@ def admin_signin_submission():
     return resp
 
 
+@app.route("/sheets")
+def list_sheets():
+    adb = AdminDatabase()
+    istrue = adb.check_token(request.cookies.get('adminun'), request.cookies.get('admintkn'))
+    adb.exit()
+    if not istrue:
+        return redirect("/admin-signin")
+    path = os.path.abspath(".")
+    files = os.listdir(os.path.join(path, "sheets", "brands"))
+    files = ["CATALOGUE.XLSX"] + [f for f in files if "CATALOGUE" not in f]
+    return render_template("files.html", files=files)
+
+
 @app.route("/load_sheet", methods=["GET", "POST"])
 @app.route("/sheet_acquire/<tname>")
 def load_sheet(tname=None):
@@ -60,24 +76,7 @@ def load_sheet(tname=None):
         return send_from_directory("copied", tname)
 
 
-@app.route("/error/<text>/<path:returnto>")
-def throw_error(text, returnto):
-    return render_template("error.html", text=text, returnto=returnto)
-
-
-@app.route("/sheets")
-def list_sheets():
-    adb = AdminDatabase()
-    istrue = adb.check_token(request.cookies.get('adminun'), request.cookies.get('admintkn'))
-    adb.exit()
-    if not istrue:
-        return redirect("/admin-signin")
-    path = os.path.abspath(".")
-    files = os.listdir(os.path.join(path, "sheets", "brands"))
-    files = ["CATALOGUE.XLSX"] + [f for f in files if "CATALOGUE" not in f]
-    return render_template("files.html", files=files)
-
-
+'''
 @app.route("/upload-file", methods=["GET", "POST"])
 def upload_file():
     adb = AdminDatabase()
@@ -136,6 +135,7 @@ def upload_bm_files():
             return jsonify({
                 "new_photo_id": fname
             })
+'''
 
 
 @app.route("/p")
@@ -146,6 +146,18 @@ def panel():
     if not istrue:
         return make_response(redirect("/admin-signin"))
     return send_from_directory("static", "tables.html")
+
+
+@app.route("/_app_range_on_brand")
+def _app_range_on_brand(brand, gender_int, standard, size):
+    return jsonify(
+        ComputationsDbSession().range_on_brand(brand, gender_int, standard, size)
+    )
+
+
+@app.route("/error/<text>/<path:returnto>")
+def throw_error(text, returnto):
+    return render_template("error.html", text=text, returnto=returnto)
 
 
 @app.route('/st/<path:path>')
