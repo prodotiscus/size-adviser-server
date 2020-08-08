@@ -152,7 +152,7 @@ def panel():
 def _app_range_on_brand():
     return jsonify(
         ComputationsDbSession().range_on_brand(
-            request.args["brand"], request.args["gender_int"], request.args["standard"], request.args["size"]
+            request.args["brand"], int(request.args["gender_int"]), request.args["standard"], request.args["size"]
         )
     )
 
