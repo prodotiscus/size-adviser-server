@@ -179,6 +179,46 @@ def _app_recommended_size():
     )
 
 
+@app.route("/_app_try_with_size")
+def _app_try_with_size():
+    user_id = request.args["user_id"]
+    brand = request.args["brand"]
+    size = request.args["size"]
+    fit_value = request.args["fit_value"]
+    s = FittingSession(user_id)
+    s.try_with_size(brand, size, fit_value)
+    return jsonify(dict(result="success"))
+
+
+@app.route("/_app_my_collection")
+def _app_my_collection():
+    user_id = request.args["user_id"]
+    s = FittingSession(user_id)
+    ignore = int(request.args["ignore"])
+    limit = None
+    if request.args["limit"]:
+        limit = int(request.args["limit"])
+    media = "media" in request.args
+    coll = s.get_user_collection(ignore, limit, media)
+    ...
+
+
+@app.route("/_app_download_photo")
+def _app_download_photo():
+    ...
+
+
+@app.route("/_app_upload_photo")
+def _app_upload_photo():
+    ...
+
+
+@app.route("/_app_ajax_brand_search")
+def _app_ajax_brand_search():
+    prefix = request.args["prefix"]
+    ...
+
+
 @app.route("/error/<text>/<path:returnto>")
 def throw_error(text, returnto):
     return render_template("error.html", text=text, returnto=returnto)
