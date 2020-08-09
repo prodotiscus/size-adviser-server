@@ -169,7 +169,7 @@ def _app_range_of_system():
 @app.route("/_app_recommended_size")
 def _app_recommended_size():
     brand = request.args["brand"]
-    gender_int = request.args["gender_int"]
+    gender_int = int(request.args["gender_int"])
     user_id = request.args["user_id"]
     s = ComputationsDbSession()
     # FIX IT !!!
