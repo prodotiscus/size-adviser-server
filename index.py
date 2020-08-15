@@ -200,9 +200,10 @@ def _app_my_collection():
         limit = int(request.args["limit"])
     media = "media" in request.args
     coll = s.get_user_collection(ignore, limit, media)
-    ...
+    # ...
 
 
+'''
 @app.route("/_app_download_photo")
 def _app_download_photo():
     ...
@@ -217,6 +218,7 @@ def _app_upload_photo():
 def _app_ajax_brand_search():
     prefix = request.args["prefix"]
     ...
+'''
 
 
 @app.route("/error/<text>/<path:returnto>")
@@ -228,6 +230,10 @@ def throw_error(text, returnto):
 def send_js(path):
     return send_from_directory('static', path)
 
+
+@app.route("/")
+def helloworld():
+    return "Hello World!"
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
