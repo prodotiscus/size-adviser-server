@@ -56,6 +56,7 @@ class ComputationsDbSession:
                 "AND gender=%d" % (system, brand, gender_int)
 
         res = dict(data=[s[0] for s in self.c.execute(query).fetchall()])
+        res["system"] = system
         if len(res) >= 2:
             res["minimal"] = res["data"][0]
             res["maximal"] = res["data"][-1]
