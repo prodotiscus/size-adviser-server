@@ -55,7 +55,15 @@ class ComputationsDbSession:
         query = "SELECT json_extract(systems, '$.%s') FROM from_sheets WHERE brand='%s' " \
                 "AND gender=%d" % (system, brand, gender_int)
 
-        return dict(data=[s[0] for s in self.c.execute(query).fetchall()])
+        res = dict(data=[s[0] for s in self.c.execute(query).fetchall()])
+        if len(res) >= 2:
+            res["minimal"] = res["data"][0]
+            res["maximal"] = res["data"][-1]
+        else:
+            res["minimal"] = None
+            res["maximal"] = None
+
+        return res
 
     def stop(self):
         self.db.commit()
