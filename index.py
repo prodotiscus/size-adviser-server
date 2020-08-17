@@ -16,6 +16,7 @@ from flask import render_template
 from flask import request
 from flask import send_from_directory
 from shutil import copyfile
+from werkzeug.utils import secure_filename
 
 import os
 import random
@@ -74,7 +75,7 @@ def update_file():
             return "2"
             #return redirect("/p")
         if file:
-            file.save(os.path.join(app.root_path, "sheets/brands", fname))
+            #file.save(os.path.join(app.root_path, "sheets/brands", fname))
             return redirect("/sheets")
 
     if "name-of-file" in request.args:
