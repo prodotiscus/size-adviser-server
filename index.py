@@ -56,6 +56,35 @@ def upload_as(name_of_file):
     return render_template("upload_as.html", name_of_file=name_of_file)
 
 
+@app.route("/update_file", methods=["GET", "POST"])
+def update_file():
+    adb = AdminDatabase()
+    istrue = adb.check_token(request.cookies.get("adminun"), request.cookies.get("admintkn"))
+    adb.exit()
+    if not istrue:
+        return redirect("/admin-signin")
+
+    if request.method == "POST":
+        if "file" not in request.files:
+            return redirect("/p")
+        file = request.files["uploaded-file"]
+        fname = request.form["name-of-file"]
+        if file.filename == "":
+            return redirect("/p")
+        if file:
+            file.save(os.path.join(app.root_path, "sheets/brands", fname))
+            return redirect("/sheets")
+
+    if "name-of-file" in request.args:
+        fname = request.args["name-of-file"]
+    elif "name-of-file" in request.form:
+        fname = request.args["name-of-file"]
+    else:
+        fname = ""
+
+    return redirect("/error/Unknown error, try again/upload_as/" + fname)
+
+
 @app.route("/sheets")
 def list_sheets():
     adb = AdminDatabase()
