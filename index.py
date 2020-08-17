@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from db_admins import AdminDatabase
+from db_computations import brand_of_file
 from db_computations import ComputationsDbSession
 from db_computations import db_load_sheets
 from db_computations import sheet_records
@@ -51,7 +52,23 @@ def list_sheets():
     path = os.path.abspath(".")
     files = os.listdir(os.path.join(path, "sheets", "brands"))
     files = ["CATALOGUE.XLSX"] + [f for f in files if "CATALOGUE" not in f]
-    return render_template("files.html", files=files)
+    file_rows = []
+    for e, filename in enumerate(files):
+        try:
+            mtime = os.path.getmtime(os.path.join(path, "sheets", "brands", filename))
+        except OSError:
+            mtime = 0
+        last_modified = datetime.fromtimestamp(mtime)
+        bof = brand_of_file(filename) if e > 0 else ""
+        index = filename.split(".")[0] if e > 0 else ""
+        file_rows.append(dict(
+            filename=filename,
+            last_modified=last_modified,
+            brand=bof,
+            internal_code=index
+        ))
+
+    return render_template("files.html", file_rows=file_rows)
 
 
 @app.route("/load_sheet", methods=["GET", "POST"])
@@ -232,8 +249,9 @@ def send_js(path):
 
 
 @app.route("/")
-def helloworld():
-    return "Hello World!"
+def welcome():
+    return redirect("/error/Authorization needed/admin-signin")
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")

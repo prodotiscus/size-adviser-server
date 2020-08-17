@@ -4,6 +4,15 @@ import openpyexcel as pyxl
 import os
 import json
 
+
+def brand_of_file(filename):
+    wb = pyxl.load_workbook(filename="test_data/" + os.listdir("test_data")[0])
+    all_rows = [row for row in wb.active.rows]
+    if len(all_rows) < 2:
+        raise ValueError
+    return all_rows[1][0].value
+
+
 wb = pyxl.load_workbook(filename="test_data/" + os.listdir("test_data")[0])
 all_rows = [row for row in wb.active.rows]
 columns = [c.value for c in all_rows[0]]

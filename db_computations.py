@@ -6,6 +6,14 @@ import json
 import sqlite3
 
 
+def brand_of_file(filename, dirname="sheets/brands"):
+    wb = pyxl.load_workbook(filename=os.path.join(dirname, filename))
+    all_rows = [row for row in wb.active.rows]
+    if len(all_rows) < 2:
+        raise ValueError
+    return all_rows[1][0].value
+
+
 def sheet_records(dirname="sheets/brands", mgender=0):
     files = os.listdir(dirname)
     for flname in files:
