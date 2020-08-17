@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from datetime import datetime
 from db_admins import AdminDatabase
 from db_computations import brand_of_file
 from db_computations import ComputationsDbSession
@@ -16,7 +17,6 @@ from flask import request
 from flask import send_from_directory
 from shutil import copyfile
 
-import datetime
 import os
 import random
 
