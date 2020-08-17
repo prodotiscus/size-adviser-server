@@ -14,6 +14,7 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import send_from_directory
+from logging.handlers import WatchedFileHandler
 from shutil import copyfile
 
 import os
@@ -22,6 +23,13 @@ import random
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = os.path.join(app.root_path, "files")
 app.config["ALLOWED_EXTENSIONS"] = {".xlsx", ".xls", ".jpg", ".jpeg", ".png"}
+
+
+@app.before_first_request
+def setup_logging():
+    handler = WatchedFileHandler("/var/log/size-adviser.log")
+    app.logger.addHandler(handler)
+    app.logger.setLevel(logging.INFO)
 
 
 @app.route("/admin-signin")
