@@ -65,7 +65,7 @@ def update_file():
         return redirect("/admin-signin")
 
     if request.method == "POST":
-        if "file" not in request.files:
+        if "uploaded-file" not in request.files:
             return redirect("/p")
         file = request.files["uploaded-file"]
         fname = request.form["name-of-file"]
