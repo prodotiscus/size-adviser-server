@@ -5,11 +5,11 @@
     </head>
 
     <body>
-        <form action="/update_file" method="POST">
+        <form action="/update_file" method="POST" enctype="multipart/form-data">
             <label for="name-of-file">Update file as: </label>
             <input type="text" name="name-of-file" id="name-of-file" value="{{ name_of_file }}" disabled>
             <br>
-            <input type="file" id="uploaded-file" name="uploaded-file">
+            <input type="file" id="uploaded-file" name="file">
             <input type="submit" value="Update">
         </form>
 
