@@ -52,6 +52,13 @@ def admin_signin_submission():
     return resp
 
 
+@app.route("/_unf")
+def upload_as__shortcut():
+    if "sheet-code" not in request.args:
+        return redirect("/sheets")
+    return redirect("/upload_as/" + request.args["sheet-code"])
+
+
 @app.route("/upload_as/<name_of_file>")
 def upload_as(name_of_file):
     return render_template("upload_as.html", name_of_file=name_of_file)
