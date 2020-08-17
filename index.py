@@ -66,12 +66,12 @@ def update_file():
 
     if request.method == "POST":
         if "file" not in request.files:
-            return 1
+            return "1"
             return redirect("/p")
         file = request.files["file"]
         fname = request.form["name-of-file"]
         if file.filename == "":
-            return 2
+            return "2"
             return redirect("/p")
         if file:
             file.save(os.path.join(app.root_path, "sheets/brands", fname))
