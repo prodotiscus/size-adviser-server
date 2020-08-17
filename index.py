@@ -54,7 +54,7 @@ def admin_signin_submission():
 @app.route("/sheets")
 def list_sheets():
     adb = AdminDatabase()
-    istrue = adb.check_token(request.cookies.get('adminun'), request.cookies.get('admintkn'))
+    istrue = adb.check_token(request.cookies.get("adminun"), request.cookies.get("admintkn"))
     adb.exit()
     if not istrue:
         return redirect("/admin-signin")
