@@ -94,7 +94,7 @@ def list_sheets():
         return redirect("/admin-signin")
     path = os.path.abspath(".")
     files = os.listdir(os.path.join(path, "sheets", "brands"))
-    files = ["CATALOGUE.XLSX"] + [f for f in files if "CATALOGUE" not in f]
+    files = ["CATALOGUE.xlsx"] + [f for f in files if "CATALOGUE" not in f]
     file_rows = []
     for e, filename in enumerate(files):
         try:
