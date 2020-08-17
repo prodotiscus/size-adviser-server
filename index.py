@@ -57,8 +57,8 @@ def upload_as(name_of_file):
     return render_template("upload_as.html", name_of_file=name_of_file)
 
 
-@app.route("/update_file", methods=["GET", "POST"])
-def update_file():
+@app.route("/update_file/<fname>", methods=["GET", "POST"])
+def update_file(fname):
     adb = AdminDatabase()
     istrue = adb.check_token(request.cookies.get("adminun"), request.cookies.get("admintkn"))
     adb.exit()
@@ -67,23 +67,13 @@ def update_file():
 
     if request.method == "POST":
         if "file" not in request.files:
-            return "1"
-            #return redirect("/p")
+            return redirect("/p")
         file = request.files["file"]
-        fname = request.form["name-of-file"]
         if file.filename == "":
-            return "2"
-            #return redirect("/p")
+            return redirect("/p")
         if file:
-            #file.save(os.path.join(app.root_path, "sheets/brands", fname))
+            file.save(os.path.join(app.root_path, "sheets/brands", fname))
             return redirect("/sheets")
-
-    if "name-of-file" in request.args:
-        fname = request.args["name-of-file"]
-    elif "name-of-file" in request.form:
-        fname = request.args["name-of-file"]
-    else:
-        fname = ""
 
     return redirect("/error/Unknown error, try again/upload_as/" + fname)
 
