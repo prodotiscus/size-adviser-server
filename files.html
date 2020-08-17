@@ -1,19 +1,48 @@
-<h2>Index of sheets</h2>
-<br>
+<!doctype html>
+<html>
 
-<form action="/load_sheet" method="POST">
-    <label for="sheet-code">Number of file (6 digits) to download: </label>
-    <input type="text" id="sheet-code" name="sheet-code">
-    <input type="submit" value="Download">
-</form>
+    <head>
+        <link rel="stylesheet" href="//cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <script src="//cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    </head>
 
-<br>
-<ul>
-    {% for file in files %}
-    <li>
-        <a href="{{ ('sheet_acquire/') + file }}">
-            {{ file }}
-        </a>
-    </li>
-    {% endfor %}
-</ul>
+    <body>
+        <h2>Index of sheets</h2>
+        <br>
+
+        <form action="/load_sheet" method="POST">
+            <label for="sheet-code">Number of file (6 digits) to download: </label>
+            <input type="text" id="sheet-code" name="sheet-code">
+            <input type="submit" value="Download">
+        </form>
+
+        <br>
+        <table id="sheet-list">
+            <tr>
+                <th>File</th>
+                <th>Last modified</th>
+                <th>Brand</th>
+                <th>Internal code</th>
+            </tr>
+            {% for row in file_rows %}
+            <tr>
+                <td>
+                    <a href="{{ ('sheet_acquire/') + row['filename'] }}">
+                        {{ row['filename'] }}
+                    </a>
+                </td>
+                <td>{{ row['last_modified'] }}</td>
+                <td>{{ row['brand'] }}</td>
+                <td>{{ row['internal_code'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+
+    <script>
+        $(document).ready( function () {
+            $('#sheet-list').DataTable();
+        } );
+    </script>
+
+</html>
