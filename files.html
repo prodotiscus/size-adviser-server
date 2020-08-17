@@ -21,6 +21,7 @@
             <thead>
                 <tr>
                     <th>File</th>
+                    <th>Upload link</th>
                     <th>Last modified</th>
                     <th>Brand</th>
                     <th>Internal code</th>
@@ -30,8 +31,13 @@
                 {% for row in file_rows %}
                 <tr>
                     <td>
-                        <a href="{{ ('sheet_acquire/') + row['filename'] }}">
+                        <a href="{{ ('sheet_acquire/') + row['filename'] }}" title="Click to download">
                             {{ row['filename'] }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ ('upload_as/') + row['filename'] }}" title="Click to upload the new version">
+                            link
                         </a>
                     </td>
                     <td>{{ row['last_modified'] }}</td>
