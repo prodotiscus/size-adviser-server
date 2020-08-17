@@ -56,7 +56,7 @@ def admin_signin_submission():
 def upload_as__shortcut():
     if "sheet-code" not in request.args:
         return redirect("/sheets")
-    return redirect("/upload_as/" + request.args["sheet-code"])
+    return redirect("/upload_as/%s.xlsx" % str(request.args["sheet-code"]))
 
 
 @app.route("/upload_as/<name_of_file>")
