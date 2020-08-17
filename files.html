@@ -23,24 +23,28 @@
 
         <br>
         <table id="sheet-list">
-            <tr>
-                <th>File</th>
-                <th>Last modified</th>
-                <th>Brand</th>
-                <th>Internal code</th>
-            </tr>
-            {% for row in file_rows %}
-            <tr>
-                <td>
-                    <a href="{{ ('sheet_acquire/') + row['filename'] }}">
-                        {{ row['filename'] }}
-                    </a>
-                </td>
-                <td>{{ row['last_modified'] }}</td>
-                <td>{{ row['brand'] }}</td>
-                <td>{{ row['internal_code'] }}</td>
-            </tr>
-            {% endfor %}
+            <thead>
+                <tr>
+                    <th>File</th>
+                    <th>Last modified</th>
+                    <th>Brand</th>
+                    <th>Internal code</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in file_rows %}
+                <tr>
+                    <td>
+                        <a href="{{ ('sheet_acquire/') + row['filename'] }}">
+                            {{ row['filename'] }}
+                        </a>
+                    </td>
+                    <td>{{ row['last_modified'] }}</td>
+                    <td>{{ row['brand'] }}</td>
+                    <td>{{ row['internal_code'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </body>
 
