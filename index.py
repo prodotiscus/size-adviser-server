@@ -26,14 +26,6 @@ app.config["UPLOAD_FOLDER"] = os.path.join(app.root_path, "files")
 app.config["ALLOWED_EXTENSIONS"] = {".xlsx", ".xls", ".jpg", ".jpeg", ".png"}
 
 
-@app.before_first_request
-def setup_logging():
-    import logging
-    gunicorn_logger = logging.getLogger('gunicorn.error')
-    for handler in gunicorn_logger.handlers:
-        app.logger.addHandler(handler)
-
-
 @app.route("/admin-signin")
 def admin_signin():
     return send_from_directory("static", "login.html")
