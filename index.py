@@ -85,6 +85,8 @@ def update_file(fname):
     return redirect("/error/Unknown error, try again/upload_as/" + fname)
 
 
+@app.route("/p")
+@app.route("/list-files")
 @app.route("/sheets")
 def list_sheets():
     adb = AdminDatabase()
@@ -196,16 +198,6 @@ def upload_bm_files():
                 "new_photo_id": fname
             })
 '''
-
-
-@app.route("/p")
-def panel():
-    adb = AdminDatabase()
-    istrue = adb.check_token(request.cookies.get('adminun'), request.cookies.get('admintkn'))
-    adb.exit()
-    if not istrue:
-        return make_response(redirect("/admin-signin"))
-    return send_from_directory("static", "tables.html")
 
 
 @app.route("/_app_systems_of_size")
