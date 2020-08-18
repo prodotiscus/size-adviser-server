@@ -31,8 +31,10 @@
           // Initialize Firebase
           firebase.initializeApp(firebaseConfig);
 
+          var provider = new firebase.auth.FacebookAuthProvider();
+
           function runLogin() {
-              var provider = new firebase.auth.FacebookAuthProvider();
+
 
               provider.addScope("email");
               provider.addScope("user_gender");
