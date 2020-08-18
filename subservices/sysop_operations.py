@@ -18,33 +18,32 @@ import random
 from shutil import copyfile
 
 
-
 sysop = Blueprint("sysop", __name__, static_folder="static", template_folder="templates")
 
 
-@sysop.route("/admin-signin")
+@sysop.route("/signin")
 def admin_signin():
     return send_from_directory("static", "login.html")
 
 
-@sysop.route("/admin-signin-submission", methods=["POST"])
+@sysop.route("/signin-submission", methods=["POST"])
 def admin_signin_submission():
     username = request.form["username"]
     pwd = request.form["password"]
     adb = AdminDatabase()
     token = adb.get_token(username, pwd)
     adb.exit()
-    resp = make_response(redirect("/p" if token != "notoken" else "/admin-signin"))
-    resp.set_cookie('adminun', username)
-    resp.set_cookie('admintkn', token)
+    resp = make_response(redirect("/p" if token != "notoken" else "/sysop/signin"))
+    resp.set_cookie("adminun", username)
+    resp.set_cookie("admintkn", token)
     return resp
 
 
 @sysop.route("/_unf")
 def upload_as__shortcut():
     if "sheet-code" not in request.args:
-        return redirect("/sheets")
-    return redirect("/upload_as/%s.xlsx" % str(request.args["sheet-code"]))
+        return redirect("/sysop/sheets")
+    return redirect("/sysop/upload_as/%s.xlsx" % str(request.args["sheet-code"]))
 
 
 @sysop.route("/upload_as/<name_of_file>")
@@ -58,18 +57,18 @@ def update_file(fname):
     istrue = adb.check_token(request.cookies.get("adminun"), request.cookies.get("admintkn"))
     adb.exit()
     if not istrue:
-        return redirect("/admin-signin")
+        return redirect("/sysop/signin")
 
     if request.method == "POST":
         if "file" not in request.files:
-            return redirect("/p")
+            return redirect("/sysop/p")
         file = request.files["file"]
         if file.filename == "":
-            return redirect("/p")
+            return redirect("/sysop/p")
         if file:
             file.save(os.path.join(sysop.root_path, "sheets/brands", fname))
             db_load_sheets(dirname=os.path.join(sysop.root_path, "sheets/brands"))
-            return redirect("/sheets")
+            return redirect("/sysop/sheets")
 
     return redirect("/error/Unknown error, try again/upload_as/" + fname)
 
@@ -82,7 +81,7 @@ def list_sheets():
     istrue = adb.check_token(request.cookies.get("adminun"), request.cookies.get("admintkn"))
     adb.exit()
     if not istrue:
-        return redirect("/admin-signin")
+        return redirect("/sysop/signin")
     path = os.path.abspath(".")
     files = os.listdir(os.path.join(path, "sheets", "brands"))
     files = ["CATALOGUE.xlsx"] + [f for f in files if "CATALOGUE" not in f]
@@ -112,7 +111,7 @@ def load_sheet(tname=None):
         tname = request.form["sheet-code"] + ".xlsx"
 
     elif tname is None:
-        return redirect("/sheets")
+        return redirect("/sysop/sheets")
 
     if ":" not in tname:
         num = random.randrange(111111, 999999)
@@ -121,7 +120,7 @@ def load_sheet(tname=None):
             copyfile(os.path.join("sheets", "brands", tname), os.path.join("copied", copyname))
         except FileNotFoundError:
             return redirect("/error/%s/%s" % ("No file holding the given number found", "sheets"))
-        return redirect("/sheet_acquire/" + copyname)
+        return redirect("/sysop/sheet_acquire/" + copyname)
 
     else:
         return send_from_directory("copied", tname)
