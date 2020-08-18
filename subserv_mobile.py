@@ -66,11 +66,6 @@ def _app_my_collection():
     # ...
 
 
-@mobile.route("/redirect_test")
-def _app_redirect_test():
-    return redirect("/error/a/a")
-
-
 '''
 @app.route("/_app_download_photo")
 def _app_download_photo():
