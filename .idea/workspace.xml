@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ced12cd7-f07d-4f21-ad03-1c5a68dd11a8" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/subserv_mobile.py" afterPath="$PROJECT_DIR$/subserv_mobile.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/subserv_firebase.py" afterPath="$PROJECT_DIR$/subservices/firebase.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/subserv_mobile.py" afterPath="$PROJECT_DIR$/subservices/mobile_requests.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/subserv_sysop.py" afterPath="$PROJECT_DIR$/subservices/sysop_operations.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.py" afterPath="$PROJECT_DIR$/index.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -13,11 +17,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="index.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="367">
-              <caret line="183" column="50" lean-forward="false" selection-start-line="183" selection-start-column="50" selection-end-line="183" selection-end-column="50" />
+            <state relative-caret-position="510">
+              <caret line="30" column="54" lean-forward="true" selection-start-line="30" selection-start-column="54" selection-end-line="30" selection-end-column="54" />
+              <folding>
+                <element signature="e#20#29#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sysop_operations.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/subservices/sysop_operations.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1207">
+              <caret line="71" column="38" lean-forward="true" selection-start-line="71" selection-start-column="38" selection-end-line="71" selection-end-column="38" />
               <folding>
                 <element signature="e#20#49#0" expanded="true" />
               </folding>
@@ -25,21 +41,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="subserv_firebase.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/subserv_firebase.py">
+      <file leaf-file-name="mobile_requests.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/subservices/mobile_requests.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="subserv_mobile.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/subserv_mobile.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="67" column="0" lean-forward="true" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
+            <state relative-caret-position="170">
+              <caret line="10" column="38" lean-forward="true" selection-start-line="10" selection-start-column="38" selection-end-line="10" selection-end-column="38" />
               <folding>
                 <element signature="e#20#69#0" expanded="true" />
               </folding>
@@ -57,6 +63,7 @@
     <replaceStrings>
       <replace>=&quot;$1&quot;</replace>
       <replace>mobile.route</replace>
+      <replace>sysop.route</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -70,8 +77,10 @@
         <option value="$PROJECT_DIR$/error.html" />
         <option value="$PROJECT_DIR$/signup.html" />
         <option value="$PROJECT_DIR$/login.html" />
-        <option value="$PROJECT_DIR$/index.py" />
         <option value="$PROJECT_DIR$/subserv_mobile.py" />
+        <option value="$PROJECT_DIR$/subservices/mobile_requests.py" />
+        <option value="$PROJECT_DIR$/subservices/sysop_operations.py" />
+        <option value="$PROJECT_DIR$/index.py" />
       </list>
     </option>
   </component>
@@ -103,6 +112,11 @@
               <item name="size-adviser-server" type="b2602c69:ProjectViewProjectNode" />
               <item name="size-adviser-server" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="size-adviser-server" type="b2602c69:ProjectViewProjectNode" />
+              <item name="size-adviser-server" type="462c0819:PsiDirectoryNode" />
+              <item name="subservices" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -114,6 +128,11 @@
   <component name="PropertiesComponent">
     <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\fsizo\Documents\GitHub\size-adviser-server\subservices" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -206,7 +225,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/credentials.css" />
     <entry file="file://$PROJECT_DIR$/login.html" />
     <entry file="file://$PROJECT_DIR$/index.py" />
     <entry file="file://$PROJECT_DIR$/photos.py" />
@@ -254,7 +272,7 @@
     <entry file="file://$PROJECT_DIR$/signup.html" />
     <entry file="file://$PROJECT_DIR$/tables.css" />
     <entry file="file://$PROJECT_DIR$/login.html" />
-    <entry file="file://$PROJECT_DIR$/subserv_firebase.py">
+    <entry file="file://$PROJECT_DIR$/subservices/firebase.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -262,22 +280,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.py">
+    <entry file="file://$PROJECT_DIR$/subservices/mobile_requests.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="367">
-          <caret line="183" column="50" lean-forward="false" selection-start-line="183" selection-start-column="50" selection-end-line="183" selection-end-column="50" />
+        <state relative-caret-position="170">
+          <caret line="10" column="38" lean-forward="true" selection-start-line="10" selection-start-column="38" selection-end-line="10" selection-end-column="38" />
+          <folding>
+            <element signature="e#20#69#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/subservices/sysop_operations.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1207">
+          <caret line="71" column="38" lean-forward="true" selection-start-line="71" selection-start-column="38" selection-end-line="71" selection-end-column="38" />
           <folding>
             <element signature="e#20#49#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/subserv_mobile.py">
+    <entry file="file://$PROJECT_DIR$/index.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="67" column="0" lean-forward="true" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
+        <state relative-caret-position="510">
+          <caret line="30" column="54" lean-forward="true" selection-start-line="30" selection-start-column="54" selection-end-line="30" selection-end-column="54" />
           <folding>
-            <element signature="e#20#69#0" expanded="true" />
+            <element signature="e#20#29#0" expanded="true" />
           </folding>
         </state>
       </provider>
