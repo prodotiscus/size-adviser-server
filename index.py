@@ -285,7 +285,7 @@ def send_js(path):
 
 @app.route("/")
 def welcome():
-    return redirect("/error/Authorization needed/admin-signin")
+    return redirect("/error/Authorization needed/p")
 
 
 if __name__ == "__main__":
