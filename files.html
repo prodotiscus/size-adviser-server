@@ -10,7 +10,7 @@
         <h2>Index of spreadsheet files</h2>
         <br>
 
-        <form action="/_unf" method="GET">
+        <form action="/sysop/_unf" method="GET">
             <label for="sheet-code">Number of file (6 digits) to upload: </label>
             <input type="text" id="sheet-code" name="sheet-code">
             <input type="submit" value="Upload new file">
@@ -31,12 +31,12 @@
                 {% for row in file_rows %}
                 <tr>
                     <td>
-                        <a href="{{ ('sheet_acquire/') + row['filename'] }}" title="Click to download">
+                        <a href="{{ ('sysop/sheet_acquire/') + row['filename'] }}" title="Click to download">
                             {{ row['filename'] }}
                         </a>
                     </td>
                     <td>
-                        <a href="{{ ('upload_as/') + row['filename'] }}" title="Click to upload the new version">
+                        <a href="{{ ('sysop/upload_as/') + row['filename'] }}" title="Click to upload the new version">
                             link
                         </a>
                     </td>
