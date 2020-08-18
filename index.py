@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from datetime import datetime
+
 from db_admins import AdminDatabase
 from db_computations import brand_of_file
 from db_computations import ComputationsDbSession
@@ -8,6 +9,7 @@ from db_computations import db_load_sheets
 from db_computations import sheet_records
 from db_personal import FittingSession
 from db_personal import save_user_props
+
 from flask import Flask
 from flask import jsonify
 from flask import make_response
@@ -15,6 +17,9 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import send_from_directory
+
+from subserv_mobile import mobile
+
 from shutil import copyfile
 from werkzeug.utils import secure_filename
 
@@ -132,23 +137,6 @@ def load_sheet(tname=None):
 
 
 '''
-@app.route("/upload-file", methods=["GET", "POST"])
-def upload_file():
-    adb = AdminDatabase()
-    istrue = adb.check_token(request.cookies.get('adminun'), request.cookies.get('admintkn'))
-    adb.exit()
-    if not istrue:
-        return redirect("/admin-signin")
-    if request.method == "POST":
-        if "file" not in request.files:
-            return redirect("/p")
-        file = request.files['file']
-        if file.filename == "":
-            return redirect("/p")
-        if file:
-            file.save(os.path.join(app.root_path, "files", "LAST_UPLOADED.XLSX"))
-            table.update_metatable("files/LAST_UPLOADED.XLSX")
-            return redirect("/p?success=1")
 
 
 @app.route("/upload-bm-file", methods=["GET", "POST"])
@@ -193,77 +181,7 @@ def upload_bm_files():
 '''
 
 
-@app.route("/_app_systems_of_size")
-def _app_systems_of_size():
-    return jsonify(
-        ComputationsDbSession().systems_of_size(
-            request.args["brand"], int(request.args["gender_int"]), request.args["standard"], request.args["size"]
-        )
-    )
-
-
-@app.route("/_app_range_of_system")
-def _app_range_of_system():
-    return jsonify(
-        ComputationsDbSession().range_of_system(
-            request.args["brand"], int(request.args["gender_int"]), request.args["system"]
-        )
-    )
-
-
-@app.route("/_app_recommended_size")
-def _app_recommended_size():
-    brand = request.args["brand"]
-    gender_int = int(request.args["gender_int"])
-    user_id = request.args["user_id"]
-    s = ComputationsDbSession()
-    # FIX IT !!!
-    _recommended = ["UK", "4.5"]
-    return jsonify(
-        s.systems_of_size(brand, gender_int, *_recommended)
-    )
-
-
-@app.route("/_app_try_with_size")
-def _app_try_with_size():
-    user_id = request.args["user_id"]
-    brand = request.args["brand"]
-    size = request.args["size"]
-    fit_value = request.args["fit_value"]
-    s = FittingSession(user_id)
-    s.try_with_size(brand, size, fit_value)
-    return jsonify(dict(result="success"))
-
-
-@app.route("/_app_my_collection")
-def _app_my_collection():
-    user_id = request.args["user_id"]
-    s = FittingSession(user_id)
-    ignore = int(request.args["ignore"])
-    limit = None
-    if request.args["limit"]:
-        limit = int(request.args["limit"])
-    media = "media" in request.args
-    coll = s.get_user_collection(ignore, limit, media)
-    # ...
-
-
-'''
-@app.route("/_app_download_photo")
-def _app_download_photo():
-    ...
-
-
-@app.route("/_app_upload_photo")
-def _app_upload_photo():
-    ...
-
-
-@app.route("/_app_ajax_brand_search")
-def _app_ajax_brand_search():
-    prefix = request.args["prefix"]
-    ...
-'''
+app.register_blueprint(mobile, url_prefix="/mobile")
 
 
 @app.route("/error/<text>/<path:returnto>")
