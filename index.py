@@ -72,6 +72,7 @@ def update_file(fname):
             return redirect("/p")
         if file:
             file.save(os.path.join(app.root_path, "sheets/brands", fname))
+            db_load_sheets(dirname=os.path.join(app.root_path, "sheets/brands"))
             return redirect("/sheets")
 
     return redirect("/error/Unknown error, try again/upload_as/" + fname)
