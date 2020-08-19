@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+
+    <head></head>
+
+    <body>
+      <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+      <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+      <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-app.js"></script>
+
+      <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+      <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-analytics.js"></script>
+
+      <!-- Add Firebase products that you want to use -->
+      <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-auth.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-firestore.js"></script>
+
+
+      <script>
+          // Your web app's Firebase configuration
+          var firebaseConfig = {
+            apiKey: "AIzaSyAzPmBPcIIkNK9KUzRLQ0AnHQjQWydSBKI",
+            authDomain: "size-adviser.firebaseapp.com",
+            databaseURL: "https://size-adviser.firebaseio.com",
+            projectId: "size-adviser",
+            storageBucket: "size-adviser.appspot.com",
+            messagingSenderId: "862763273858",
+            appId: "1:862763273858:web:12e4a2ea44b1053f6dee9b"
+          };
+          // Initialize Firebase
+          firebase.initializeApp(firebaseConfig);
+
+          var provider = new firebase.auth.GoogleAuthProvider();
+
+          function runLogin() {
+
+              provider.addScope("profile");
+              provider.addScope("email");
+
+              firebase.auth().useDeviceLanguage();
+
+              firebase.auth().signInWithRedirect(provider);
+          }
+
+
+          firebase.auth().onAuthStateChanged(function(user) {
+              if (user) {
+                console.log();
+              } else {
+                runLogin();
+              }
+          });
+
+          firebase.auth().getRedirectResult().then(function(result) {
+              if (result.credential) {
+                // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+                var token = result.credential.accessToken;
+                document.getElementById("access-token").value = token;
+                console.log(token);
+                // ...
+              }
+              // The signed-in user info.
+              var user = result.user;
+            }).catch(function(error) {
+              // Handle Errors here.
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              // The email of the user's account used.
+              var email = error.email;
+              // The firebase.auth.AuthCredential type that was used.
+              var credential = error.credential;
+              // ...
+          });
+       </script>
+
+       <input type="text" id="access-token" value="">
+       <br>
+       <button onclick="runLogin()">Sign in</button>
+    </body>
+
+</html>
