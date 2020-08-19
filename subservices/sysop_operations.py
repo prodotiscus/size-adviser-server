@@ -33,7 +33,7 @@ def admin_signin_submission():
     adb = AdminDatabase()
     token = adb.get_token(username, pwd)
     adb.exit()
-    resp = make_response(redirect("/p" if token != "notoken" else "/sysop/signin"))
+    resp = make_response(redirect("/sysop/p" if token != "notoken" else "/sysop/signin"))
     resp.set_cookie("adminun", username)
     resp.set_cookie("admintkn", token)
     return resp
