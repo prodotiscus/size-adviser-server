@@ -12,5 +12,5 @@ def facebook_auth():
 
 
 @firebase.route("/google_auth")
-def facebook_auth():
+def google_auth():
     return render_template("google_auth.html")
