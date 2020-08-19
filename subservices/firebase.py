@@ -11,14 +11,14 @@ import sqlite3
 firebase = Blueprint("firebase", __name__, template_folder="templates")
 
 
-@firebase.route("/facebook_auth")
-def facebook_auth():
-    return render_template("firebase_auth.html")
+@firebase.route("/facebook_auth/<session_id>")
+def facebook_auth(session_id):
+    return render_template("firebase_auth.html", session_id=session_id)
 
 
-@firebase.route("/google_auth")
-def google_auth():
-    return render_template("google_auth.html")
+@firebase.route("/google_auth/<session_id>")
+def google_auth(session_id):
+    return render_template("google_auth.html", session_id=session_id)
 
 
 @firebase.route("/set_session_data")
