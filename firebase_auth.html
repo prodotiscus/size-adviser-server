@@ -44,7 +44,14 @@
               firebase.auth().signInWithRedirect(provider);
           }
 
-          runLogin();
+
+          firebase.auth().onAuthStateChanged(function(user) {
+              if (user) {
+                console.log();
+              } else {
+                runLogin();
+              }
+          });
 
           firebase.auth().getRedirectResult().then(function(result) {
               if (result.credential) {
