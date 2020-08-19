@@ -2,7 +2,7 @@
 
 import os
 
-from flask import Flask, redirect, render_template, send_from_directory
+from flask import Flask, redirect, render_template, Response, send_from_directory
 
 from subservices.firebase import firebase
 from subservices.mobile_requests import mobile
@@ -31,6 +31,11 @@ def send_js(path):
 @app.route("/")
 def welcome():
     return redirect("/error/Authorization needed/p")
+
+
+@app.route("/robots.txt")
+def disallow_robots():
+    return Response("User-agent: *\nDisallow: /\n", mimetype="text/plain")
 
 
 if __name__ == "__main__":
