@@ -34,6 +34,10 @@ def set_session_data():
     c.execute("INSERT INTO firebase_sessions VALUES (?, ?, ?)", v)
     db.commit()
     db.close()
+    return jsonify({
+        "status": "success",
+        "message": "Session data successfully recorded to the database."
+    })
 
 
 @firebase.route("/get_session_data")
