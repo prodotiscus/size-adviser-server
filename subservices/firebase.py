@@ -13,7 +13,7 @@ firebase = Blueprint("firebase", __name__, template_folder="templates")
 
 @firebase.route("/facebook_auth/<session_id>")
 def facebook_auth(session_id):
-    return render_template("firebase_auth.html", session_id=session_id)
+    return render_template("facebook_auth.html", session_id=session_id)
 
 
 @firebase.route("/google_auth/<session_id>")
