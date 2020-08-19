@@ -50,10 +50,6 @@ def get_session_data():
     db = sqlite3.connect("databases/personal.sqlite3")
     c = db.cursor()
     d = c.execute("SELECT user_email, user_name FROM firebase_sessions WHERE session_id='%s'" % session_id).fetchone()
-    try:
-        d = d[0]
-    except IndexError:
-        return abort(400)
     if d is None:
         return abort(400)
 
