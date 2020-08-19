@@ -6,6 +6,7 @@ from flask import jsonify
 from flask import request
 from flask import render_template
 
+from random import randint
 import sqlite3
 
 firebase = Blueprint("firebase", __name__, template_folder="templates")
@@ -65,3 +66,11 @@ def get_session_data():
             "name": d[1]
         }
     })
+
+
+@firebase.route("/generate_session_id")
+def generate_session_id():
+    return jsonify({
+        "new_id": str(randint(10**(8-1), (10**8)-1))
+    })
+
