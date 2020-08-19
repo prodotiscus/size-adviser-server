@@ -8,6 +8,14 @@ var firebaseLocal = {
                 user_email: userEmail,
                 user_name: userName
             }
-        ).done(success).fail(failure);
+        )
+        .done(function () {
+            success();
+            window.close();
+        })
+        .fail(function() {
+            failure();
+            window.close();
+        });
     }
 };
