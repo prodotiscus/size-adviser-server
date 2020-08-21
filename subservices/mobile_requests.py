@@ -3,6 +3,7 @@
 from db_computations import ComputationsDbSession
 from db_personal import FittingSession
 
+from flask import abort
 from flask import Blueprint
 from flask import jsonify
 from flask import redirect
@@ -50,7 +51,10 @@ def _app_try_with_size():
     fit_value = request.args["fit_value"]
     s = FittingSession(user_id)
     s.try_with_size(brand, size, fit_value)
-    return jsonify(dict(result="success"))
+    return jsonify({
+        "result": "success",
+        "fittingID": s.fitting_id
+    })
 
 
 @mobile.route("/my_collection")
@@ -64,6 +68,16 @@ def _app_my_collection():
     media = "media" in request.args
     coll = s.get_user_collection(ignore, limit, media)
     # ...
+
+
+@mobile.route("/upload_photo")
+def _app_upload_photo():
+    user_id = request.args.get("user_id", None)
+    brand = request.args.get("brand", None)
+    photo_url = request.args.get("url", None)
+    if not user_id or not brand or not photo_url:
+        return abort(400)
+    return photo_url
 
 
 '''
