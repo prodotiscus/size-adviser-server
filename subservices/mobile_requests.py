@@ -9,6 +9,9 @@ from flask import jsonify
 from flask import redirect
 from flask import request
 
+import re
+import urllib.request
+
 mobile = Blueprint("mobile", __name__)
 
 
@@ -46,14 +49,14 @@ def _app_recommended_size():
 @mobile.route("/try_with_size")
 def _app_try_with_size():
     user_id = request.args["user_id"]
+    fitting_id = request.args["fitting_id"]
     brand = request.args["brand"]
     size = request.args["size"]
     fit_value = request.args["fit_value"]
-    s = FittingSession(user_id)
+    s = FittingSession(user_id, fitting_id)
     s.try_with_size(brand, size, fit_value)
     return jsonify({
-        "result": "success",
-        "fittingID": s.fitting_id
+        "result": "success"
     })
 
 
@@ -73,11 +76,24 @@ def _app_my_collection():
 @mobile.route("/upload_photo")
 def _app_upload_photo():
     user_id = request.args.get("user_id", None)
+    fitting_id = request.args.get("fitting_id", None)
     brand = request.args.get("brand", None)
     photo_url = request.args.get("url", None)
-    if not user_id or not brand or not photo_url:
+    s = FittingSession(user_id, fitting_id)
+
+    if not user_id or not fitting_id or not brand or not photo_url:
         return abort(400)
-    return photo_url
+    if not re.search(r"^https://res\.cloudinary\.com/size-adviser/.*", photo_url):
+        return abort(400)
+
+    extension = re.search(r".+\.(.+)", photo_url).group(1)
+    photo_id = s.make_photo_id()
+    urllib.request.urlretrieve(photo_url, "media/%s.%s" % (photo_id, extension))
+    s.db_media_adding(photo_id)
+
+    return jsonify({
+        "result": "success"
+    })
 
 
 '''
