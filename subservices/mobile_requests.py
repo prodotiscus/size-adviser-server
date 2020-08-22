@@ -7,7 +7,6 @@ from flask import abort
 from flask import Blueprint
 from flask import jsonify
 from flask import make_response
-from flask import read_image
 from flask import request
 
 import re
