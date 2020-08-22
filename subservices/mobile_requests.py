@@ -84,10 +84,16 @@ def _app_get_collection_items(user_id, offset, limit):
     offset, limit = int(offset), int(limit)
     s = FittingSession(user_id)
     coll = s.get_user_collection(offset, limit)
-    response = {}
+    response = {
+        "previousEnabled": True,
+        "nextEnabled": True,
+        "items": []
+    }
+    if not offset:
+        response["previousEnabled"] = False
     n = 1
     for (fid, obj) in coll.items():
-        response[str(n)] = {
+        response["items"][str(n)] = {
             "empty": False,
             "pictureURL": "https://size-adviser.com/mobile/get_images/%s/0" % (obj["brand"]),
             "brand": obj["brand"],
@@ -95,7 +101,7 @@ def _app_get_collection_items(user_id, offset, limit):
         }
         n += 1
     for x in range(n, limit + 1):
-        response[str(x)] = {
+        response["items"][str(x)] = {
             "empty": True
         }
     return jsonify(response)
