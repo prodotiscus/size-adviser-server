@@ -87,7 +87,7 @@ def _app_get_collection_items(user_id, offset, limit):
     response = {
         "previousEnabled": True,
         "nextEnabled": True,
-        "items": []
+        "items": {}
     }
     if not offset:
         response["previousEnabled"] = False
