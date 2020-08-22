@@ -65,6 +65,42 @@ def _app_try_with_size():
     })
 
 
+def fit_value_to_str(fit_value):
+    fit_value = int(fit_value)
+    if fit_value == 1:
+        return "1 SIZE DOWN"
+    elif fit_value == 2:
+        return "TOO SMALL"
+    elif fit_value == 3:
+        return "IDEAL"
+    elif fit_value == 4:
+        return "TOO BIG"
+    elif fit_value == 5:
+        return "1 SIZE UP"
+
+
+@mobile.route("/get_collection_items/<user_id>/<int:offset>/<int:limit>")
+def _app_get_collection_items(user_id, offset, limit):
+    offset, limit = int(offset), int(limit)
+    s = FittingSession(user_id)
+    coll = s.get_user_collection(offset, limit)
+    response = {}
+    n = 1
+    for (fid, obj) in coll.items():
+        response[str(n)] = {
+            "empty": False,
+            "pictureURL": "https://size-adviser.com/mobile/get_images/%s/0" % (obj["brand"]),
+            "brand": obj["brand"],
+            "sizeAndFitValue": "%s [%s]" % (obj["size"], fit_value_to_str(obj["fit_value"]))
+        }
+        n += 1
+    for x in range(n, limit + 1):
+        response[str(x)] = {
+            "empty": True
+        }
+    return jsonify(response)
+
+
 @mobile.route("/my_collection")
 def _app_my_collection():
     user_id = request.args["user_id"]
