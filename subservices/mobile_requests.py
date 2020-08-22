@@ -122,7 +122,7 @@ def _app_get_images(brand, index):
     else:
         return abort(400)
 
-    with open(image, mode="rb") as img:
+    with open("media/" + image, mode="rb") as img:
         image_binary = img.read()
     response = make_response(image_binary)
     response.headers.set("Content-Type", content_type)

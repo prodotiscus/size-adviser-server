@@ -28,9 +28,11 @@
       <file leaf-file-name="mobile_requests.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/subservices/mobile_requests.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="31" lean-forward="false" selection-start-line="8" selection-start-column="31" selection-end-line="8" selection-end-column="31" />
-              <folding />
+            <state relative-caret-position="484">
+              <caret line="133" column="3" lean-forward="true" selection-start-line="133" selection-start-column="3" selection-end-line="133" selection-end-column="3" />
+              <folding>
+                <element signature="e#20#69#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -314,9 +316,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/subservices/mobile_requests.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="31" lean-forward="false" selection-start-line="8" selection-start-column="31" selection-end-line="8" selection-end-column="31" />
-          <folding />
+        <state relative-caret-position="484">
+          <caret line="133" column="3" lean-forward="true" selection-start-line="133" selection-start-column="3" selection-end-line="133" selection-end-column="3" />
+          <folding>
+            <element signature="e#20#69#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
