@@ -59,8 +59,8 @@ class FittingSession:
 
         return response
 
-    def db_media_adding(self, photo_id):
-        self.c.execute("INSERT INTO brand_photos VALUES (?,?)", (self.fitting_id, photo_id))
+    def db_media_adding(self, photo_id, extension=""):
+        self.c.execute("INSERT INTO brand_photos VALUES (?,?)", (self.fitting_id, photo_id + extension))
         self.db.commit()
 
     def stop(self):

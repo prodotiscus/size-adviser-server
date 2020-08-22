@@ -6,10 +6,12 @@ from db_personal import FittingSession
 from flask import abort
 from flask import Blueprint
 from flask import jsonify
-from flask import redirect
+from flask import make_response
+from flask import read_image
 from flask import request
 
 import re
+import sqlite3
 import urllib.request
 
 mobile = Blueprint("mobile", __name__)
@@ -89,11 +91,45 @@ def _app_upload_photo():
     extension = re.search(r".+\.(.+)", photo_url).group(1)
     photo_id = s.make_photo_id()
     urllib.request.urlretrieve(photo_url, "media/%s.%s" % (photo_id, extension))
-    s.db_media_adding(photo_id)
+    s.db_media_adding(photo_id + "." + extension)
 
     return jsonify({
         "result": "success"
     })
+
+
+@mobile.route("/get_images/<brand>/<int:index>")
+def _app_get_images(brand, index):
+    db = sqlite3.connect("databases/personal.sqlite3")
+    c = db.cursor()
+    pids = c.execute("SELECT photo_id FROM brand_photos WHERE fitting_id IN "
+                     "(SELECT fitting_id FROM fitting WHERE brand='{brand}')".format(brand=brand)).fetchall()
+    db.close()
+    try:
+        image = pids[index][0]
+    except IndexError:
+        return abort(400)
+
+    pid, extension = image.split(".")
+    extension = extension.lower()
+    if "jp" in extension:
+        content_type = "image/jpeg"
+    elif "png" in extension:
+        content_type = "image/png"
+    elif "bmp" in extension:
+        content_type = "image/bmp"
+    elif "svg" in extension:
+        content_type = "image/svg+xml"
+    else:
+        return abort(400)
+
+    with open(image, mode="rb") as img:
+        image_binary = img.read()
+    response = make_response(image_binary)
+    response.headers.set("Content-Type", content_type)
+    response.headers.set(
+        "Content-Disposition", "attachment", filename="media/" + image)
+    return response
 
 
 '''
