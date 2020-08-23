@@ -31,6 +31,7 @@
             width: 200px;
             height: 30px;
             border: none;
+            cursor: pointer;
         }
 
         button.facebook {
@@ -103,7 +104,13 @@
                 firebaseLocal.setSessionData(
                     templateSessionID, user.email, user.displayName,
                     function () {
-                        $("#auth_msg").html("You are now logged in! Please now proceed back to the app");
+                        $(".header").html("Done! Now press <b>\u21b5</b> on your device and go back to the app");
+                        $(".auth_button").attr("disabled", false");
+                        $(".auth_button").removeClass("facebook");
+                        $(".auth_button").removeClass("google");
+                        $(".auth_button").addClass("action");
+                        $(".auth_button").attr("onclick", "window.close()");
+                        $(".auth_button").html("Close");
                     }, window.close
                 );
               }
@@ -113,6 +120,27 @@
               var email = error.email;
               var credential = error.credential;
           });
+
+          /* interface */
+
+          function lsDateDiff (keyName) {
+            var cur = new Date();
+            var old = Date.parse(window.localStorage.getItem(keyName));
+            return (((cur-old) % 86400000) % 3600000) / 60000;
+          }
+
+          if (!window.localStorage.getItem("sa-auth-started")) {
+            window.localStorage.setItem("sa-auth-started", new Date());
+          }
+          else if (lsDateDiff("sa-auth-started") > 10) {
+            window.localStorage.setItem("sa-auth-started", new Date());
+          }
+          else {
+            document.getElementsByClassName("header")[0].innerHTML = "Processing your data, please wait...";
+            document.getElementsByClassName("auth_button")[0].setAttribute("disabled", true);
+          }
+
+           Math.round(((diffMs % 86400000) % 3600000) / 60000)
        </script>
 
        <div id="auth_msg" class="auth_block">
