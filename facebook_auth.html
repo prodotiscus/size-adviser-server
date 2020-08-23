@@ -128,11 +128,11 @@
           }
 
           window.onload = function () {
-              if (!window.localStorage.getItem("sa-auth-started")) {
-                window.localStorage.setItem("sa-auth-started", new Date());
+              if (!window.localStorage.getItem("sa-f_auth-started")) {
+                window.localStorage.setItem("sa-f_auth-started", new Date());
               }
-              else if (lsDateDiff("sa-auth-started") > 10) {
-                window.localStorage.setItem("sa-auth-started", new Date());
+              else if (lsDateDiff("sa-f_auth-started") > 10) {
+                window.localStorage.setItem("sa-f_auth-started", new Date());
               }
               else {
                 document.getElementsByClassName("header")[0].innerHTML = "Processing your data, please wait...";
