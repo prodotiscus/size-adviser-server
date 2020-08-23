@@ -129,18 +129,18 @@
             return (((cur-old) % 86400000) % 3600000) / 60000;
           }
 
-          if (!window.localStorage.getItem("sa-auth-started")) {
-            window.localStorage.setItem("sa-auth-started", new Date());
-          }
-          else if (lsDateDiff("sa-auth-started") > 10) {
-            window.localStorage.setItem("sa-auth-started", new Date());
-          }
-          else {
-            document.getElementsByClassName("header")[0].innerHTML = "Processing your data, please wait...";
-            document.getElementsByClassName("auth_button")[0].setAttribute("disabled", true);
-          }
-
-           Math.round(((diffMs % 86400000) % 3600000) / 60000)
+          window.onload = function () {
+              if (!window.localStorage.getItem("sa-auth-started")) {
+                window.localStorage.setItem("sa-auth-started", new Date());
+              }
+              else if (lsDateDiff("sa-auth-started") > 10) {
+                window.localStorage.setItem("sa-auth-started", new Date());
+              }
+              else {
+                document.getElementsByClassName("header")[0].innerHTML = "Processing your data, please wait...";
+                document.getElementsByClassName("auth_button")[0].setAttribute("disabled", true);
+              }
+          };
        </script>
 
        <div id="auth_msg" class="auth_block">
