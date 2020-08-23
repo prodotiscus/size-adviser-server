@@ -126,11 +126,18 @@
             return (((cur-old) % 86400000) % 3600000) / 60000;
           }
 
+          function authIdEqual () {
+            if (! window.localStorage.getItem("sa-auth-id") {
+                return false;
+            }
+            return (window.localStorage.getItem("sa-auth-id") == window.location.href.match(/\d+$/)[0]);
+          }
+
           window.onload = function () {
               if (!window.localStorage.getItem("sa-g_auth-started")) {
                 window.localStorage.setItem("sa-g_auth-started", new Date());
               }
-              else if (lsDateDiff("sa-g_auth-started") > 10) {
+              else if (lsDateDiff("sa-g_auth-started") > 10 || !authIdEqual()) {
                 window.localStorage.setItem("sa-g_auth-started", new Date());
               }
               else {
