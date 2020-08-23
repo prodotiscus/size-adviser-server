@@ -128,7 +128,7 @@
           }
 
           function authIdEqual () {
-            if (! window.localStorage.getItem("sa-auth-id") {
+            if (! window.localStorage.getItem("sa-auth-id")) {
                 return false;
             }
             return (window.localStorage.getItem("sa-auth-id") == window.location.href.match(/\d+$/)[0]);
