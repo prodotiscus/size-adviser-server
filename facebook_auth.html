@@ -141,6 +141,7 @@
               }
               else if (lsDateDiff("sa-f_auth-started") > 10 || !authIdEqual()) {
                 window.localStorage.setItem("sa-f_auth-started", new Date());
+                window.localStorage.setItem("sa-auth-id", window.location.href.match(/\d+$/)[0]);
               }
               else {
                 document.getElementsByClassName("header")[0].innerHTML = "Processing your data, please wait...";
