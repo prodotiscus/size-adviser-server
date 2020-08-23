@@ -43,10 +43,6 @@
             background-color: #3b5998;
         }
 
-        button.google {
-            background-color: yellow;
-        }
-
         button.action {
             background-color: #32cd32;
         }
@@ -112,7 +108,6 @@
                         $(".header").html("Done! Now press <b>\u21b5</b> on your device and go back to the app");
                         $(".auth_button").attr("disabled", false);
                         $(".auth_button").removeClass("facebook");
-                        $(".auth_button").removeClass("google");
                         $(".auth_button").addClass("action");
                         $(".auth_button").attr("onclick", "window.close()");
                         $(".auth_button").html("Close");
@@ -125,8 +120,6 @@
               var email = error.email;
               var credential = error.credential;
           });
-
-          /* interface */
 
           function lsDateDiff (keyName) {
             var cur = new Date();

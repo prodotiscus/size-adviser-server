@@ -1,7 +1,53 @@
 <!doctype html>
 <html>
 
-    <head></head>
+    <head>
+        <style>
+        div.auth_block {
+            height: 200px;
+            width: 400px;
+            background: #e6dbdb;
+            font-family: Arial;
+
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin-top: -100px;
+            margin-left: -200px;
+            text-align: center;
+        }
+
+        p.header {
+            font-size: 25px;
+            font-weight: bold;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        button.auth_button {
+            color: white;
+            border-radius: 45px;
+            font-weight: bold;
+            width: 200px;
+            height: 30px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button[disabled] {
+            opacity: 50%;
+            cursor: auto;
+        }
+
+        button.google {
+            background-color: #db4a39;
+        }
+
+        button.action {
+            background-color: #32cd32;
+        }
+      </style>
+    </head>
 
     <body>
 
@@ -58,7 +104,12 @@
                 firebaseLocal.setSessionData(
                     templateSessionID, user.email, user.displayName,
                     function () {
-                        $("#auth_msg").html("You are now logged in! Please now proceed back to the app");
+                        $(".header").html("Done! Now press <b>\u21b5</b> on your device and go back to the app");
+                        $(".auth_button").attr("disabled", false);
+                        $(".auth_button").removeClass("google");
+                        $(".auth_button").addClass("action");
+                        $(".auth_button").attr("onclick", "window.close()");
+                        $(".auth_button").html("Close");
                     }, window.close
                 );
               }
@@ -68,12 +119,31 @@
               var email = error.email;
               var credential = error.credential;
           });
+
+          function lsDateDiff (keyName) {
+            var cur = new Date();
+            var old = Date.parse(window.localStorage.getItem(keyName));
+            return (((cur-old) % 86400000) % 3600000) / 60000;
+          }
+
+          window.onload = function () {
+              if (!window.localStorage.getItem("sa-auth-started")) {
+                window.localStorage.setItem("sa-auth-started", new Date());
+              }
+              else if (lsDateDiff("sa-auth-started") > 10) {
+                window.localStorage.setItem("sa-auth-started", new Date());
+              }
+              else {
+                document.getElementsByClassName("header")[0].innerHTML = "Processing your data, please wait...";
+                document.getElementsByClassName("auth_button")[0].setAttribute("disabled", true);
+              }
+          };
        </script>
 
-       <div id="auth_msg">
-           If your browser does not redirect you automatically, click the button below...
-           <br><br>
-           <button onclick="runLogin()">Authorize using Google</button>
+       <div id="auth_msg" class="auth_block">
+           <p class="header">If your browser does not redirect you automatically, click the button below...</p>
+
+           <button class="auth_button google" onclick="runLogin()">Authorize using Google</button>
        </div>
     </body>
 
