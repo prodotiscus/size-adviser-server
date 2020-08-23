@@ -3,16 +3,46 @@
 
     <head>
         <style>
-          div.auth_block {
+        div.auth_block {
             height: 200px;
             width: 400px;
-            background: black;
+            background: #e6dbdb;
+            font-family: Arial;
 
             position: fixed;
             top: 50%;
             left: 50%;
             margin-top: -100px;
             margin-left: -200px;
+            text-align: center;
+        }
+
+        p.header {
+            font-size: 25px;
+            font-weight: bold;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        button.auth_button {
+            color: white;
+            border-radius: 45px;
+            font-weight: bold;
+            width: 200px;
+            height: 30px;
+            border: none;
+        }
+
+        button.facebook {
+            background-color: #3b5998;
+        }
+
+        button.google {
+            background-color: yellow;
+        }
+
+        button.action {
+            background-color: #32cd32;
         }
       </style>
     </head>
@@ -86,9 +116,9 @@
        </script>
 
        <div id="auth_msg" class="auth_block">
-           If your browser does not redirect you automatically, click the button below...
-           <br><br>
-           <button onclick="runLogin()">Authorize using Facebook</button>
+           <p class="header">If your browser does not redirect you automatically, click the button below...</p>
+
+           <button class="auth_button facebook" onclick="runLogin()">Authorize using Facebook</button>
        </div>
     </body>
 
