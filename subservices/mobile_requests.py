@@ -130,7 +130,7 @@ def _app_upload_photo():
 
     if not user_id or not fitting_id or not brand or not photo_url:
         return abort(400)
-    if not re.search(r"^https://res\.cloudinary\.com/size-adviser/.*", photo_url):
+    if not re.search(r"^https?://res\.cloudinary\.com/size-adviser/.*", photo_url):
         return abort(400)
 
     extension = re.search(r".+\.(.+)", photo_url).group(1)
