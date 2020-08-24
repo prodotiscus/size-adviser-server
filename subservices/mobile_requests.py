@@ -101,7 +101,7 @@ def _app_get_collection_items(user_id, offset, limit):
                 ],
             "brand": obj["brand"],
             "size": obj["size"],
-            "fitValue": fit_value_to_str(obj["fit_value"])
+            "fit_value": fit_value_to_str(obj["fit_value"])
         }
         n += 1
     for x in range(n, limit + 1):
