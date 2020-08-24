@@ -95,9 +95,13 @@ def _app_get_collection_items(user_id, offset, limit):
     for (fid, obj) in coll.items():
         response["items"][str(n)] = {
             "empty": False,
-            "pictureURL": "https://size-adviser.com/mobile/get_images/%s/0" % (obj["brand"]),
+            "pictureURLs": [
+                "https://size-adviser.com/mobile/get_images/%s/%d" % (obj["brand"], n)
+                for n in range(3)
+                ],
             "brand": obj["brand"],
-            "sizeAndFitValue": "%s [%s]" % (obj["size"], fit_value_to_str(obj["fit_value"]))
+            "size": obj["size"],
+            "fitValue": fit_value_to_str(obj["fit_value"])
         }
         n += 1
     for x in range(n, limit + 1):
