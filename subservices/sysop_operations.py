@@ -114,7 +114,7 @@ def load_sheet(tname=None):
         return redirect("/sysop/sheets")
 
     if ":" not in tname:
-        num = random.randrange(111111, 999999)
+        num = random.randrange(100000, 999999)
         copyname = "%s:%d.XLSX" % (tname, num)
         try:
             copyfile(os.path.join("sheets", "brands", tname), os.path.join("copied", copyname))
