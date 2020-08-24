@@ -13,7 +13,7 @@ import re
 import sqlite3
 import urllib.request
 
-mobile = Blueprint("mobile", __name__)
+mobile = Blueprint("mobile", __name__, static_folder="static")
 
 
 @mobile.route("/systems_of_size")
@@ -147,6 +147,16 @@ def _app_upload_photo():
     })
 
 
+def respond_placeholder_binary():
+    with open("static/70x70.png", mode="rb") as img:
+        image_binary = img.read()
+    response = make_response(image_binary)
+    response.headers.set("Content-Type", "image/png")
+    response.headers.set(
+        "Content-Disposition", "attachment", filename="70x70.png")
+    return response
+
+
 @mobile.route("/get_images/<brand>/<int:index>")
 def _app_get_images(brand, index):
     db = sqlite3.connect("databases/personal.sqlite3")
@@ -154,10 +164,11 @@ def _app_get_images(brand, index):
     pids = c.execute("SELECT photo_id FROM brand_photos WHERE fitting_id IN "
                      "(SELECT fitting_id FROM fitting WHERE brand='{brand}')".format(brand=brand)).fetchall()
     db.close()
+
     try:
         image = pids[index][0]
     except IndexError:
-        return abort(400)
+        return respond_placeholder_binary()
 
     pid, extension = image.split(".")
     extension = extension.lower()
@@ -170,7 +181,7 @@ def _app_get_images(brand, index):
     elif "svg" in extension:
         content_type = "image/svg+xml"
     else:
-        return abort(400)
+        return respond_placeholder_binary()
 
     with open("media/" + image, mode="rb") as img:
         image_binary = img.read()
