@@ -192,19 +192,11 @@ def _app_get_images(brand, index):
     return response
 
 
-'''
-@app.route("/_app_download_photo")
-def _app_download_photo():
-    ...
+@mobile.route("/brands_from/<prefix>")
+def _app_ajax_brand_search(prefix):
+    prefix = prefix.lower()
+    all_brands = ["Adidas", "Asics", "Nike"] # FIXIT!
+    return jsonify({
+        "brands": [b for b in all_brands if b.lower().startswith(prefix)]
+    })
 
-
-@app.route("/_app_upload_photo")
-def _app_upload_photo():
-    ...
-
-
-@app.route("/_app_ajax_brand_search")
-def _app_ajax_brand_search():
-    prefix = request.args["prefix"]
-    ...
-'''
