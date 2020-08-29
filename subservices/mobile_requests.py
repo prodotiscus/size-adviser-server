@@ -34,6 +34,10 @@ def _app_range_of_system():
     )
 
 
+def recommend_size(brand, gender_int, user_id, system=None):
+    return ["UK", "4.5"] # FIX IT!
+
+
 @mobile.route("/recommended_size")
 def _app_recommended_size():
     brand = request.args["brand"]
@@ -41,7 +45,7 @@ def _app_recommended_size():
     user_id = request.args["user_id"]
     s = ComputationsDbSession()
     # FIX IT !!!
-    _recommended = ["UK", "4.5"]
+    _recommended = recommend_size(brand, gender_int, user_id)
     return jsonify(
         s.systems_of_size(brand, gender_int, *_recommended)
     )
@@ -192,12 +196,39 @@ def _app_get_images(brand, index):
     return response
 
 
-@mobile.route("/brands_from/", defaults={"prefix": ""})
-@mobile.route("/brands_from/<prefix>")
-def _app_ajax_brand_search(prefix):
+@mobile.route("/brands_from/<user_id>/<gender_int>/<my_system>", defaults={"prefix": ""})
+@mobile.route("/brands_from/<user_id>/<gender_int>/<my_system>/<prefix>")
+def _app_ajax_brand_search(user_id, gender_int, my_system, prefix):
+    urls = [
+        "https://size-adviser.com/static/not-tried-on.png",
+        "https://size-adviser.com/static/tried-on.png"
+    ]
     prefix = prefix.lower()
-    all_brands = ["Adidas", "Asics", "Nike"] # FIXIT!
-    return jsonify({
-        "brands": [b for b in all_brands if b.lower().startswith(prefix)]
-    })
+    all_brands = ["Adidas", "Asics", "Nike"]  # FIX IT!
+    found = [b for b in all_brands if b.lower().startswith(prefix)]
+    if not found:
+        return jsonify({"hints": []})
 
+    s = FittingSession(user_id)
+
+    def choose_pic(brand_name, have_tried):
+        return {
+            "brand": brand_name,
+            "picURL": urls[have_tried]
+        }
+
+    res_brands = [
+        json_item for json_item in s.attribute_tried(all_brands, s.attribute_tried(found, choose_pic))
+    ]
+
+    s2 = ComputationsDbSession()
+
+    for item in res_brands:
+        system, size = recommend_size(item["brand"], gender_int, user_id, my_system)
+        if system != my_system:
+            size = s2.systems_of_size(item["brand"], gender_int, system, size)[my_system]
+        item["size"] = size
+
+    return jsonify({
+        "hints": res_brands
+    })
