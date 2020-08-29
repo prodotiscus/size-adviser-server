@@ -221,10 +221,14 @@ def _app_ajax_brand_search(user_id, gender_int, my_system, prefix):
 
     s2 = ComputationsDbSession()
 
-    for item in res_brands:
+    for e, item in enumerate(res_brands):
         system, size = recommend_size(item["brand"], gender_int, user_id, my_system)
         if system != my_system:
-            size = s2.systems_of_size(item["brand"], gender_int, system, size)[my_system]
+            try:
+                size = s2.systems_of_size(item["brand"], gender_int, system, size)[my_system]
+            except TypeError:
+                del res_brands[e]
+                continue
         item["size"] = size
 
     return jsonify({
