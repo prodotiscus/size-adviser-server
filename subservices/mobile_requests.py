@@ -217,9 +217,7 @@ def _app_ajax_brand_search(user_id, gender_int, my_system, prefix):
             "picURL": urls[have_tried]
         }
 
-    res_brands = [
-        json_item for json_item in s.attribute_tried(all_brands, s.attribute_tried(found, choose_pic))
-    ]
+    res_brands = s.attribute_tried(found, choose_pic)
 
     s2 = ComputationsDbSession()
 
