@@ -59,6 +59,12 @@ class FittingSession:
 
         return response
 
+    def attribute_tried(self, brand_list, attr_func):
+        sql_list = ",".join(["'%s'" % b for b in brand_list])
+        tried = [row[0] for row in self.c.execute("SELECT DISTINCT brand FROM fitting WHERE brand IN (%s) AND "
+                        "user_id='%s'" % (sql_list, self.user_id))]
+        return [attr_func(brand, brand in tried) for brand in brand_list]
+
     def db_media_adding(self, photo_id, extension=""):
         self.c.execute("INSERT INTO brand_photos VALUES (?,?)", (self.fitting_id, photo_id + extension))
         self.db.commit()
