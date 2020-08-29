@@ -196,7 +196,7 @@ def _app_get_images(brand, index):
     return response
 
 
-@mobile.route("/brands_from/<user_id>/<int:gender_int>/<my_system>", defaults={"prefix": ""})
+@mobile.route("/brands_from/<user_id>/<int:gender_int>/<my_system>/", defaults={"prefix": ""})
 @mobile.route("/brands_from/<user_id>/<int:gender_int>/<my_system>/<prefix>")
 def _app_ajax_brand_search(user_id, gender_int, my_system, prefix):
     urls = [
