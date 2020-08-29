@@ -192,6 +192,7 @@ def _app_get_images(brand, index):
     return response
 
 
+@mobile.route("/brands_from/", defaults={"prefix": ""})
 @mobile.route("/brands_from/<prefix>")
 def _app_ajax_brand_search(prefix):
     prefix = prefix.lower()
