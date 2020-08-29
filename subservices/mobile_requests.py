@@ -214,6 +214,7 @@ def _app_ajax_brand_search(user_id, gender_int, my_system, prefix):
     def choose_pic(brand_name, have_tried):
         return {
             "brand": brand_name,
+            "have_tried": have_tried,
             "picURL": urls[have_tried]
         }
 
@@ -223,12 +224,13 @@ def _app_ajax_brand_search(user_id, gender_int, my_system, prefix):
 
     for e, item in enumerate(res_brands):
         system, size = recommend_size(item["brand"], gender_int, user_id, my_system)
-        if system != my_system:
+        if system != my_system and item["have_tried"]:
             try:
                 size = s2.systems_of_size(item["brand"], gender_int, system, size)[my_system]
             except TypeError:
                 del res_brands[e]
                 continue
+            del item["have_tried"]
         item["size"] = size
 
     return jsonify({
