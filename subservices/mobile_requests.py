@@ -196,6 +196,14 @@ def _app_get_images(brand, index):
     return response
 
 
+@mobile.route("/number_of_tries/<user_id>")
+def _app_number_of_tries(user_id):
+    s = FittingSession(user_id)
+    n = s.number_of_tries()
+    s.stop()
+    return jsonify({"number": n})
+
+
 @mobile.route("/brands_from/<user_id>/<int:gender_int>/<my_system>/", defaults={"prefix": ""})
 @mobile.route("/brands_from/<user_id>/<int:gender_int>/<my_system>/<prefix>")
 def _app_ajax_brand_search(user_id, gender_int, my_system, prefix):
