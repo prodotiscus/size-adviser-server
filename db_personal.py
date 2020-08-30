@@ -26,6 +26,9 @@ class FittingSession:
         fl.write(binary)
         fl.close()
 
+    def number_of_tries(self):
+        return self.c.execute("SELECT COUNT(*) FROM fitting WHERE user_id='%s'" % (self.user_id)).fetchone()[0]
+
     def try_with_size(self, brand, size, fit_value):
         self.c.execute("INSERT INTO fitting VALUES (?,?,?,?,?)", (
             self.user_id, self.fitting_id, brand, size, fit_value
