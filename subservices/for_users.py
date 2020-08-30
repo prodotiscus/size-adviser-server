@@ -9,10 +9,10 @@ from flask import render_template
 import os
 
 
-for_users = Blueprint("for_users", __name__, template_folder="templates")
+for_users = Blueprint("for_users", __name__, static_folder="static", template_folder="templates")
 
 
-def android_get_latest(prefix="size-adviser-for-android_1.0.a", folder_name="android_bin"):
+def android_get_latest(prefix="size-adviser-for-android_1.0.a", folder_name="static/android_bin"):
     return max([fn for fn in os.listdir(folder_name) if fn.startswith(prefix)])
 
 
