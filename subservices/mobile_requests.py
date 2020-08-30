@@ -230,7 +230,7 @@ def _app_ajax_brand_search(user_id, gender_int, my_system, prefix):
             except TypeError:
                 del res_brands[e]
                 continue
-            del res_brands[e]["have_tried"]
+        del res_brands[e]["have_tried"]
         item["size"] = size
 
     return jsonify({
