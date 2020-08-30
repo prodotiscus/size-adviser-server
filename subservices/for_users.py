@@ -18,4 +18,4 @@ def android_get_latest(prefix="size-adviser-for-android_1.0.a", folder_name="sta
 
 @for_users.route("/download-app")
 def user_download_app_page():
-    return render_template("app-download-page.html", android_apk=android_get_latest())
+    return render_template("app-download-page.html", android_apk="static/android_bin/" + android_get_latest())
