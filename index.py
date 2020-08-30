@@ -5,6 +5,7 @@ import os
 from flask import Flask, redirect, render_template, Response, send_from_directory
 
 from subservices.firebase import firebase
+from subservices.for_users import for_users
 from subservices.mobile_requests import mobile
 from subservices.sysop_operations import sysop
 
@@ -14,6 +15,7 @@ app.config["ALLOWED_EXTENSIONS"] = {".xlsx", ".xls", ".jpg", ".jpeg", ".png"}
 
 
 app.register_blueprint(firebase, url_prefix="/firebase")
+app.register_blueprint(for_users, url_prefix="/for-users")
 app.register_blueprint(mobile, url_prefix="/mobile")
 app.register_blueprint(sysop, url_prefix="/sysop")
 
