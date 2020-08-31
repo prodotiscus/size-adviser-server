@@ -40,15 +40,23 @@ def recommend_size(brand, gender_int, user_id, system=None):
 
 @mobile.route("/recommended_size")
 def _app_recommended_size():
-    brand = request.args["brand"]
-    gender_int = int(request.args["gender_int"])
-    user_id = request.args["user_id"]
+    brand = request.args.get("brand", None)
+    gender_int = int(request.args.get("gender_int", -1))
+    user_id = request.args.get("user_id", None)
+
+    if not brand or gender_int == -1 or not user_id:
+        return abort(400)
+
     s = ComputationsDbSession()
-    # FIX IT !!!
-    _recommended = recommend_size(brand, gender_int, user_id)
-    return jsonify(
-        s.systems_of_size(brand, gender_int, *_recommended)
-    )
+
+    try:
+        # FIX IT !!!
+        _recommended = recommend_size(brand, gender_int, user_id)
+        return jsonify(
+            s.systems_of_size(brand, gender_int, *_recommended)
+        )
+    except TypeError:
+        return abort(400)
 
 
 @mobile.route("/try_with_size")
