@@ -66,8 +66,8 @@ def update_file(fname):
         if file.filename == "":
             return redirect("/sysop/p")
         if file:
-            file.save(os.path.join("..", "sheets/brands", fname))
-            db_load_sheets(dirname=os.path.join("..", "sheets/brands"))
+            file.save(os.path.join(os.path.split(sysop.root_path)[0], "sheets/brands", fname))
+            db_load_sheets(dirname=os.path.join(os.path.split(sysop.root_path)[0], "sheets/brands"))
             return redirect("/sysop/sheets")
 
     return redirect("/error/Unknown error, try again/upload_as/" + fname)
