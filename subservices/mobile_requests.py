@@ -35,7 +35,7 @@ def _app_range_of_system():
 
 
 def recommend_size(brand, gender_int, user_id, system=None):
-    return ["UK", "4.5"] # FIX IT!
+    return ["US", "7"] # FIX IT!
 
 
 @mobile.route("/recommended_size")
