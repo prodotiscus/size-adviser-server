@@ -80,3 +80,4 @@ cython_debug/
 # Project-related .gitignore part
 
 .idea/
+.idea/*
