@@ -1,0 +1,61 @@
+<html>
+<head>
+    <link rel="stylesheet" href="/static/credentials.css">
+    <meta charset="utf-8">
+    <script>
+      function enterSubmit(e) {
+        if (e.keyCode === 13) {
+          document.forms[0].submit();
+        }
+      };
+    </script>
+</head>
+<body>
+<form autocomplete="off" class="form" action="/sysop/signin-submission" method="POST">
+  <div class="control">
+    <h1>
+      Войти в панель
+    </h1>
+  </div>
+  <div class="control block-cube block-input">
+    <input name="username" placeholder="Имя пользователя" type="text" onkeypress="enterSubmit(event)">
+    <div class="bg-top">
+      <div class="bg-inner"></div>
+    </div>
+    <div class="bg-right">
+      <div class="bg-inner"></div>
+    </div>
+    <div class="bg">
+      <div class="bg-inner"></div>
+    </div>
+  </div>
+  <div class="control block-cube block-input">
+    <input name="password" placeholder="Пароль" type="password" onkeypress="enterSubmit(event)">
+    <div class="bg-top">
+      <div class="bg-inner"></div>
+    </div>
+    <div class="bg-right">
+      <div class="bg-inner"></div>
+    </div>
+    <div class="bg">
+      <div class="bg-inner"></div>
+    </div>
+  </div>
+  <button class="btn block-cube block-cube-hover" type="button" onclick="document.forms[0].submit()">
+    <div class="bg-top">
+      <div class="bg-inner"></div>
+    </div>
+    <div class="bg-right">
+      <div class="bg-inner"></div>
+    </div>
+    <div class="bg">
+      <div class="bg-inner"></div>
+    </div>
+    <div class="text">
+      Войти
+    </div>
+  </button>
+</form>
+
+</body>
+</html>
