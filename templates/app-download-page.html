@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+    <head>
+
+        <title>Download &mdash; Size Adviser for Mobile</title>
+
+        <style>
+
+            div.download_block {
+                height: 400px;
+                width: 800px;
+                font-family: Arial;
+
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                margin-top: -200px;
+                margin-left: -400px;
+                text-align: center;
+
+                border: 1px solid #d3d3d3;
+            }
+
+            .android_link {
+                color: black;
+                text-decoration: none;
+                font-weight: bold;
+                letter-spacing: 1px;
+                font-family: Arial;
+                border: 1px solid black;
+                border-radius: 45px;
+                padding: 16px 16px 16px 16px;
+                justify-content: right;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div class="download_block">
+            <a href="/{{ android_apk }}" class="android_link">
+                <img src="https://cdn.worldvectorlogo.com/logos/android-4.svg" width="128">
+                Size Adviser for Android
+            </a>
+        </div>
+
+    </body>
+</html>

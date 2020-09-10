@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+
+    <head>
+        <style>
+        div.auth_block {
+            height: 400px;
+            width: 800px;
+            background: #e1dee4;
+            font-family: Arial;
+
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin-top: -200px;
+            margin-left: -400px;
+            text-align: center;
+        }
+
+        p.header {
+            font-size: 45px;
+            font-weight: bold;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        button.auth_button {
+            color: white;
+            border-radius: 45px;
+            font-weight: bold;
+            width: 400px;
+            height: 100px;
+            font-size: 35px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button[disabled] {
+            opacity: 50%;
+            cursor: auto;
+        }
+
+        button.google {
+            background-color: #db4a39;
+        }
+
+        button.action {
+            background-color: #32cd32;
+        }
+      </style>
+    </head>
+
+    <body>
+
+      <script>
+          var templateSessionID = "{{ session_id }}";
+      </script>
+
+      <script src="/static/jquery-3.5.1.min.js"></script>
+      <script src="/static/jquery.firebaseLocal.js"></script>
+
+      <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-analytics.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-auth.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-firestore.js"></script>
+
+      <script>
+          var firebaseConfig = {
+            apiKey: "AIzaSyAzPmBPcIIkNK9KUzRLQ0AnHQjQWydSBKI",
+            authDomain: "size-adviser.firebaseapp.com",
+            databaseURL: "https://size-adviser.firebaseio.com",
+            projectId: "size-adviser",
+            storageBucket: "size-adviser.appspot.com",
+            messagingSenderId: "862763273858",
+            appId: "1:862763273858:web:12e4a2ea44b1053f6dee9b"
+          };
+          firebase.initializeApp(firebaseConfig);
+
+          var provider = new firebase.auth.GoogleAuthProvider();
+
+          function runLogin() {
+
+              provider.addScope("profile");
+              provider.addScope("email");
+
+              firebase.auth().useDeviceLanguage();
+
+              firebase.auth().signInWithRedirect(provider);
+          }
+
+
+          firebase.auth().onAuthStateChanged(function(user) {
+              if (user) {
+                console.log();
+              } else {
+                runLogin();
+              }
+          });
+
+          firebase.auth().getRedirectResult().then(function(result) {
+              if (result.credential) {
+                var token = result.credential.accessToken;
+                var user = result.user;
+
+                firebaseLocal.setSessionData(
+                    templateSessionID, user.email, user.displayName,
+                    function () {
+                        $(".header").html("Done! Now press <b>\u21b5</b> on your device and go back to the app");
+                        $(".auth_button").attr("disabled", false);
+                        $(".auth_button").removeClass("google");
+                        $(".auth_button").addClass("action");
+                        $(".auth_button").attr("onclick", "window.close()");
+                        $(".auth_button").html("Close");
+                    }, window.close
+                );
+              }
+            }).catch(function(error) {
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              var email = error.email;
+              var credential = error.credential;
+          });
+
+          function lsDateDiff (keyName) {
+            var cur = new Date();
+            var old = Date.parse(window.localStorage.getItem(keyName));
+            return (((cur-old) % 86400000) % 3600000) / 60000;
+          }
+
+          function authIdEqual () {
+            if (! window.localStorage.getItem("sa-auth-id")) {
+                return false;
+            }
+            return (window.localStorage.getItem("sa-auth-id") == window.location.href.match(/\d+$/)[0]);
+          }
+
+          window.onload = function () {
+              if (!window.localStorage.getItem("sa-g_auth-started")) {
+                window.localStorage.setItem("sa-g_auth-started", new Date());
+                window.localStorage.setItem("sa-auth-id", window.location.href.match(/\d+$/)[0]);
+              }
+              else if (lsDateDiff("sa-g_auth-started") > 10 || !authIdEqual()) {
+                window.localStorage.setItem("sa-g_auth-started", new Date());
+                window.localStorage.setItem("sa-auth-id", window.location.href.match(/\d+$/)[0]);
+              }
+              else {
+                document.getElementsByClassName("header")[0].innerHTML = "Processing your data, please wait...";
+                document.getElementsByClassName("auth_button")[0].setAttribute("disabled", true);
+              }
+          };
+       </script>
+
+       <div id="auth_msg" class="auth_block">
+           <p class="header">If your browser does not redirect you automatically, click the button below...</p>
+
+           <button class="auth_button google" onclick="runLogin()">Authorize using Google</button>
+       </div>
+    </body>
+
+</html>

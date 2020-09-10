@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+
+    <head>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <title>Index of spreadsheet files</title>
+    </head>
+
+    <body>
+        <h2>Index of spreadsheet files</h2>
+        <br>
+
+        <form action="/sysop/_unf" method="GET">
+            <label for="sheet-code">Number of file (6 digits) to upload: </label>
+            <input type="text" id="sheet-code" name="sheet-code">
+            <input type="submit" value="Upload new file">
+        </form>
+
+        <br>
+        <table id="sheet-list" class="display">
+            <thead>
+                <tr>
+                    <th>File</th>
+                    <th>Upload link</th>
+                    <th>Last modified</th>
+                    <th>Brand</th>
+                    <th>Internal code</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in file_rows %}
+                <tr>
+                    <td>
+                        <a href="{{ ('sheet_acquire/') + row['filename'] }}" title="Click to download">
+                            {{ row['filename'] }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ ('upload_as/') + row['filename'] }}" title="Click to upload the new version">
+                            link
+                        </a>
+                    </td>
+                    <td>{{ row['last_modified'] }}</td>
+                    <td>{{ row['brand'] }}</td>
+                    <td>{{ row['internal_code'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <script src="/static/jquery-3.5.1.min.js"></script>
+
+        <script src="/static/jquery.dataTables.min.js"></script>
+
+        <script>
+            $(document).ready( function () {
+                $('#sheet-list').DataTable();
+            } );
+        </script>
+    </body>
+
+</html>
