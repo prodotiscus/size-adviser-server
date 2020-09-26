@@ -124,3 +124,10 @@ def load_sheet(tname=None):
 
     else:
         return send_from_directory("copied", tname)
+
+
+@sysop.route("/git-pull-webhook", methods=["GET", "POST"])
+def git_pull_on_webhook():
+    #cwd = os.getcwd()
+    #os.chdir("")
+    return sysop.root_path
