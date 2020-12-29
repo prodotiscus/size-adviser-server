@@ -6,6 +6,7 @@ from flask import jsonify
 from flask import request
 from flask import render_template
 
+from json import dumps, loads
 from random import randint
 import sqlite3
 
@@ -74,3 +75,32 @@ def generate_session_id():
         "new_id": str(randint(10**(8-1), (10**8)-1))
     })
 
+
+@firebase.route("/register_new_account")
+def register_new():
+    firebase_uid = request.args.get("firebase_uid")
+    user_email = request.args.get("user_email")
+    user_name = request.args.get("user_name")
+    user_gender = int(request.args.get("user_gender"))
+
+    db = sqlite3.connect("databases/personal.sqlite3")
+    c = db.cursor()
+    exists = c.execute("SELECT firebase_uid FROM firebase_accounts WHERE firebase_uid='%s'" % firebase_uid).fetchone()
+    if exists:
+        db.close()
+        return jsonify({
+            "status": "success",
+            "code": "already_exists"
+        })
+
+    c.execute(
+        "INSERT INTO firebase_accounts VALUES (?, ?, ?, ?, ?)",
+        (firebase_uid, user_email, user_name, user_gender, dumps({}))
+    )
+    db.commit()
+    db.close()
+
+    return jsonify({
+        "status": "success",
+        "code": "registered"
+    })
