@@ -83,6 +83,9 @@ def register_new():
     user_name = request.args.get("user_name")
     user_gender = int(request.args.get("user_gender"))
 
+    if not firebase_uid or not user_email or not user_name or not user_gender:
+        return abort(400)
+
     db = sqlite3.connect("databases/personal.sqlite3")
     c = db.cursor()
     exists = c.execute("SELECT firebase_uid FROM firebase_accounts WHERE firebase_uid='%s'" % firebase_uid).fetchone()
