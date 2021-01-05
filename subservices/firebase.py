@@ -84,13 +84,13 @@ def register_new():
     user_gender = int(request.args.get("user_gender"))
     rewrite = request.args.get("rewrite") is not None
 
-    if not firebase_uid or not user_email or not user_name or not user_gender:
+    if firebase_uid is None or user_email is None or user_name is None or user_gender is None:
         return abort(400)
 
     db = sqlite3.connect("databases/personal.sqlite3")
     c = db.cursor()
     exists = c.execute("SELECT firebase_uid FROM firebase_accounts WHERE firebase_uid='%s'" % firebase_uid).fetchone()
-    if exists:
+    if exists and not rewrite:
         db.close()
         return jsonify({
             "status": "success",
