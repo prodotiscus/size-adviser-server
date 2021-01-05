@@ -82,6 +82,7 @@ def register_new():
     user_email = request.args.get("user_email")
     user_name = request.args.get("user_name")
     user_gender = int(request.args.get("user_gender"))
+    rewrite = request.args.get("rewrite") is not None
 
     if not firebase_uid or not user_email or not user_name or not user_gender:
         return abort(400)
@@ -96,14 +97,21 @@ def register_new():
             "code": "already_exists"
         })
 
-    c.execute(
-        "INSERT INTO firebase_accounts VALUES (?, ?, ?, ?, ?)",
-        (firebase_uid, user_email, user_name, user_gender, dumps({}))
-    )
+    if not rewrite:
+        c.execute(
+            "INSERT INTO firebase_accounts VALUES (?, ?, ?, ?, ?)",
+            (firebase_uid, user_email, user_name, user_gender, dumps({}))
+        )
+    else:
+        c.execute(
+            "UPDATE firebase_accounts SET user_email=?, user_name=?, user_gender=?, additional=? "
+            "WHERE firebase_uid='%s'" % firebase_uid,
+            (user_email, user_name, user_gender, dumps({}))
+        )
     db.commit()
     db.close()
 
     return jsonify({
         "status": "success",
-        "code": "registered"
+        "code": "registered" if not rewrite else "updated"
     })
