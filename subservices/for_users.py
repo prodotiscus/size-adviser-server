@@ -24,3 +24,8 @@ def user_download_app_page():
 @for_users.route("/privacy-policy")
 def show_privacy_policy():
     return render_template("gdpr_6jan.html")
+
+
+@for_users.route("/data-deletion")
+def data_deletion():
+    return render_template("data_deletion.html")
