@@ -16,6 +16,18 @@ import urllib.request
 mobile = Blueprint("mobile", __name__, static_folder="static")
 
 
+@mobile.route("/get_brand_data")
+def _app_get_brand_data():
+    """Used in SizeAdviserApi"""
+    brand = request.args.get("brand")
+    gender_int = int(request.args.get("gender_int"), -1)
+    if brand is None or gender_int == -1:
+        return abort(400)
+    return jsonify(
+        ComputationsDbSession().get_brand_data(brand, gender_int)
+    )
+
+
 @mobile.route("/systems_of_size")
 def _app_systems_of_size():
     return jsonify(

@@ -53,6 +53,19 @@ class ComputationsDbSession:
         self.db = sqlite3.connect("databases/computations.sqlite3")
         self.c = self.db.cursor()
 
+    def get_brand_data(self, brand, gender_int):
+        query = f"SELECT systems FROM from_sheets where brand='{brand}' AND gender={gender_int}'"
+        db_brand_data = self.c.execute(query).fetchall()
+        data_dict = {}
+        for row in db_brand_data:
+            for (standard, value) in row[0]:
+                if standard not in data_dict:
+                    data_dict[standard] = []
+                data_dict[standard].append(value)
+        for (standard, list_values) in data_dict.items():
+            data_dict[standard] = sorted(data_dict[standard])
+        return data_dict
+
     def systems_of_size(self, brand, gender_int, standard, size):
         query = "SELECT systems FROM from_sheets WHERE brand='%s' AND gender=%d " \
                 "AND json_extract(systems, '$.%s')='%s'" % (brand, gender_int, standard, size)
