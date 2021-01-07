@@ -20,7 +20,7 @@ mobile = Blueprint("mobile", __name__, static_folder="static")
 def _app_get_brand_data():
     """Used in SizeAdviserApi"""
     brand = request.args.get("brand")
-    gender_int = int(request.args.get("gender_int"), -1)
+    gender_int = int(request.args.get("gender_int", -1))
     if brand is None or gender_int == -1:
         return abort(400)
     return jsonify(
