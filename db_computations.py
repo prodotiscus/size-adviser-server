@@ -3,6 +3,7 @@
 import openpyexcel as pyxl
 import os
 import json
+import re
 import sqlite3
 
 
@@ -63,8 +64,11 @@ class ComputationsDbSession:
                     data_dict[standard] = []
                 data_dict[standard].append(value)
 
-        def fractions_to_float(fraction):
-            return eval(fraction.replace(" ", "+"))
+        def fractions_to_float(value):
+            fraction_style = re.compile(r"^(\d+)(\.|\s)+(\d+/\d+)$")
+            if not fraction_style.match(value):
+                raise ValueError("Evil expression found!")
+            return eval(x.sub("\g<1>+\g<3>", s))
 
         for (standard, list_values) in data_dict.items():
             data_dict[standard] = sorted(data_dict[standard], key=lambda s: fractions_to_float(s))
