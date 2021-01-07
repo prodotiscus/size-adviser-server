@@ -62,8 +62,12 @@ class ComputationsDbSession:
                 if standard not in data_dict:
                     data_dict[standard] = []
                 data_dict[standard].append(value)
+
+        def fractions_to_float(fraction):
+            return eval(fraction.replace(" ", "+"))
+
         for (standard, list_values) in data_dict.items():
-            data_dict[standard] = sorted(data_dict[standard], key=lambda s: eval(s.replace(" 1/", "+1/")))
+            data_dict[standard] = sorted(data_dict[standard], key=lambda s: fractions_to_float(s))
         return data_dict
 
     def systems_of_size(self, brand, gender_int, standard, size):
