@@ -58,7 +58,7 @@ class ComputationsDbSession:
         db_brand_data = self.c.execute(query).fetchall()
         data_dict = {}
         for row in db_brand_data:
-            for (standard, value) in row[0]:
+            for (standard, value) in json.loads(row[0]):
                 if standard not in data_dict:
                     data_dict[standard] = []
                 data_dict[standard].append(value)
