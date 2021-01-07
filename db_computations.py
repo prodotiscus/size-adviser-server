@@ -54,7 +54,7 @@ class ComputationsDbSession:
         self.c = self.db.cursor()
 
     def get_brand_data(self, brand, gender_int):
-        query = f"SELECT systems FROM from_sheets where brand='{brand}' AND gender={gender_int}'"
+        query = f"SELECT systems FROM from_sheets where brand='{brand}' AND gender={gender_int}"
         db_brand_data = self.c.execute(query).fetchall()
         data_dict = {}
         for row in db_brand_data:
