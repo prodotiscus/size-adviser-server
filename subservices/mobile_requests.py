@@ -23,9 +23,9 @@ def _app_get_brand_data():
     gender_int = int(request.args.get("gender_int", -1))
     if brand is None or gender_int == -1:
         return abort(400)
-    return jsonify(
-        ComputationsDbSession().get_brand_data(brand, gender_int)
-    )
+    return jsonify({
+        "standards": ComputationsDbSession().get_brand_data(brand, gender_int)
+    })
 
 
 @mobile.route("/systems_of_size")
