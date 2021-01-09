@@ -23,9 +23,18 @@ def _app_get_brand_data():
     gender_int = int(request.args.get("gender_int", -1))
     if brand is None or gender_int == -1:
         return abort(400)
+    standards = ComputationsDbSession().get_brand_data(brand, gender_int)
     return jsonify({
-        "standards": ComputationsDbSession().get_brand_data(brand, gender_int)
+        "standards": standards,
+        "defaultStandard": get_default_standard(standards.keys())
     })
+
+
+@staticmethod
+def get_default_standard(list_standards):
+    if "RU" in list_standards:
+        return "RU"
+    return list_standards[0]
 
 
 @mobile.route("/get_brands")
