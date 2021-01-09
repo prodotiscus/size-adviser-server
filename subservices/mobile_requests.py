@@ -109,7 +109,7 @@ def _app_data_for_gender():
     gender_int = int(request.args.get("gender_int", -1))
     user_id = request.args.get("user_id", None)
 
-    if not brand or gender_int == -1 or not user_id:
+    if gender_int == -1 or not user_id:
         return abort(400)
 
     s = ComputationsDbSession()
