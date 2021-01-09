@@ -47,6 +47,18 @@ def _app_get_brands():
     })
 
 
+@mobile.route("/random_brand")
+def _app_random_brand():
+    """Used in SizeAdviserApi"""
+    """The value will be the first brand of lex-sorted table, not actually random"""
+    gender_int = int(request.args.get("gender_int", -1))
+    if gender_int == -1:
+        return abort(400)
+    return jsonify({
+        "brand": ComputationsDbSession().get_all_brands(gender_int, "LIMIT 1")[0]
+    })
+
+
 @mobile.route("/systems_of_size")
 def _app_systems_of_size():
     return jsonify(
