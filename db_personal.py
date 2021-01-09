@@ -35,6 +35,18 @@ class FittingSession:
         ))
         self.db.commit()
 
+
+    def get_user_best_fits(self):
+        data = self.c.execute(
+            f"SELECT brand, size, fit_value FROM fitting WHERE user_id='{self.user_id}'").fetchall()
+        result = {}
+        for (brand, size, fit_value) in data:
+            fit_value = int(fit_value)
+            if brand not in result or abs(fit_value-3) < abs(result[brand][1]-3):
+                result[brand] = [size, fit_value]
+        return result
+
+
     def get_user_collection(self, ignore=0, limit=None, media=False):
         if not self.user_id:
             raise ValueError
