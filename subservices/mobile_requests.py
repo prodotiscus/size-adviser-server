@@ -113,12 +113,29 @@ def _app_data_for_gender():
         return abort(400)
 
     s = ComputationsDbSession()
+    f = FittingSession(user_id=user_id)
+    
     brands = s.get_all_brands(gender_int)
-    return jsonify(
-        dict([(brand,
-                s.systems_of_size(
-                    brand, gender_int, *recommend_size(brand, gender_int, user_id)
-                )) for brand in brands]))
+    best_fits = f.get_user_best_fits()
+    
+    recommended = {}
+    for brand in brands:
+        recommended[brand] = {
+            "systemsOfSize": s.systems_of_size(
+                brand, gender_int, *recommend_size(brand, gender_int, user_id)
+            ),
+            "triedOn": False
+        }
+    
+    for brand in best_fits:
+        size_joint, fv = best_fits[brand]
+        size, standard = size_joint.split()
+        recommended[brand] = {
+            "systemsOfSize": s.systems_of_size(brand, gender_int, standard, size),
+            "triedOn": True
+        }
+    
+    return jsonify(recommended)
 
 
 @mobile.route("/try_with_size")
