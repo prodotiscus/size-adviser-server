@@ -134,8 +134,9 @@ def _app_data_for_gender():
             "systemsOfSize": s.systems_of_size(brand, gender_int, standard, size),
             "triedOn": True
         }
-    
-    return jsonify(recommended)
+    return jsonify({
+        "data": [dict({"brand": brand}, **recommended[brand]) for brand in recommended]
+    })
 
 
 @mobile.route("/try_with_size")
