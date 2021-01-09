@@ -89,7 +89,7 @@ class ComputationsDbSession:
     
     def systems_for_gender(self, gender_int):
         query = f"SELECT brand, systems FROM from_sheets WHERE gender={gender_int}"
-        return [dict(row[0], json.loads(row[1])) for row in self.c.execute(query).fetchall()]
+        return [dict((row[0], json.loads(row[1]))) for row in self.c.execute(query).fetchall()]
 
     def range_of_system(self, brand, gender_int, system):
         query = "SELECT json_extract(systems, '$.%s') FROM from_sheets WHERE brand='%s' " \
