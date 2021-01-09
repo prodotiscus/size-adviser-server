@@ -71,7 +71,7 @@ class ComputationsDbSession:
                 return float(value)
             elif not fraction_style.match(value):
                 raise ValueError("Evil expression found!")
-            return eval(x.sub("\g<1>+\g<3>", s))
+            return eval(fraction_style.sub("\g<1>+\g<3>", value))
 
         for (standard, list_values) in data_dict.items():
             data_dict[standard] = sorted(data_dict[standard], key=lambda s: fractions_to_float(s))
