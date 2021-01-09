@@ -47,6 +47,17 @@ def _app_get_brands():
     })
 
 
+@mobile.route("/data_for_gender")
+def _app_data_for_gender():
+    """Used in SizeAdviserApi"""
+    gender_int = int(request.args.get("gender_int", -1))
+    if gender_int == -1:
+        return abort(400)
+    return jsonify({
+        "forGender": ComputationsDbSession().systems_for_gender(gender_int)
+    })
+
+
 @mobile.route("/random_brand")
 def _app_random_brand():
     """Used in SizeAdviserApi"""
