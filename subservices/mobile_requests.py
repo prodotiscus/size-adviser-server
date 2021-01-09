@@ -28,6 +28,17 @@ def _app_get_brand_data():
     })
 
 
+@mobile.route("/get_brands")
+def _app_get_brands():
+    """Used in SizeAdviserApi"""
+    gender_int = int(request.args.get("gender_int", -1))
+    if gender_int == -1:
+        return abort(400)
+    return jsonify({
+        "listBrands": ComputationsDbSession().get_all_brands(gender_int)
+    })
+
+
 @mobile.route("/systems_of_size")
 def _app_systems_of_size():
     return jsonify(
