@@ -118,12 +118,17 @@ def _app_data_for_gender():
     brands = s.get_all_brands(gender_int)
     best_fits = f.get_user_best_fits()
     
+    
+    def _gson_conv(size_dict):
+        return [{"standard": k, "size": v} for (k,v) in size_dict.items()]
+    
+    
     recommended = {}
     for brand in brands:
         recommended[brand] = {
-            "systemsOfSize": s.systems_of_size(
+            "systemsOfSize": _gson_conv(s.systems_of_size(
                 brand, gender_int, *recommend_size(brand, gender_int, user_id)
-            ),
+            )),
             "triedOn": False
         }
     
@@ -131,7 +136,7 @@ def _app_data_for_gender():
         size_joint, fv = best_fits[brand]
         size, standard = size_joint.split()
         recommended[brand] = {
-            "systemsOfSize": s.systems_of_size(brand, gender_int, standard, size),
+            "systemsOfSize": _gson_conv(s.systems_of_size(brand, gender_int, standard, size)),
             "triedOn": True
         }
     return jsonify({
