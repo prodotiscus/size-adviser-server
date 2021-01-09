@@ -47,17 +47,6 @@ def _app_get_brands():
     })
 
 
-@mobile.route("/data_for_gender")
-def _app_data_for_gender():
-    """Used in SizeAdviserApi"""
-    gender_int = int(request.args.get("gender_int", -1))
-    if gender_int == -1:
-        return abort(400)
-    return jsonify({
-        "forGender": ComputationsDbSession().systems_for_gender(gender_int)
-    })
-
-
 @mobile.route("/random_brand")
 def _app_random_brand():
     """Used in SizeAdviserApi"""
@@ -112,6 +101,46 @@ def _app_recommended_size():
         )
     except TypeError:
         return abort(400)
+
+
+@mobile.route("/recommended_size")
+def _app_recommended_size():
+    """Used in SizeAdviserApi"""
+    brand = request.args.get("brand", None)
+    gender_int = int(request.args.get("gender_int", -1))
+    user_id = request.args.get("user_id", None)
+
+    if not brand or gender_int == -1 or not user_id:
+        return abort(400)
+
+    s = ComputationsDbSession()
+
+    try:
+        # FIX IT !!!
+        _recommended = recommend_size(brand, gender_int, user_id)
+        return jsonify(
+            s.systems_of_size(brand, gender_int, *_recommended)
+        )
+    except TypeError:
+        return abort(400)
+
+
+@mobile.route("/data_for_gender")
+def _app_data_for_gender():
+    """Used in SizeAdviserApi"""
+    gender_int = int(request.args.get("gender_int", -1))
+    user_id = request.args.get("user_id", None)
+
+    if not brand or gender_int == -1 or not user_id:
+        return abort(400)
+
+    s = ComputationsDbSession()
+    brands = s.get_all_brands(gender_int)
+    return jsonify(
+        dict([(brand,
+                s.systems_of_size(
+                    brand, gender_int, recommend_size(brand, gender_int, user_id)
+                )) for brand in brands]))
 
 
 @mobile.route("/try_with_size")
