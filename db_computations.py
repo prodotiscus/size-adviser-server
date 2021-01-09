@@ -66,7 +66,10 @@ class ComputationsDbSession:
 
         def fractions_to_float(value):
             fraction_style = re.compile(r"^(\d+)(\.|\s)+(\d+/\d+)$")
-            if not fraction_style.match(value):
+            simple_float = re.compile(r"^\d+(?:\.\d+)?$")
+            if simple_float.match(value):
+                return float(value)
+            elif not fraction_style.match(value):
                 raise ValueError("Evil expression found!")
             return eval(x.sub("\g<1>+\g<3>", s))
 
