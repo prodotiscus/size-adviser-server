@@ -55,7 +55,7 @@ class ComputationsDbSession:
         self.c = self.db.cursor()
 
     def get_brand_data(self, brand, gender_int):
-        query = f"SELECT systems FROM from_sheets where brand='{brand}' AND gender={gender_int}"
+        query = f"SELECT systems FROM from_sheets WHERE brand='{brand}' AND gender={gender_int}"
         db_brand_data = self.c.execute(query).fetchall()
         data_dict = {}
         for row in db_brand_data:
@@ -73,6 +73,10 @@ class ComputationsDbSession:
         for (standard, list_values) in data_dict.items():
             data_dict[standard] = sorted(data_dict[standard], key=lambda s: fractions_to_float(s))
         return data_dict
+    
+    def get_all_brands(self, gender_int):
+        query = f"SELECT DISTINCT brand FROM from_sheets WHERE gender={gender_int}"
+        return [row[0] for row in self.c.execute(query).fetchall()]
 
     def systems_of_size(self, brand, gender_int, standard, size):
         query = "SELECT systems FROM from_sheets WHERE brand='%s' AND gender=%d " \
