@@ -77,8 +77,8 @@ class ComputationsDbSession:
             data_dict[standard] = sorted(data_dict[standard], key=lambda s: fractions_to_float(s))
         return data_dict
     
-    def get_all_brands(self, gender_int):
-        query = f"SELECT DISTINCT brand FROM from_sheets WHERE gender={gender_int}"
+    def get_all_brands(self, gender_int, add_query=""):
+        query = f"SELECT DISTINCT brand FROM from_sheets WHERE gender={gender_int} {add_query}"
         return [row[0] for row in self.c.execute(query).fetchall()]
 
     def systems_of_size(self, brand, gender_int, standard, size):
