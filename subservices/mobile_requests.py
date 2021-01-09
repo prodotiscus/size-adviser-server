@@ -30,7 +30,6 @@ def _app_get_brand_data():
     })
 
 
-@staticmethod
 def get_default_standard(list_standards):
     if "RU" in list_standards:
         return "RU"
