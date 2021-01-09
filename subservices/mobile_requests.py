@@ -63,6 +63,7 @@ def recommend_size(brand, gender_int, user_id, system=None):
 
 @mobile.route("/recommended_size")
 def _app_recommended_size():
+    """Used in SizeAdviserApi"""
     brand = request.args.get("brand", None)
     gender_int = int(request.args.get("gender_int", -1))
     user_id = request.args.get("user_id", None)
