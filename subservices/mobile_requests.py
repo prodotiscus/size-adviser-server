@@ -117,7 +117,7 @@ def _app_data_for_gender():
     return jsonify(
         dict([(brand,
                 s.systems_of_size(
-                    brand, gender_int, recommend_size(brand, gender_int, user_id)
+                    brand, gender_int, *recommend_size(brand, gender_int, user_id)
                 )) for brand in brands]))
 
 
