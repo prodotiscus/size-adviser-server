@@ -194,7 +194,7 @@ def _app_get_collection_items():
         response["items"].append({
             "brand": obj["brand"],
             "size": size,
-            "standard": standard
+            "standard": standard,
             "fit_value": obj["fit_value"]
         })
     return jsonify(response)
