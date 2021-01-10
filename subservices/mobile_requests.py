@@ -185,19 +185,19 @@ def _app_get_collection_items():
         abort(400)
     
     s = FittingSession(user_id)
-    coll = s.get_user_collection()
-    response = {
-        "items": []
-    }
-    for (fid, obj) in coll.items():
-        standard, size = obj["size"].split()
-        response["items"].append({
-            "brand": obj["brand"],
-            "size": size,
-            "standard": standard,
-            "fit_value": obj["fit_value"]
-        })
-    return jsonify(response)
+    coll = s.get_user_best_fits()
+    
+    return jsonify(
+        "items": [
+            dict(
+                brand = brand,
+                standard = coll[brand][0].split()[0],
+                size = coll[brand][0].split()[1],
+                fit_value = coll[brand][1]) for brand in coll
+        ]
+    )
+    
+    
 
 
 @mobile.route("/my_collection")
