@@ -134,7 +134,7 @@ def _app_data_for_gender():
     
     for brand in best_fits:
         size_joint, fv = best_fits[brand]
-        size, standard = size_joint.split()
+        size, standard = size_joint.rsplit(' ', 1)
         recommended[brand] = {
             "systemsOfSize": _gson_conv(s.systems_of_size(brand, gender_int, standard, size)),
             "triedOn": True
@@ -146,6 +146,7 @@ def _app_data_for_gender():
 
 @mobile.route("/try_with_size")
 def _app_try_with_size():
+    """Used in SizeAdviserApi"""
     user_id = request.args.get("user_id", None)
     fitting_id = request.args.get("fitting_id", None)
     brand = request.args.get("brand", None)
