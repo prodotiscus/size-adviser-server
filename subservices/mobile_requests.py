@@ -187,7 +187,7 @@ def _app_get_collection_items():
     s = FittingSession(user_id)
     coll = s.get_user_best_fits()
     
-    return jsonify(
+    return jsonify({
         "items": [
             dict(
                 brand = brand,
@@ -195,9 +195,7 @@ def _app_get_collection_items():
                 size = coll[brand][0].split()[1],
                 fit_value = coll[brand][1]) for brand in coll
         ]
-    )
-    
-    
+    })
 
 
 @mobile.route("/my_collection")
