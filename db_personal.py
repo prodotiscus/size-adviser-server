@@ -47,12 +47,11 @@ class FittingSession:
         return result
 
 
-    def get_user_collection(self, ignore=0, limit=None, media=False):
+    def get_user_collection(self, media=False):
         if not self.user_id:
             raise ValueError
-        quantity = (("LIMIT " + str(limit) + " ") if limit else "") + "OFFSET " + str(ignore)
-        ftg = self.c.execute("SELECT fitting_id, brand, size, fit_value FROM fitting WHERE "
-                             "user_id='%s' %s" % (self.user_id, quantity)).fetchall()
+        ftg = self.c.execute(f"SELECT fitting_id, brand, size, fit_value FROM fitting WHERE "
+                             "user_id='{self.user_id}'").fetchall()
         response = {}
         for row in ftg:
             response[row[0]] = {
