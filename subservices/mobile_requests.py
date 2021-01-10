@@ -176,35 +176,27 @@ def fit_value_to_str(fit_value):
         return "1 SIZE UP"
 
 
-@mobile.route("/get_collection_items/<user_id>/<int:offset>/<int:limit>")
-def _app_get_collection_items(user_id, offset, limit):
-    offset, limit = int(offset), int(limit)
+@mobile.route("/get_collection_items")
+def _app_get_collection_items():
+    """Used in SizeAdviserApi"""
+    user_id = request.args.get("user_id")
+    
+    if user_id is None:
+        abort(400)
+    
     s = FittingSession(user_id)
-    coll = s.get_user_collection(offset, limit)
+    coll = s.get_user_collection()
     response = {
-        "previousEnabled": True,
-        "nextEnabled": True,
-        "items": {}
+        "items": []
     }
-    if not offset:
-        response["previousEnabled"] = False
-    n = 1
     for (fid, obj) in coll.items():
-        response["items"][str(n)] = {
-            "empty": False,
-            "pictureURLs": [
-                "https://size-adviser.com/mobile/get_images/%s/%d" % (obj["brand"], n)
-                for n in range(3)
-                ],
+        standard, size = obj["size"].split()
+        response["items"].append({
             "brand": obj["brand"],
-            "size": obj["size"],
-            "fit_value": fit_value_to_str(obj["fit_value"])
-        }
-        n += 1
-    for x in range(n, limit + 1):
-        response["items"][str(x)] = {
-            "empty": True
-        }
+            "size": size,
+            "standard": standard
+            "fit_value": obj["fit_value"]
+        })
     return jsonify(response)
 
 
