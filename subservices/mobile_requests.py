@@ -191,8 +191,8 @@ def _app_get_collection_items():
         "items": [
             dict(
                 brand = brand,
-                standard = coll[brand][0].split()[0],
-                size = coll[brand][0].split()[1],
+                standard = coll[brand][0].split()[1],
+                size = coll[brand][0].split()[0],
                 fit_value = coll[brand][1]) for brand in coll
         ]
     })
