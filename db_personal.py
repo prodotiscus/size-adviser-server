@@ -46,8 +46,13 @@ class FittingSession:
             if brand not in result or abs(fit_value-3) < abs(result[brand][1]-3):
                 result[brand] = [size, fit_value]
         return result
+    
+    def get_user_collection(self):
+        data = self.c.execute(
+            f"SELECT brand, size, fit_value FROM fitting WHERE user_id='{self.user_id}'").fetchall()
+        return dict([(brand, [size, int(fit_value)]) for (brand, size, fit_value) in data])
 
-
+'''
     def get_user_collection(self, media=False):
         if not self.user_id:
             raise ValueError
@@ -73,6 +78,7 @@ class FittingSession:
                 response[fitting_id]["media_binaries"].append(open("media/" + photo_id, "rb").read())
 
         return response
+'''
 
     def attribute_tried(self, brand_list, attr_func):
         sql_list = ",".join(["'%s'" % b for b in brand_list])
