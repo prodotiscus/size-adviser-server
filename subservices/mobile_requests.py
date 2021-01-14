@@ -187,15 +187,18 @@ def _app_get_collection_items():
     
     s = FittingSession(user_id)
     coll = s.get_user_collection()
+    result = []
+    for brand_object in coll:
+        for brand in brand_object:            
+            result.append({
+                "brand": brand,
+                "standard": brand_object[brand][0].rsplit(' ',1)[1],
+                "size": brand_object[brand][0].rsplit(' ',1)[0],
+                "fit_value": brand_object[brand][1]
+            })
     
     return jsonify({
-        "items": [
-            dict(
-                brand = brand,
-                standard = coll[brand][0].rsplit(' ',1)[1],
-                size = coll[brand][0].rsplit(' ',1)[0],
-                fit_value = coll[brand][1]) for brand in coll
-        ]
+        "items": result
     })
 
 
