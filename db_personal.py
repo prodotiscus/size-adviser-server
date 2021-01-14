@@ -51,35 +51,7 @@ class FittingSession:
         data = self.c.execute(
             f"SELECT brand, size, fit_value FROM fitting WHERE user_id='{self.user_id}'").fetchall()
         return dict([(brand, [size, int(fit_value)]) for (brand, size, fit_value) in data])
-
-'''
-    def get_user_collection(self, media=False):
-        if not self.user_id:
-            raise ValueError
-        ftg = self.c.execute(f"SELECT fitting_id, brand, size, fit_value FROM fitting WHERE "
-                             "user_id='{self.user_id}'").fetchall()
-        response = {}
-        for row in ftg:
-            response[row[0]] = {
-                "brand": row[1],
-                "size": row[2],
-                "fit_value": row[3],
-                "media_binaries": None
-            }
-        if media:
-            ids = [row[0] for row in ftg]
-            query_ids = ",".join(["'%s'" % el for el in ids])
-            links = self.c.execute("SELECT fitting_id, photo_id FROM brand_photos WHERE "
-                                   "fitting_id in (%s)" % query_ids).fetchall()
-            for row in links:
-                fitting_id, photo_id = row
-                if not response[fitting_id]["media_binaries"]:
-                    response[fitting_id]["media_binaries"] = []
-                response[fitting_id]["media_binaries"].append(open("media/" + photo_id, "rb").read())
-
-        return response
-'''
-
+    
     def attribute_tried(self, brand_list, attr_func):
         sql_list = ",".join(["'%s'" % b for b in brand_list])
         tried = [row[0] for row in self.c.execute("SELECT DISTINCT brand FROM fitting WHERE brand IN (%s) AND "
