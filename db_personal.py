@@ -31,7 +31,7 @@ class FittingSession:
 
     def try_with_size(self, brand, size, fit_value, rewrite=True):
         if rewrite:
-            self.c.execute(f"DELETE FROM fitting WHERE brand='{brand}' AND size='{size}'")
+            self.c.execute(f"DELETE FROM fitting WHERE brand='{brand}' AND size='{size}' AND user_id='{self.user_id}'")
         self.c.execute("INSERT INTO fitting VALUES (?,?,?,?,?)", (
             self.user_id, self.fitting_id, brand, size, fit_value
         ))
