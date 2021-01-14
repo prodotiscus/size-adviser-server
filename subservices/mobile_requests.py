@@ -186,7 +186,7 @@ def _app_get_collection_items():
         abort(400)
     
     s = FittingSession(user_id)
-    coll = s.get_user_best_fits()
+    coll = s.get_user_collection()
     
     return jsonify({
         "items": [
