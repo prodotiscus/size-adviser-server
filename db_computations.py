@@ -40,7 +40,7 @@ def sheet_records(dirname="sheets/brands", mgender=0):
 
 
 def db_load_sheets(dirname="sheets/brands", mgender=0):
-    db = sqlite3.connect("databases/computations.sqlite3")
+    db = sqlite3.connect("../DATABASES/computations.sqlite3")
     c = db.cursor()
     c.execute("DELETE FROM from_sheets")
     for record in sheet_records(dirname, mgender):
