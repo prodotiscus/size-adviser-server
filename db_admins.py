@@ -6,7 +6,7 @@ import sqlite3
 
 class AdminDatabase:
     def __init__(self):
-        self.db = sqlite3.connect("databases/admins.sqlite3")
+        self.db = sqlite3.connect("../DATABASES/admins.sqlite3")
         self.c = self.db.cursor()
 
     def check_token(self, username, token):

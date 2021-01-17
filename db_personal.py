@@ -12,7 +12,7 @@ class FittingSession:
             raise ValueError
         if user_id and not fitting_id:
             self.fitting_id = str(randint(10**(8-1), (10**8)-1))
-        self.db = sqlite3.connect("databases/personal.sqlite3")
+        self.db = sqlite3.connect("../DATABASES/personal.sqlite3")
         self.c = self.db.cursor()
 
     @staticmethod

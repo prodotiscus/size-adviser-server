@@ -51,7 +51,7 @@ def db_load_sheets(dirname="sheets/brands", mgender=0):
 
 class ComputationsDbSession:
     def __init__(self):
-        self.db = sqlite3.connect("databases/computations.sqlite3")
+        self.db = sqlite3.connect("../DATABASES/computations.sqlite3")
         self.c = self.db.cursor()
 
     def get_brand_data(self, brand, gender_int):
