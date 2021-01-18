@@ -14,6 +14,8 @@ import re
 import sqlite3
 import urllib.request
 
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 mobile = Blueprint("mobile", __name__, static_folder="static")
 
 
@@ -214,8 +216,13 @@ def _app_my_collection():
     media = "media" in request.args
     coll = s.get_user_collection(ignore, limit, media)
     # ...
-    
-    
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 @mobile.route("/upload_personal_photo", methods=["GET", "POST"])
 def _app_upload_personal_photo():
     """Used in SizeAdviserApi"""
