@@ -25,9 +25,9 @@ def register_new():
     if firebase_uid is None or user_email is None or user_name is None or user_gender is None:
         return abort(400)
 
-    db = sqlite3.connect("databases/personal.sqlite3")
+    db = sqlite3.connect("../DATABASES/personal.sqlite3")
     c = db.cursor()
-    exists = c.execute("SELECT firebase_uid FROM firebase_accounts WHERE firebase_uid='%s'" % firebase_uid).fetchone()
+    exists = c.execute(f"SELECT firebase_uid FROM firebase_accounts WHERE firebase_uid='{firebase_uid}'").fetchone()
     if exists and not rewrite:
         db.close()
         return jsonify({
@@ -43,7 +43,7 @@ def register_new():
     else:
         c.execute(
             "UPDATE firebase_accounts SET user_email=?, user_name=?, user_gender=?, additional=? "
-            "WHERE firebase_uid='%s'" % firebase_uid,
+            f"WHERE firebase_uid='{firebase_uid}'",
             (user_email, user_name, user_gender, dumps({}))
         )
     db.commit()
