@@ -9,6 +9,7 @@ from flask import jsonify
 from flask import make_response
 from flask import request
 
+import os
 import re
 import sqlite3
 import urllib.request
@@ -213,6 +214,23 @@ def _app_my_collection():
     media = "media" in request.args
     coll = s.get_user_collection(ignore, limit, media)
     # ...
+    
+    
+@mobile.route("/upload_personal_photo", methods=["GET", "POST"])
+def _app_upload_personal_photo():
+    """Used in SizeAdviserApi"""
+    if request.method == "POST":
+        if "file" not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files["file"]
+        if file.filename == "":
+            flash("No selected file")
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(os.path.split(mobile.root_path)[0], "sheets/brands", "sample.jpeg"))
+            return "Hurray."
 
 
 @mobile.route("/upload_photo")
