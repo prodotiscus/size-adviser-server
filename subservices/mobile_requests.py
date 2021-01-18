@@ -239,7 +239,7 @@ def _app_upload_personal_photo():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(os.path.split(mobile.root_path)[0], "sheets/brands", "sample.jpeg"))
+            file.save(os.path.join(os.path.split(mobile.root_path)[0], "static", "sample.jpeg"))
             return "Hurray."
 
 
