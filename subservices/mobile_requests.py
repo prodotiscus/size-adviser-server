@@ -5,6 +5,7 @@ from db_personal import FittingSession
 
 from flask import abort
 from flask import Blueprint
+from flask import flash
 from flask import jsonify
 from flask import make_response
 from flask import request
@@ -13,6 +14,8 @@ import os
 import re
 import sqlite3
 import urllib.request
+
+from werkzeug.utils import secure_filename
 
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
