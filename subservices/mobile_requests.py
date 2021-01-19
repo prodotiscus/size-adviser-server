@@ -249,12 +249,12 @@ def _app_upload_photo(user_id, fitting_id, local_id):
 
 
 def respond_placeholder_binary():
-    with open("static/70x70.png", mode="rb") as img:
+    with open("static/og_image_source.jpg", mode="rb") as img:
         image_binary = img.read()
     response = make_response(image_binary)
-    response.headers.set("Content-Type", "image/png")
+    response.headers.set("Content-Type", "image/jpeg")
     response.headers.set(
-        "Content-Disposition", "attachment", filename="70x70.png")
+        "Content-Disposition", "attachment", filename="placeholder_.png")
     return response
 
 
