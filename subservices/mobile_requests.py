@@ -273,27 +273,14 @@ def _app_get_images():
     db.close()
 
     try:
-        image_path = "%s_%s.png" % (pids[index][0], pids[index][1])
+        image_path = "photo_%s_%s.png" % (pids[index][0], pids[index][1])
     except IndexError:
-        return respond_placeholder_binary()
-
-    pid, extension = image_path.split(".")
-    extension = extension.lower()
-    if "jp" in extension:
-        content_type = "image/jpeg"
-    elif "png" in extension:
-        content_type = "image/png"
-    elif "bmp" in extension:
-        content_type = "image/bmp"
-    elif "svg" in extension:
-        content_type = "image/svg+xml"
-    else:
         return respond_placeholder_binary()
 
     with open("../MEDIA/" + image_path, mode="rb") as img:
         image_binary = img.read()
     response = make_response(image_binary)
-    response.headers.set("Content-Type", content_type)
+    response.headers.set("Content-Type", "image/png")
     response.headers.set(
         "Content-Disposition", "attachment", filename="photo_%s_%d.png" % (brand, index))
     return response
