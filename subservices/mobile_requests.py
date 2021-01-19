@@ -230,7 +230,7 @@ def allowed_file(filename):
 def _app_upload_photo(user_id, fitting_id, local_id):
     """Used in SizeAdviserApi"""
     s = FittingSession(user_id, fitting_id)
-    fn = f"photo_{user_id}_{local_id}.png"
+    fn = f"photo_{fitting_id}_{local_id}.png"
     if request.method == "POST":
         if "file" not in request.files:
             return abort(400)
@@ -257,20 +257,27 @@ def respond_placeholder_binary():
     return response
 
 
-@mobile.route("/get_images/<brand>/<int:index>")
-def _app_get_images(brand, index):
-    db = sqlite3.connect("databases/personal.sqlite3")
+@mobile.route("/get_images")
+def _app_get_images():
+    """Used in SizeAdviserApi"""
+    brand = request.args.get("brand")
+    if brand is None:
+        return abort(400)
+    index = request.args.get("index", 0)
+    user_id = request.args("user_id")
+    
+    db = sqlite3.connect("../DATABASES/personal.sqlite3")
     c = db.cursor()
-    pids = c.execute("SELECT photo_id FROM brand_photos WHERE fitting_id IN "
-                     "(SELECT fitting_id FROM fitting WHERE brand='{brand}')".format(brand=brand)).fetchall()
+    pids = c.execute("SELECT fitting_id, photo_id FROM brand_photos WHERE fitting_id IN "
+                     f"(SELECT fitting_id FROM fitting WHERE brand='{brand}')").fetchall()
     db.close()
 
     try:
-        image = pids[index][0]
+        image_path = "%s_%s.png" % (pids[index][0], pids[index][1])
     except IndexError:
         return respond_placeholder_binary()
 
-    pid, extension = image.split(".")
+    pid, extension = image_path.split(".")
     extension = extension.lower()
     if "jp" in extension:
         content_type = "image/jpeg"
@@ -283,12 +290,12 @@ def _app_get_images(brand, index):
     else:
         return respond_placeholder_binary()
 
-    with open("media/" + image, mode="rb") as img:
+    with open("../MEDIA/" + image_path, mode="rb") as img:
         image_binary = img.read()
     response = make_response(image_binary)
     response.headers.set("Content-Type", content_type)
     response.headers.set(
-        "Content-Disposition", "attachment", filename="media/" + image)
+        "Content-Disposition", "attachment", filename="photo_%s_%d.png" % (brand, index))
     return response
 
 
