@@ -29,11 +29,11 @@ class FittingSession:
     def number_of_tries(self):
         return self.c.execute("SELECT COUNT(*) FROM fitting WHERE user_id='%s'" % (self.user_id)).fetchone()[0]
 
-    def try_with_size(self, brand, size, fit_value, rewrite=True):
+    def try_with_size(self, brand, size, fit_value, date, geo, rewrite=True):
         if rewrite:
             self.c.execute(f"DELETE FROM fitting WHERE brand='{brand}' AND size='{size}' AND user_id='{self.user_id}'")
-        self.c.execute("INSERT INTO fitting VALUES (?,?,?,?,?)", (
-            self.user_id, self.fitting_id, brand, size, fit_value
+        self.c.execute("INSERT INTO fitting VALUES (?,?,?,?,?,?,?)", (
+            self.user_id, self.fitting_id, brand, size, fit_value, date, geo
         ))
         self.db.commit()
 
