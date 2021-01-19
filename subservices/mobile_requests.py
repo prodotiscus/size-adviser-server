@@ -159,11 +159,13 @@ def _app_try_with_size():
     size = request.args.get("size", None)
     system = request.args.get("system", None)
     fit_value = request.args.get("fit_value", None)
-    if not user_id or not fitting_id or not brand or not size or not system or not fit_value:
+    date = request.args.get("date", None)
+    geo = request.args.get("geo", "")
+    if not user_id or not fitting_id or not brand or not size or not system or not fit_value or not date:
         return abort(400)
 
     s = FittingSession(user_id, fitting_id)
-    s.try_with_size(brand, " ".join([size, system]), fit_value)
+    s.try_with_size(brand, " ".join([size, system]), fit_value, date, geo)
     return jsonify({
         "result": "success"
     })
