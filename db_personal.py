@@ -49,8 +49,8 @@ class FittingSession:
     
     def get_user_collection(self):
         data = self.c.execute(
-            f"SELECT brand, size, fit_value FROM fitting WHERE user_id='{self.user_id}'").fetchall()
-        return [{brand: [size, int(fit_value)]} for (brand, size, fit_value) in data]
+            f"SELECT brand, size, fit_value, fitting_id FROM fitting WHERE user_id='{self.user_id}'").fetchall()
+        return [{brand: [size, int(fit_value), fitting_id]} for (brand, size, fit_value, fitting_id) in data]
     
     def attribute_tried(self, brand_list, attr_func):
         sql_list = ",".join(["'%s'" % b for b in brand_list])
