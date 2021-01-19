@@ -201,7 +201,7 @@ def _app_get_collection_items():
                 "standard": brand_object[brand][0].rsplit(' ',1)[1],
                 "size": brand_object[brand][0].rsplit(' ',1)[0],
                 "fit_value": brand_object[brand][1],
-                "fittingID": brand_objects[brand][2]
+                "fittingID": brand_object[brand][2]
             })
     
     return jsonify({
