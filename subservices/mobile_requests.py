@@ -263,7 +263,7 @@ def _app_get_images():
     brand = request.args.get("brand")
     if brand is None:
         return abort(400)
-    index = request.args.get("index", 0)
+    index = int(request.args.get("index", 0))
     user_id = request.args.get("user_id")
     
     db = sqlite3.connect("../DATABASES/personal.sqlite3")
