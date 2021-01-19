@@ -269,11 +269,11 @@ def _app_get_images():
         return abort(400)
     index = int(request.args.get("index", 0))
     user_id = request.args.get("user_id")
+    fitting_id = request.args.get("fitting_id")
     
     db = sqlite3.connect("../DATABASES/personal.sqlite3")
     c = db.cursor()
-    pids = c.execute("SELECT fitting_id, photo_id FROM brand_photos WHERE fitting_id IN "
-                     f"(SELECT fitting_id FROM fitting WHERE brand='{brand}')").fetchall()
+    pids = c.execute(f"SELECT fitting_id, photo_id FROM brand_photos WHERE fitting_id='{fitting_id}'").fetchall()
     db.close()
 
     try:
