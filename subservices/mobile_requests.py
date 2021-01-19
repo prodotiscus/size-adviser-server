@@ -226,44 +226,25 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@mobile.route("/upload_personal_photo", methods=["GET", "POST"])
-def _app_upload_personal_photo():
+@mobile.route("/<user_id>/<fitting_id>/<local_id>/upload_photo", methods=["GET", "POST"])
+def _app_upload_photo(user_id, fitting_id, local_id):
     """Used in SizeAdviserApi"""
+    s = FittingSession(user_id, fitting_id)
+    fn = f"photo_{user_id}_{local_id}.png"
     if request.method == "POST":
         if "file" not in request.files:
-            flash('No file part')
-            return redirect(request.url)
+            return abort(400)
         file = request.files["file"]
         if file.filename == "":
-            flash("No selected file")
-            return redirect(request.url)
+            return abort(400)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(os.path.split(mobile.root_path)[0], "static", "sample.jpeg"))
-            return "Hurray."
-
-
-@mobile.route("/upload_photo")
-def _app_upload_photo():
-    user_id = request.args.get("user_id", None)
-    fitting_id = request.args.get("fitting_id", None)
-    brand = request.args.get("brand", None)
-    photo_url = request.args.get("url", None)
-    s = FittingSession(user_id, fitting_id)
-
-    if not user_id or not fitting_id or not brand or not photo_url:
-        return abort(400)
-    if not re.search(r"^https?://res\.cloudinary\.com/size-adviser/.*", photo_url):
-        return abort(400)
-
-    extension = re.search(r".+\.(.+)", photo_url).group(1)
-    photo_id = s.make_photo_id()
-    urllib.request.urlretrieve(photo_url, "media/%s.%s" % (photo_id, extension))
-    s.db_media_adding(photo_id + "." + extension)
-
-    return jsonify({
-        "result": "success"
-    })
+            file.save(os.path.join(os.path.split(mobile.root_path)[0], "../MEDIA", fn))
+            s.db_media_adding(local_id)
+            return jsonify({
+                "uploaded": True,
+                "result": "success"
+            })
 
 
 def respond_placeholder_binary():
