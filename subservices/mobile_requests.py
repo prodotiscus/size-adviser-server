@@ -264,7 +264,7 @@ def _app_get_images():
     if brand is None:
         return abort(400)
     index = request.args.get("index", 0)
-    user_id = request.args("user_id")
+    user_id = request.args.get("user_id")
     
     db = sqlite3.connect("../DATABASES/personal.sqlite3")
     c = db.cursor()
