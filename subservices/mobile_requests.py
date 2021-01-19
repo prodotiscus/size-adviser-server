@@ -212,19 +212,6 @@ def _app_get_collection_items():
     })
 
 
-@mobile.route("/my_collection")
-def _app_my_collection():
-    user_id = request.args["user_id"]
-    s = FittingSession(user_id)
-    ignore = int(request.args["ignore"])
-    limit = None
-    if request.args["limit"]:
-        limit = int(request.args["limit"])
-    media = "media" in request.args
-    coll = s.get_user_collection(ignore, limit, media)
-    # ...
-
-
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -265,8 +252,6 @@ def respond_placeholder_binary():
 def _app_get_images():
     """Used in SizeAdviserApi"""
     brand = request.args.get("brand")
-    if brand is None:
-        return abort(400)
     index = int(request.args.get("index", 0))
     user_id = request.args.get("user_id")
     fitting_id = request.args.get("fitting_id")
@@ -288,53 +273,3 @@ def _app_get_images():
     response.headers.set(
         "Content-Disposition", "attachment", filename="photo_%s_%d.png" % (brand, index))
     return response
-
-
-@mobile.route("/number_of_tries/<user_id>")
-def _app_number_of_tries(user_id):
-    s = FittingSession(user_id)
-    n = s.number_of_tries()
-    s.stop()
-    return jsonify({"number": n})
-
-
-@mobile.route("/brands_from/<user_id>/<int:gender_int>/<my_system>/", defaults={"prefix": ""})
-@mobile.route("/brands_from/<user_id>/<int:gender_int>/<my_system>/<prefix>")
-def _app_ajax_brand_search(user_id, gender_int, my_system, prefix):
-    urls = [
-        "https://size-adviser.com/static/not-tried-on.png",
-        "https://size-adviser.com/static/tried-on.png"
-    ]
-    prefix = prefix.lower()
-    all_brands = ["Adidas", "Asics", "Nike"]  # FIX IT!
-    found = [b for b in all_brands if b.lower().startswith(prefix)]
-    if not found:
-        return jsonify({"hints": []})
-
-    s = FittingSession(user_id)
-
-    def choose_pic(brand_name, have_tried):
-        return {
-            "brand": brand_name,
-            "have_tried": have_tried,
-            "picURL": urls[have_tried]
-        }
-
-    res_brands = s.attribute_tried(found, choose_pic)
-
-    s2 = ComputationsDbSession()
-
-    for e, item in enumerate(res_brands):
-        system, size = recommend_size(item["brand"], gender_int, user_id, my_system)
-        if system != my_system and item["have_tried"]:
-            try:
-                size = s2.systems_of_size(item["brand"], gender_int, system, size)[my_system]
-            except TypeError:
-                del res_brands[e]
-                continue
-        del res_brands[e]["have_tried"]
-        item["size"] = size
-
-    return jsonify({
-        "hints": res_brands
-    })
