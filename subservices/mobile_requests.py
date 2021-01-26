@@ -31,7 +31,7 @@ def _app_get_brand_data():
         return abort(400)
     standards = ComputationsDbSession().get_brand_data(brand, gender_int)
     return jsonify({
-        "standards": standards,
+        "standards": [{"standard": k if k != "CM" else "Cm", "sizes": v} for (k, v) in standards.items()],
         "defaultStandard": get_default_standard(list(standards.keys()))
     })
 
