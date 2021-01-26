@@ -102,9 +102,10 @@ def _app_recommended_size():
     try:
         # FIX IT !!!
         _recommended = recommend_size(brand, gender_int, user_id)
-        return jsonify(
-            s.systems_of_size(brand, gender_int, *_recommended)
-        )
+        return jsonify({
+            "recommendations": [{"standard": k if k != "CM" else "Cm", "value": v} 
+             for (k,v) in s.systems_of_size(brand, gender_int, *_recommended).items()]
+        })
     except TypeError:
         return abort(400)
 
