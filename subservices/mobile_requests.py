@@ -288,7 +288,7 @@ def _app_get_images():
     try:
         image_path = "photo_%s_%s.png" % (pids[index][0], pids[index][1])
     except IndexError:
-        return respond_placeholder_binary()
+        return abort(400)
 
     with open("../MEDIA/" + image_path, mode="rb") as img:
         image_binary = img.read()
