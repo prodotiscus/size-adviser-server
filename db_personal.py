@@ -52,6 +52,14 @@ class FittingSession:
             f"SELECT brand, size, fit_value, fitting_id, date FROM fitting WHERE user_id='{self.user_id}'").fetchall()
         return [{brand: [size, int(fit_value), fitting_id, date]} for (brand, size, fit_value, fitting_id, date) in data]
     
+    def remove_fitting_data(self):
+        self.c.execute(f"DELETE FROM fitting WHERE fitting_id='{self.fitting_id}'")
+        return True
+    
+    def remove_photo(self, photo_id):
+        self.c.execute(f"DELETE FROM brand_photos WHERE photo_id='{photo_id}' AND fitting_id='{self.fitting_id}'")
+        return True
+    
     def attribute_tried(self, brand_list, attr_func):
         sql_list = ",".join(["'%s'" % b for b in brand_list])
         tried = [row[0] for row in self.c.execute("SELECT DISTINCT brand FROM fitting WHERE brand IN (%s) AND "
