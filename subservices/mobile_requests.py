@@ -224,7 +224,7 @@ def _app_rm_collection_item():
         return jsonify({removed: True})
 
 
-@app.route("/remove_photo")
+@mobile.route("/remove_photo")
 def _app_rm_photo():
     """Used in SizeAdviserApi"""
     user_id = requests.args.get("user_id")
