@@ -213,7 +213,7 @@ def _app_get_collection_items():
     })
 
 
-@app.route("/remove_collection_item")
+@mobile.route("/remove_collection_item")
 def _app_rm_collection_item():
     """Used in SizeAdviserApi"""
     user_id = requests.args.get("user_id")
