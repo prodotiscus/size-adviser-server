@@ -173,7 +173,8 @@ def _app_get_collection_items():
                 "size": brand_object[brand][0].rsplit(' ',1)[0],
                 "fit_value": brand_object[brand][1],
                 "fittingID": brand_object[brand][2],
-                "date": brand_object[brand][3]
+                "date": brand_object[brand][3],
+                "has_photos": brand_object[brand][4] is not None
             })
     
     return jsonify({
