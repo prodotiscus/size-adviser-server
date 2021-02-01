@@ -49,8 +49,11 @@ class FittingSession:
     
     def get_user_collection(self):
         data = self.c.execute(
-            f"SELECT brand, size, fit_value, fitting_id, date FROM fitting WHERE user_id='{self.user_id}'").fetchall()
-        return [{brand: [size, int(fit_value), fitting_id, date]} for (brand, size, fit_value, fitting_id, date) in data]
+            f"""SELECT brand, size, fit_value, fitting_id, date, photo_id FROM (
+                    SELECT brand, size, fit_value, fitting.fitting_id, brand_photos.photo_id, fitting.user_id, date 
+                    FROM fitting LEFT OUTER JOIN brand_photos ON fitting.fitting_id = brand_photos.fitting_id
+                ) WHERE user_id='{self.user_id}' GROUP BY fitting_id""").fetchall()
+        return [{brand: [size, int(fit_value), fitting_id, date, photo_id]} for (brand, size, fit_value, fitting_id, date, photo_id) in data]
     
     def remove_fitting_data(self):
         self.c.execute(f"DELETE FROM fitting WHERE fitting_id='{self.fitting_id}'")
