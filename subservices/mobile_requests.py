@@ -65,24 +65,6 @@ def _app_random_brand():
     })
 
 
-@mobile.route("/systems_of_size")
-def _app_systems_of_size():
-    return jsonify(
-        ComputationsDbSession().systems_of_size(
-            request.args["brand"], int(request.args["gender_int"]), request.args["standard"], request.args["size"]
-        )
-    )
-
-
-@mobile.route("/range_of_system")
-def _app_range_of_system():
-    return jsonify(
-        ComputationsDbSession().range_of_system(
-            request.args["brand"], int(request.args["gender_int"]), request.args["system"]
-        )
-    )
-
-
 def recommend_size(brand, gender_int, user_id, system=None):
     return ["US", "7"] # FIX IT!
 
@@ -170,20 +152,6 @@ def _app_try_with_size():
     return jsonify({
         "result": "success"
     })
-
-
-def fit_value_to_str(fit_value):
-    fit_value = int(fit_value)
-    if fit_value == 1:
-        return "1 SIZE DOWN"
-    elif fit_value == 2:
-        return "TOO SMALL"
-    elif fit_value == 3:
-        return "IDEAL"
-    elif fit_value == 4:
-        return "TOO BIG"
-    elif fit_value == 5:
-        return "1 SIZE UP"
 
 
 @mobile.route("/get_collection_items")
