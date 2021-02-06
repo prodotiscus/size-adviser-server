@@ -10,6 +10,7 @@ from flask import jsonify
 from flask import make_response
 from flask import request
 
+import datetime
 import os
 import re
 import sqlite3
@@ -178,7 +179,7 @@ def _app_get_collection_items():
             })
     
     return jsonify({
-        "items": result
+        "items": sorted(result, key=lambda x: datetime.datetime.strptime(x["date"], "%d.%m.%Y"), reverse=True)
     })
 
 
