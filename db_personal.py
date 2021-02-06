@@ -57,10 +57,12 @@ class FittingSession:
     
     def remove_fitting_data(self):
         self.c.execute(f"DELETE FROM fitting WHERE fitting_id='{self.fitting_id}'")
+        self.db.commit()
         return True
     
     def remove_photo(self, photo_id):
         self.c.execute(f"DELETE FROM brand_photos WHERE photo_id='{photo_id}' AND fitting_id='{self.fitting_id}'")
+        self.db.commit()
         return True
     
     def attribute_tried(self, brand_list, attr_func):
