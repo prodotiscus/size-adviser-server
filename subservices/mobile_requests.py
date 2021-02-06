@@ -190,7 +190,7 @@ def _app_rm_collection_item():
     s = FittingSession(user_id, fitting_id)
     if s.remove_fitting_data():
         s.stop()
-        return jsonify({removed: True})
+        return jsonify(dict(removed=True))
 
 
 @mobile.route("/remove_photo")
@@ -202,7 +202,7 @@ def _app_rm_photo():
     s = FittingSession(user_id, fitting_id)
     if s.remove_photo(photo_id):
         s.stop()
-        return jsonify({removed: True})
+        return jsonify(dict(removed=True))
 
 
 def allowed_file(filename):
