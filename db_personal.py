@@ -65,6 +65,11 @@ class FittingSession:
         self.db.commit()
         return True
     
+    def remove_photo_by_index(self, photo_index=-1):
+        self.c.execute(f"DELETE FROM brand_photos WHERE fitting_id='{self.fitting_id}' LIMIT 1 OFFSET {photo_index}")
+        self.db.commit()
+        return True
+    
     def attribute_tried(self, brand_list, attr_func):
         sql_list = ",".join(["'%s'" % b for b in brand_list])
         tried = [row[0] for row in self.c.execute("SELECT DISTINCT brand FROM fitting WHERE brand IN (%s) AND "
