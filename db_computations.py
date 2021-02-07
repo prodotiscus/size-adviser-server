@@ -82,6 +82,8 @@ class ComputationsDbSession:
         return [row[0] for row in self.c.execute(query).fetchall()]
 
     def systems_of_size(self, brand, gender_int, standard, size):
+        if standard == "Cm":
+            standard = "CM"
         query = "SELECT systems FROM from_sheets WHERE brand='%s' AND gender=%d " \
                 "AND json_extract(systems, '$.%s')='%s'" % (brand, gender_int, standard, size)
 
