@@ -206,6 +206,18 @@ def _app_rm_photo():
         return jsonify(dict(removed=True))
 
 
+@mobile.route("/remove_photo_by_index")
+def _app_rm_photo_by_index():
+    """Used in SizeAdviserApi"""
+    user_id = request.args.get("user_id")
+    fitting_id = request.args.get("fitting_id")
+    photo_index = request.args.get("photo_index")
+    s = FittingSession(user_id, fitting_id)
+    if s.remove_photo_by_index(photo_index):
+        s.stop()
+        return jsonify(dict(removed=True))
+
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
