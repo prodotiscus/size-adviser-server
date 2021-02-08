@@ -10,6 +10,7 @@ from flask import jsonify
 from flask import make_response
 from flask import request
 
+from PIL import ExifTags
 from PIL import Image
 
 import datetime
