@@ -241,6 +241,9 @@ def _app_upload_photo(user_id, fitting_id, local_id):
             file.save(os.path.join(os.path.split(mobile.root_path)[0], "../MEDIA", fn))
             thumb_path = fn.rstrip(".png") + "_thumb.png"
             image = Image.open(os.path.join(os.path.split(mobile.root_path)[0], "../MEDIA", fn))
+            exif = dict((ExifTags.TAGS[k], v) for k, v in image._getexif().items() if k in ExifTags.TAGS)
+            if not exif["Orientation"]:
+                image = image.rotate(90, expand=True)
             image.thumbnail((120, 120), Image.ANTIALIAS)
             image.save(os.path.join(os.path.split(mobile.root_path)[0], "../MEDIA", thumb_path), 'PNG', quality=88)
             s.db_media_adding(local_id)
