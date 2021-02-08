@@ -10,6 +10,8 @@ from flask import jsonify
 from flask import make_response
 from flask import request
 
+from PIL import Image
+
 import datetime
 import os
 import re
@@ -237,6 +239,10 @@ def _app_upload_photo(user_id, fitting_id, local_id):
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(os.path.split(mobile.root_path)[0], "../MEDIA", fn))
+            thumb_path = fn.rstrip(".png") + "_thumb.png"
+            image = Image.open(os.path.join(os.path.split(mobile.root_path)[0], "../MEDIA", fn))
+            image.thumbnail((120, 120), Image.ANTIALIAS)
+            image.save(os.path.join(os.path.split(mobile.root_path)[0], "../MEDIA", thumb_path), 'PNG', quality=88)
             s.db_media_adding(local_id)
             return jsonify({
                 "uploaded": True,
@@ -261,6 +267,7 @@ def _app_get_images():
     index = int(request.args.get("index", 0))
     user_id = request.args.get("user_id")
     fitting_id = request.args.get("fitting_id")
+    thumbnail = request.args.get("thumbnail", "no")
     
     db = sqlite3.connect("../DATABASES/personal.sqlite3")
     c = db.cursor()
@@ -271,6 +278,9 @@ def _app_get_images():
         image_path = "photo_%s_%s.png" % (pids[index][0], pids[index][1])
     except IndexError:
         return abort(400)
+    
+    if thumbnail != "no":
+        image_path = image_path.rstrip(".png") + "_thumb.png"
 
     with open("../MEDIA/" + image_path, mode="rb") as img:
         image_binary = img.read()
