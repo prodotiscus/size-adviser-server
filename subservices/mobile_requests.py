@@ -244,7 +244,7 @@ def _app_upload_photo(user_id, fitting_id, local_id):
             thumb_path = fn.rstrip(".png") + "_thumb.png"
             image_loaded = Image.open(os.path.join(os.path.split(mobile.root_path)[0], "../MEDIA", fn))
             image = ImageOps.exif_transpose(image_loaded)
-            image.thumbnail((120, 120), Image.ANTIALIAS)
+            image.thumbnail((240, 240), Image.ANTIALIAS)
             image.save(os.path.join(os.path.split(mobile.root_path)[0], "../MEDIA", thumb_path), 'PNG', quality=88)
             s.db_media_adding(local_id)
             return jsonify({
