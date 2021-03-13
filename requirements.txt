@@ -1,2 +1,5 @@
 Flask
 openpyexcel
+pytest
+pytest-mypy-testing
+Pillow>=8.0

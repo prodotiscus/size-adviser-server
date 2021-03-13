@@ -84,4 +84,5 @@ cython_debug/
 .idea/workspace.xml
 *.log
 databases/*
-media/*
+media/
+copied/
