@@ -33,7 +33,7 @@ def test_basic_requests_android(client) -> None:
     d = client.get(f"/mobile/recommended_size?brand=Adidas&gender_int={gender_int}&user_id={uid}")
     e = client.get(f"/mobile/get_brands?gender_int={gender_int}")
     f = client.get(f"/mobile/get_brand_data?brand=Adidas&gender_int={gender_int}")
-    g = client.get("/mobile/get_brand_data?brand=Asics&gender_int={gender_int}")
+    g = client.get(f"/mobile/get_brand_data?brand=Asics&gender_int={gender_int}")
     h = client.get(f"/mobile/recommended_size?brand=Asics&gender_int={gender_int}&user_id={uid}")
     i = client.get(f"/mobile/try_with_size?user_id={uid}&fitting_id={rint}&brand=Asics&size=7.5&system=US&fit_value=4&date=13.03.2021")
     j = client.get(f"/mobile/get_collection_items?user_id={uid}")
