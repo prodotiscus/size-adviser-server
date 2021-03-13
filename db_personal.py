@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from random import randint
+from typing import Dict, Iterable, List, Union
 import sqlite3
 
 
@@ -46,30 +47,30 @@ class FittingSession:
             if brand not in result or abs(fit_value-3) < abs(result[brand][1]-3):
                 result[brand] = [size, fit_value]
         return result
-    
-    def get_user_collection(self):
+
+    def get_user_collection(self) -> Dict[str, List[Union[str, None]]]:
         data = self.c.execute(
             f"""SELECT brand, size, fit_value, fitting_id, date, photo_id FROM (
-                    SELECT brand, size, fit_value, fitting.fitting_id, brand_photos.photo_id, fitting.user_id, date 
+                    SELECT brand, size, fit_value, fitting.fitting_id, brand_photos.photo_id, fitting.user_id, date
                     FROM fitting LEFT OUTER JOIN brand_photos ON fitting.fitting_id = brand_photos.fitting_id
                 ) WHERE user_id='{self.user_id}' GROUP BY fitting_id""").fetchall()
         return [{brand: [size, int(fit_value), fitting_id, date, photo_id]} for (brand, size, fit_value, fitting_id, date, photo_id) in data]
-    
+
     def remove_fitting_data(self):
         self.c.execute(f"DELETE FROM fitting WHERE fitting_id='{self.fitting_id}'")
         self.db.commit()
         return True
-    
+
     def remove_photo(self, photo_id):
         self.c.execute(f"DELETE FROM brand_photos WHERE photo_id='{photo_id}' AND fitting_id='{self.fitting_id}'")
         self.db.commit()
         return True
-    
+
     def remove_photo_by_index(self, photo_index=-1):
         self.c.execute(f"DELETE FROM brand_photos WHERE fitting_id='{self.fitting_id}' LIMIT 1 OFFSET {photo_index}")
         self.db.commit()
         return True
-    
+
     def attribute_tried(self, brand_list, attr_func):
         sql_list = ",".join(["'%s'" % b for b in brand_list])
         tried = [row[0] for row in self.c.execute("SELECT DISTINCT brand FROM fitting WHERE brand IN (%s) AND "
@@ -79,6 +80,9 @@ class FittingSession:
     def db_media_adding(self, photo_id, extension=""):
         self.c.execute("INSERT INTO brand_photos VALUES (?,?)", (self.fitting_id, photo_id + extension))
         self.db.commit()
+
+    def get_recorded_brands(self) -> Iterable[str]:
+        return map(lambda x: x[0], self.c.execute("SELECT DISTINCT brand FROM fitting").fetchall())
 
     def stop(self):
         self.db.close()
