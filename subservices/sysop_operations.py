@@ -5,10 +5,12 @@ from datetime import datetime
 from db_admins import AdminDatabase
 from db_computations import brand_of_file
 from db_computations import db_load_sheets
+from db_personal import FittingSession
 
 from collections import namedtuple
 
 from flask import Blueprint
+from flask import jsonify
 from flask import make_response
 from flask import redirect
 from flask import render_template
@@ -107,6 +109,14 @@ def wo_table_json():
     adb.exit()
     if not istrue:
         return redirect("/sysop/signin")
+
+    brands_with_tables: List[str] = [s.brand for s in iterate_sheets()]
+    recorded_brands: List[str] = FittingSession(user_id="nobody").get_recorded_brands()
+    brands_wo_table: List[str] = [brand for brand in recorded_brands if brand not in brands_with_tables]
+
+    return jsonify({
+        "wo_table": brands_wo_table
+    })
 
 
 
