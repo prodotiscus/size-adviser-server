@@ -14,6 +14,8 @@ from PIL import ExifTags
 from PIL import ImageOps
 from PIL import Image
 
+from typing import Dict, List, Union
+
 import datetime
 import os
 import re
@@ -90,7 +92,7 @@ def _app_recommended_size():
         # FIX IT !!!
         _recommended = recommend_size(brand, gender_int, user_id)
         return jsonify({
-            "recommendations": [{"standard": k if k != "CM" else "Cm", "value": v} 
+            "recommendations": [{"standard": k if k != "CM" else "Cm", "value": v}
              for (k,v) in s.systems_of_size(brand, gender_int, *_recommended).items()]
         })
     except TypeError:
@@ -108,15 +110,15 @@ def _app_data_for_gender():
 
     s = ComputationsDbSession()
     f = FittingSession(user_id=user_id)
-    
+
     brands = s.get_all_brands(gender_int)
     best_fits = f.get_user_best_fits()
-    
-    
+
+
     def _gson_conv(size_dict):
         return [{"standard": k, "size": v} for (k,v) in size_dict.items()]
-    
-    
+
+
     recommended = {}
     for brand in brands:
         recommended[brand] = {
@@ -125,7 +127,7 @@ def _app_data_for_gender():
             )),
             "triedOn": False
         }
-    
+
     for brand in best_fits:
         size_joint, fv = best_fits[brand]
         size, standard = size_joint.rsplit(' ', 1)
@@ -163,25 +165,25 @@ def _app_try_with_size():
 def _app_get_collection_items():
     """Used in SizeAdviserApi"""
     user_id = request.args.get("user_id")
-    
+
     if user_id is None:
         abort(400)
-    
+
     s = FittingSession(user_id)
-    coll = s.get_user_collection()
+    coll: Dict[str, List[Union[str, None]]] = s.get_user_collection()
     result = []
     for brand_object in coll:
-        for brand in brand_object:            
+        for brand in brand_object:
             result.append({
                 "brand": brand,
-                "standard": brand_object[brand][0].rsplit(' ',1)[1],
-                "size": brand_object[brand][0].rsplit(' ',1)[0],
+                "standard": brand_object[brand][0].rsplit(' ', 1)[1],
+                "size": brand_object[brand][0].rsplit(' ', 1)[0],
                 "fit_value": brand_object[brand][1],
                 "fittingID": brand_object[brand][2],
                 "date": brand_object[brand][3],
                 "has_photos": brand_object[brand][4] is not None
             })
-    
+
     return jsonify({
         "items": sorted(result, key=lambda x: datetime.datetime.strptime(x["date"], "%d.%m.%Y"), reverse=True)
     })
@@ -271,7 +273,7 @@ def _app_get_images():
     user_id = request.args.get("user_id")
     fitting_id = request.args.get("fitting_id")
     thumbnail = request.args.get("thumbnail", "no")
-    
+
     db = sqlite3.connect("../DATABASES/personal.sqlite3")
     c = db.cursor()
     pids = c.execute(f"SELECT fitting_id, photo_id FROM brand_photos WHERE fitting_id='{fitting_id}'").fetchall()
@@ -281,7 +283,7 @@ def _app_get_images():
         image_path = "photo_%s_%s.png" % (pids[index][0], pids[index][1])
     except IndexError:
         return abort(400)
-    
+
     if thumbnail != "no":
         image_path = image_path.rstrip(".png") + "_thumb.png"
 

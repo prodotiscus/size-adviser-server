@@ -6,12 +6,16 @@ from db_admins import AdminDatabase
 from db_computations import brand_of_file
 from db_computations import db_load_sheets
 
+from collections import namedtuple
+
 from flask import Blueprint
 from flask import make_response
 from flask import redirect
 from flask import render_template
 from flask import request
 from flask import send_from_directory
+
+from typing import Iterator, Dict, List
 
 import os
 import random
@@ -73,6 +77,39 @@ def update_file(fname):
     return redirect("/error/Unknown error, try again/upload_as/" + fname)
 
 
+sheet_item = namedtuple("sheet_item", "filename last_modified brand internal_code")
+
+
+def iterate_sheets() -> Iterator[sheet_item]:
+    path = os.path.abspath(".")
+    files = os.listdir(os.path.join(path, "sheets", "brands"))
+    files = ["CATALOGUE.xlsx"] + [f for f in files if "CATALOGUE" not in f]
+    for e, filename in enumerate(files):
+        try:
+            mtime = os.path.getmtime(os.path.join(path, "sheets", "brands", filename))
+        except OSError:
+            mtime = 0
+        last_modified = datetime.fromtimestamp(mtime)
+        bof = brand_of_file(filename) if e > 0 else ""
+        index = filename.split(".")[0] if e > 0 else ""
+        yield sheet_item(
+            filename=filename,
+            last_modified=last_modified,
+            brand=bof,
+            internal_code=index
+        )
+
+
+@sysop.route("/wo-table.json")
+def wo_table_json():
+    adb = AdminDatabase()
+    istrue = adb.check_token(request.cookies.get("adminun"), request.cookies.get("admintkn"))
+    adb.exit()
+    if not istrue:
+        return redirect("/sysop/signin")
+
+
+
 @sysop.route("/p")
 @sysop.route("/list-files")
 @sysop.route("/sheets")
@@ -85,21 +122,7 @@ def list_sheets():
     path = os.path.abspath(".")
     files = os.listdir(os.path.join(path, "sheets", "brands"))
     files = ["CATALOGUE.xlsx"] + [f for f in files if "CATALOGUE" not in f]
-    file_rows = []
-    for e, filename in enumerate(files):
-        try:
-            mtime = os.path.getmtime(os.path.join(path, "sheets", "brands", filename))
-        except OSError:
-            mtime = 0
-        last_modified = datetime.fromtimestamp(mtime)
-        bof = brand_of_file(filename) if e > 0 else ""
-        index = filename.split(".")[0] if e > 0 else ""
-        file_rows.append(dict(
-            filename=filename,
-            last_modified=last_modified,
-            brand=bof,
-            internal_code=index
-        ))
+    file_rows: List[sheet_item] = [s for s in iterate_sheets()]
 
     return render_template("files.html", file_rows=file_rows)
 
