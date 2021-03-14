@@ -20,7 +20,7 @@ def client():
         yield client
 
 
-stuff_bot: Tuple[Union[str, int]] = (
+stuff_bot: Tuple[str, str, str, int, int] = (
     f"123456789xtt",
     f"tester.populate@size-adviser.com",
     "Tester+Populate",
