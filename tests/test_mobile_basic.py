@@ -2,7 +2,7 @@ import os
 import tempfile
 import pytest
 import random
-from typing import List, Dict
+from typing import List, Dict, Tuple, Union
 
 import sys
 
@@ -18,6 +18,15 @@ def client():
 
     with index.app.test_client() as client:
         yield client
+
+
+stuff_bot: Tuple[Union[str, int]] = (
+    f"123456789xtt",
+    f"tester.populate@size-adviser.com",
+    "Tester+Populate",
+    1,
+    123456789
+)
 
 
 @pytest.mark.mypy_testing
@@ -40,3 +49,17 @@ def test_basic_requests_android(client) -> None:
     j = client.get(f"/mobile/get_collection_items?user_id={uid}")
     k = client.get(f"/mobile/remove_collection_item?user_id={uid}&fitting_id={rint}")
     l = client.get("/mobile/data_for_gender?user_id={uid}&gender_int=0")
+
+
+@pytest.mark.mypy_testing
+@pytest.mark.adding_stuff
+def test_as_unknown_brand(client) -> None:
+    uid, eml, name, gender_int, rint = stuff_bot
+    a = client.get(f"/mobile/try_with_size?user_id={uid}&fitting_id={rint}&brand=UnknownBrand&size=7.5&system=US&fit_value=4&date=13.03.2021")
+
+
+@pytest.mark.mypy_testing
+@pytest.mark.removing_stuff
+def test_rs_unknown_brand(client) -> None:
+    uid, eml, name, gender_int, rint = stuff_bot
+    a = client.get(f"/mobile/remove_collection_item?user_id={uid}&fitting_id={rint}")
