@@ -4,11 +4,20 @@
     <head>
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
         <title>Index of spreadsheet files</title>
+        <style>
+        .wo-table {
+          border: 1px solid red!important;
+          padding: 5px;
+        }
+        </style>
     </head>
 
     <body>
         <h2>Index of spreadsheet files</h2>
         <br>
+        <p style="display:none" class="wo-table">
+          The following recorded brands do not have spreadsheets:&nbsp;
+        </p>
 
         <form action="/sysop/_unf" method="GET">
             <label for="sheet-code">Number of file (6 digits) to upload: </label>
@@ -55,6 +64,9 @@
         <script>
             $(document).ready( function () {
                 $('#sheet-list').DataTable();
+                $.getJSON("wo-table.json", function (data) {
+                  $(".wo-table").append(data.wo_table.join(", "));
+                })
             } );
         </script>
     </body>
