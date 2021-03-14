@@ -21,6 +21,7 @@ def client():
 
 
 @pytest.mark.mypy_testing
+@pytest.mark.general
 def test_basic_requests_android(client) -> None:
     uid = f"{random.randrange(10**7, 10**8)}xxx"
     eml = f"tester{random.randrange(10**7, 10**8)}@size-adviser.com"

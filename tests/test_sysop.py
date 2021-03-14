@@ -21,6 +21,7 @@ def client():
 
 
 @pytest.mark.mypy_testing
+@pytest.mark.general
 def test_xlsx_downloader(client) -> None:
     dl = client.get("/sysop/sheet_acquire/000001.xlsx")
     result: str = str(dl.data)
