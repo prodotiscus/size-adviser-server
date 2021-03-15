@@ -84,6 +84,12 @@ class FittingSession:
     def get_recorded_brands(self) -> Iterable[str]:
         return map(lambda x: x[0], self.c.execute("SELECT DISTINCT brand FROM fitting").fetchall())
 
+    def wo_table_fitting(self, brand: str) -> Dict[str, str]:
+        query = f"SELECT size FROM fitting WHERE user_id='{self.user_id}' AND brand='{brand}'"
+        result: str = self.c.execute(query).fetchone()[0]
+        size, standard = result.split()
+        return {size: standard}
+
     def stop(self):
         self.db.close()
 
