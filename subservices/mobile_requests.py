@@ -195,7 +195,7 @@ def _app_get_collection_items():
                 "has_photos": brand_object[brand][4] is not None
             })
     result = sorted(result, key=lambda x: datetime.datetime.strptime(x["date"], "%H.%M.%S.%d.%m.%Y"), reverse=True)
-    result = map(lambda d: d["date"].split(".", 3)[1], result)
+    result = list(map(lambda d: d["date"].split(".", 3)[1], result))
 
     return jsonify({
         "items": result
