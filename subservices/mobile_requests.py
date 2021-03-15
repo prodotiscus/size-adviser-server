@@ -196,7 +196,7 @@ def _app_get_collection_items():
             })
 
     def remove_hms(robj: str) -> str:
-        robj["date"] = robj["date"].split(".", 3)[1]
+        robj["date"] = robj["date"].split(".", 3)[3]
         return robj
 
     result = sorted(result, key=lambda x: datetime.datetime.strptime(x["date"], "%H.%M.%S.%d.%m.%Y"), reverse=True)
