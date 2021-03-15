@@ -88,7 +88,7 @@ class FittingSession:
         query = f"SELECT size FROM fitting WHERE user_id='{self.user_id}' AND brand='{brand}'"
         result: str = self.c.execute(query).fetchone()[0]
         size, standard = result.split()
-        return {size: standard}
+        return {standard: size}
 
     def stop(self):
         self.db.close()
