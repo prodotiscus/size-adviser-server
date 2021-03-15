@@ -46,6 +46,7 @@ def test_basic_requests_android(client) -> None:
     g = client.get(f"/mobile/get_brand_data?brand=Asics&gender_int={gender_int}")
     h = client.get(f"/mobile/recommended_size?brand=Asics&gender_int={gender_int}&user_id={uid}")
     i = client.get(f"/mobile/try_with_size?user_id={uid}&fitting_id={rint}&brand=Asics&size=7.5&system=US&fit_value=4&date=13.03.2021")
+    i2 = client.get(f"/mobile/try_with_size?user_id={uid}&fitting_id={rint}&brand=Asics&size=7.5&system=US&fit_value=4&date=12.23.48.15.03.2021")
     j = client.get(f"/mobile/get_collection_items?user_id={uid}")
     l0 = client.get(f"/mobile/data_for_gender?user_id={uid}&gender_int={gender_int}")
     k = client.get(f"/mobile/remove_collection_item?user_id={uid}&fitting_id={rint}")
@@ -56,7 +57,7 @@ def test_basic_requests_android(client) -> None:
 @pytest.mark.adding_stuff
 def test_as_unknown_brand(client) -> None:
     uid, eml, name, gender_int, rint = stuff_bot
-    a = client.get(f"/mobile/try_with_size?user_id={uid}&fitting_id={rint}&brand=UnknownBrand&size=7.5&system=US&fit_value=4&date=13.03.2021")
+    a = client.get(f"/mobile/try_with_size?user_id={uid}&fitting_id={rint}&brand=UnknownBrand&size=7.5&system=US&fit_value=4&date=12.23.48.13.03.2021")
     b = client.get(f"/mobile/data_for_gender?user_id={uid}&gender_int={gender_int}")
 
 

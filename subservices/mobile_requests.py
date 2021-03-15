@@ -177,6 +177,12 @@ def _app_get_collection_items():
     s = FittingSession(user_id)
     coll: Dict[str, List[Union[str, None]]] = s.get_user_collection()
     result = []
+
+    def support_older_records(date):
+        if len(date.split(".")) == 3:
+            return f"00.00.00.{date}"
+        return date
+
     for brand_object in coll:
         for brand in brand_object:
             result.append({
@@ -185,12 +191,14 @@ def _app_get_collection_items():
                 "size": brand_object[brand][0].rsplit(' ', 1)[0],
                 "fit_value": brand_object[brand][1],
                 "fittingID": brand_object[brand][2],
-                "date": brand_object[brand][3],
+                "date": support_older_records(brand_object[brand][3]),
                 "has_photos": brand_object[brand][4] is not None
             })
+    result = sorted(result, key=lambda x: datetime.datetime.strptime(x["date"], "%H.%M.%s.%d.%m.%Y"), reverse=True)
+    result = map(lambda d: d["date"].split(".", 3)[1], result)
 
     return jsonify({
-        "items": sorted(result, key=lambda x: datetime.datetime.strptime(x["date"], "%d.%m.%Y"), reverse=True)
+        "items": result
     })
 
 
