@@ -194,8 +194,13 @@ def _app_get_collection_items():
                 "date": support_older_records(brand_object[brand][3]),
                 "has_photos": brand_object[brand][4] is not None
             })
+
+    def remove_hms(robj: str) -> str:
+        robj["date"] = robj["date"].split(".", 3)[1]
+        return robj
+
     result = sorted(result, key=lambda x: datetime.datetime.strptime(x["date"], "%H.%M.%S.%d.%m.%Y"), reverse=True)
-    result = list(map(lambda d: d["date"].split(".", 3)[1], result))
+    result = list(map(remove_hms, result))
 
     return jsonify({
         "items": result
