@@ -124,6 +124,22 @@ def _app_recommended_size():
         return abort(400)
 
 
+@mobile.route("/bound_load")
+def _app_bound_load():
+    """Used in SizeAdviserApi"""
+    brand = request.args.get("brand", None)
+    gender_int = int(request.args.get("gender_int", -1))
+    user_id = request.args.get("user_id", None)
+    try:
+        return jsonify({
+            "get_brands": _internal_get_brands(gender_int),
+            "get_brand_data": _internal_get_brand_data(brand, gender_int),
+            "recommended_size": _internal_recommended_size(brand, gender_int, user_id)
+        })
+    except SAInternalError:
+        return abort(400)
+
+
 @mobile.route("/data_for_gender")
 def _app_data_for_gender():
     """Used in SizeAdviserApi"""
