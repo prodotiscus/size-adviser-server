@@ -29,18 +29,29 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 mobile = Blueprint("mobile", __name__, static_folder="static")
 
 
+class SAInternalError(ValueError):
+    pass
+
+
+def _internal_get_brand_data(brand, gender_int):
+    if brand is None or gender_int == -1:
+        raise SAInternalError("run abort 400")
+    standards = ComputationsDbSession().get_brand_data(brand, gender_int)
+    return {
+        "standards": [{"standard": k if k != "CM" else "Cm", "sizes": v} for (k, v) in standards.items()],
+        "defaultStandard": get_default_standard(list(standards.keys()))
+    }
+
+
 @mobile.route("/get_brand_data")
 def _app_get_brand_data():
     """Used in SizeAdviserApi"""
     brand = request.args.get("brand")
     gender_int = int(request.args.get("gender_int", -1))
-    if brand is None or gender_int == -1:
+    try:
+        return jsonify(_internal_get_brand_data(brand, gender_int))
+    except SAInternalError:
         return abort(400)
-    standards = ComputationsDbSession().get_brand_data(brand, gender_int)
-    return jsonify({
-        "standards": [{"standard": k if k != "CM" else "Cm", "sizes": v} for (k, v) in standards.items()],
-        "defaultStandard": get_default_standard(list(standards.keys()))
-    })
 
 
 def get_default_standard(list_standards):
@@ -49,15 +60,22 @@ def get_default_standard(list_standards):
     return list_standards[0]
 
 
+def _internal_get_brands(gender_int):
+    if gender_int == -1:
+        raise SAInternalError("run abort 400")
+    return {
+        "listBrands": ComputationsDbSession().get_all_brands(gender_int)
+    }
+
+
 @mobile.route("/get_brands")
 def _app_get_brands():
     """Used in SizeAdviserApi"""
     gender_int = int(request.args.get("gender_int", -1))
-    if gender_int == -1:
+    try:
+        return jsonify(_internal_get_brands(gender_int))
+    except SAInternalError:
         return abort(400)
-    return jsonify({
-        "listBrands": ComputationsDbSession().get_all_brands(gender_int)
-    })
 
 
 @mobile.route("/random_brand")
@@ -76,6 +94,23 @@ def recommend_size(brand, gender_int, user_id, system=None):
     return ["US", "7"] # FIX IT!
 
 
+def _internal_recommended_size(brand, gender_int, user_id):
+    if not brand or gender_int == -1 or not user_id:
+        raise SAInternalError("run abort 400")
+
+    s = ComputationsDbSession()
+
+    try:
+        # FIX IT !!!
+        _recommended = recommend_size(brand, gender_int, user_id)
+        return {
+            "recommendations": [{"standard": k if k != "CM" else "Cm", "value": v}
+             for (k,v) in s.systems_of_size(brand, gender_int, *_recommended).items()]
+        }
+    except TypeError:
+        raise SAInternalError("TypeError -> SAIError -> ABORT 400")
+
+
 @mobile.route("/recommended_size")
 def _app_recommended_size():
     """Used in SizeAdviserApi"""
@@ -83,19 +118,9 @@ def _app_recommended_size():
     gender_int = int(request.args.get("gender_int", -1))
     user_id = request.args.get("user_id", None)
 
-    if not brand or gender_int == -1 or not user_id:
-        return abort(400)
-
-    s = ComputationsDbSession()
-
     try:
-        # FIX IT !!!
-        _recommended = recommend_size(brand, gender_int, user_id)
-        return jsonify({
-            "recommendations": [{"standard": k if k != "CM" else "Cm", "value": v}
-             for (k,v) in s.systems_of_size(brand, gender_int, *_recommended).items()]
-        })
-    except TypeError:
+        return jsonify(_internal_recommended_size(brand, gender_int, user_id))
+    except SAInternalError:
         return abort(400)
 
 
