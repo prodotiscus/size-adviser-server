@@ -128,7 +128,7 @@ def _app_recommended_size():
 def _app_bound_load():
     """Used in SizeAdviserApi"""
     brand = request.args.get("brand", None)
-    gender_int = int(request.args.get("gender_int", -1))
+    gender_int = int(request.args.get("gender_int", 0))
     user_id = request.args.get("user_id", None)
     return jsonify({
         "get_brands": _internal_get_brands(gender_int),
