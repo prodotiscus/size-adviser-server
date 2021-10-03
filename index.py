@@ -32,7 +32,7 @@ def send_js(path):
 
 @app.route("/")
 def welcome():
-    return redirect("/error/Authorization needed/p")
+    return redirect("/error/Authorization needed/sysop/p")
 
 
 @app.route("/robots.txt")
