@@ -51,7 +51,7 @@ def alg1(user_id, B_a):
         Srt.append( (abs(3-x), Rel[0]) )
     if not Srt:
         return None
-    return min(Srt, key=lambda k: k[0])[1]
+    return min(Srt, key=lambda k: k[0])[1][1]
 
 def any_to_US(brand, size_str):
     size, system = size_str.split(" ", 1)
