@@ -39,6 +39,8 @@ def get_E(B_a):
 def alg1(user_id, B_a):
     E = get_E(B_a)
     R_M1 = user_base(user_id)
+    if not R_M1:
+        return None
     Srt = []
     for Rel in E:
         Bw_Ts = list(filter(lambda _tuple: _tuple[1] == Rel[1][0], R_M1))
@@ -69,6 +71,8 @@ def find_nearest_to(gender_int, conv_float):
 def alg2(user_id, gender_int, B_a):
     E = get_E(B_a)
     R_M1 = user_base(user_id)
+    if not R_M1:
+        return None
     Srt = []
     for Rel in E:
         Ts = list(filter(lambda _tuple: _tuple[1] == Rel[1][0], R_M1))
