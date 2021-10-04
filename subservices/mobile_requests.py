@@ -2,6 +2,7 @@
 
 from db_computations import ComputationsDbSession
 from db_personal import FittingSession
+import recommend
 
 from flask import abort
 from flask import Blueprint
@@ -91,7 +92,13 @@ def _app_random_brand():
 
 
 def recommend_size(brand, gender_int, user_id, system=None):
-    return ["US", "7"] # FIX IT!
+    alg1 = recommend.alg1(user_id, brand)
+    if alg1:
+        return alg1.split(" ", 1)[::-1]
+    alg2 = recommend.alg2(user_id, gender_int, brand)
+    if alg2:
+        return alg2.split(" ", 1)[::-1]
+    return ["US", "7"] # If cannot recommend anything, we'll say this
 
 
 def _internal_recommended_size(brand, gender_int, user_id):
