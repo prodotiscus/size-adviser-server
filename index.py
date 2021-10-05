@@ -40,5 +40,11 @@ def disallow_robots():
     return Response("User-agent: *\nDisallow: /\n", mimetype="text/plain")
 
 
+@app.route("/report")
+def report_bugs():
+    GFORM_SHORTURL = "https://forms.gle/B5qzTSWFkAAg3PqE7"
+    return redirect(GFORM_SHORTURL)
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
