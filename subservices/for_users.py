@@ -26,6 +26,11 @@ def show_privacy_policy():
     return render_template("gdpr_6jan.html")
 
 
+@for_users.route("/gp-privacy-notice")
+def gp_privacy_notice():
+    return render_template("google_play_privacy_notice.html")
+
+
 @for_users.route("/data-deletion")
 def data_deletion():
     return render_template("data_deletion.html")
