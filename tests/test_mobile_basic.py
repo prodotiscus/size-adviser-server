@@ -56,7 +56,7 @@ def test_data4gender(client) -> None:
 @pytest.mark.fitting_room
 def test_get_brand_data(client) -> None:
     for GINT in GENDER_SWITCH:
-        r1 = client.get(f"/mobile/get_brand_data?brand=Adidas&gender_int={GINT}"))
+        r1 = client.get(f"/mobile/get_brand_data?brand=Adidas&gender_int={GINT}")
 
 
 @pytest.mark.mypy_testing
