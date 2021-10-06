@@ -46,5 +46,11 @@ def report_bugs():
     return redirect(GFORM_SHORTURL)
 
 
+@app.route("/tasks")
+def trello_board():
+    TRELLO_SHORTURL = "https://trello.com/b/ACy6aF4G/%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%B2%D1%8B%D0%B5-%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B8"
+    return redirect(TRELLO_SHORTURL)
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
