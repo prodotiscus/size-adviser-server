@@ -3,6 +3,7 @@ import tempfile
 import pytest
 import random
 from typing import List, Dict, Tuple, Union
+from collections import namedtuple
 
 import sys
 
@@ -20,49 +21,88 @@ def client():
         yield client
 
 
-stuff_bot: Tuple[str, str, str, int, int] = (
-    f"123456789xtt",
-    f"tester.populate@size-adviser.com",
-    "Tester+Populate",
-    1,
-    123456789
+def new_fid() -> int:
+    return random.randrange(10**7, 10**8)
+
+
+test_account = namedtuple("test_account", "uid email name gender_int")
+TEDDY = test_account(
+    "BlTshjeJc9hIUCyxDXLB2bPPzRo1",
+    "sfedor2002@gmail.com",
+    "Teddy+Tester",
+    1
 )
+GENDER_SWITCH = range(0, 2)
 
 
 @pytest.mark.mypy_testing
-@pytest.mark.general
-def test_basic_requests_android(client) -> None:
-    uid = f"{random.randrange(10**7, 10**8)}xxx"
-    eml = f"tester{random.randrange(10**7, 10**8)}@size-adviser.com"
-    name = "Foo+Bar"
-    gender_int = 1
-    rint = random.randrange(10**7, 10**8)
-    a = client.get(f"/firebase/register_new_account?firebase_uid={uid}&user_email={eml}&user_name={name}&user_gender=0")
-    b = client.get(f"/mobile/data_for_gender?user_id={uid}&gender_int={gender_int}")
-    c = client.get(f"/mobile/get_brand_data?brand=Adidas&gender_int={gender_int}")
-    d = client.get(f"/mobile/recommended_size?brand=Adidas&gender_int={gender_int}&user_id={uid}")
-    e = client.get(f"/mobile/get_brands?gender_int={gender_int}")
-    f = client.get(f"/mobile/get_brand_data?brand=Adidas&gender_int={gender_int}")
-    g = client.get(f"/mobile/get_brand_data?brand=Asics&gender_int={gender_int}")
-    h = client.get(f"/mobile/recommended_size?brand=Asics&gender_int={gender_int}&user_id={uid}")
-    i = client.get(f"/mobile/try_with_size?user_id={uid}&fitting_id={rint}&brand=Asics&size=7.5&system=US&fit_value=4&date=13.03.2021")
-    i2 = client.get(f"/mobile/try_with_size?user_id={uid}&fitting_id={rint}&brand=Asics&size=7.5&system=US&fit_value=4&date=12.23.48.15.03.2021")
-    j = client.get(f"/mobile/get_collection_items?user_id={uid}")
-    l0 = client.get(f"/mobile/data_for_gender?user_id={uid}&gender_int={gender_int}")
-    k = client.get(f"/mobile/remove_collection_item?user_id={uid}&fitting_id={rint}")
-    l = client.get(f"/mobile/data_for_gender?user_id={uid}&gender_int={gender_int}")
+@pytest.mark.mobile
+@pytest.mark.core
+def test_registration(client) -> None:
+    for GINT in GENDER_SWITCH:
+        r1 = client.get(f"/firebase/register_new_account?firebase_uid={TEDDY.uid}&user_email={TEDDY.email}&user_name={TEDDY.name}&user_gender={GINT}")
 
 
 @pytest.mark.mypy_testing
-@pytest.mark.adding_stuff
-def test_as_unknown_brand(client) -> None:
-    uid, eml, name, gender_int, rint = stuff_bot
-    a = client.get(f"/mobile/try_with_size?user_id={uid}&fitting_id={rint}&brand=UnknownBrand&size=7.5&system=US&fit_value=4&date=12.23.48.13.03.2021")
-    b = client.get(f"/mobile/data_for_gender?user_id={uid}&gender_int={gender_int}")
+@pytest.mark.mobile
+@pytest.mark.profile
+def test_data4gender(client) -> None:
+    for GINT in GENDER_SWITCH:
+        r1 = client.get(f"/mobile/data_for_gender?user_id={TEDDY.uid}&gender_int={GINT}")
 
 
 @pytest.mark.mypy_testing
-@pytest.mark.removing_stuff
-def test_rs_unknown_brand(client) -> None:
-    uid, eml, name, gender_int, rint = stuff_bot
-    a = client.get(f"/mobile/remove_collection_item?user_id={uid}&fitting_id={rint}")
+@pytest.mark.mobile
+@pytest.mark.fitting_room
+def test_get_brand_data(client) -> None:
+    for GINT in GENDER_SWITCH:
+        r1 = client.get(f"/mobile/get_brand_data?brand=Adidas&gender_int={GINT}"))
+
+
+@pytest.mark.mypy_testing
+@pytest.mark.mobile
+@pytest.mark.fitting_room
+def test_recommended_size(client) -> None:
+    for GINT in GENDER_SWITCH:
+        r1 = client.get(f"/mobile/recommended_size?brand=Adidas&gender_int={GINT}&user_id={TEDDY.uid}")
+
+
+@pytest.mark.mypy_testing
+@pytest.mark.mobile
+@pytest.mark.fitting_room
+def test_brands_list(client) -> None:
+    for GINT in GENDER_SWITCH:
+        r1 = client.get(f"/mobile/get_brands?gender_int={GINT}")
+
+
+@pytest.mark.mypy_testing
+@pytest.mark.mobile
+@pytest.mark.fitting_room
+@pytest.mark.my_collection
+def test_result_submission_existing_brand(client) -> None:
+    for GINT in GENDER_SWITCH:
+        fid = new_fid()
+        r1 = client.get(f"/mobile/try_with_size?user_id={TEDDY.uid}&fitting_id={fid}&brand=Asics&size=7.5&system=US&fit_value=4&date=12.23.48.15.03.2021")
+        r_control = client.get(f"/mobile/data_for_gender?user_id={TEDDY.uid}&gender_int={GINT}")
+        r2 = client.get(f"/mobile/remove_collection_item?user_id={TEDDY.uid}&fitting_id={fid}")
+
+
+@pytest.mark.mypy_testing
+@pytest.mark.mobile
+@pytest.mark.fitting_room
+@pytest.mark.my_collection
+def test_result_submission_new_brand(client) -> None:
+    for GINT in GENDER_SWITCH:
+        fid = new_fid()
+        r1 = client.get(f"/mobile/try_with_size?user_id={TEDDY.uid}&fitting_id={fid}&brand=NonExistingBrand&size=7.5&system=US&fit_value=4&date=12.23.48.15.03.2021")
+        r_control = client.get(f"/mobile/data_for_gender?user_id={TEDDY.uid}&gender_int={GINT}")
+        r2 = client.get(f"/mobile/remove_collection_item?user_id={TEDDY.uid}&fitting_id={fid}")
+
+
+@pytest.mark.mypy_testing
+@pytest.mark.mobile
+@pytest.mark.fitting_room
+def test_bound_load(client) -> None:
+    for GINT in GENDER_SWITCH:
+        bound_load = client.get(f"/mobile/bound_load?user_gender={GINT}&brand=Adidas&user_id={TEDDY.uid}")
+
