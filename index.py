@@ -52,5 +52,11 @@ def trello_board():
     return redirect(TRELLO_SHORTURL)
 
 
+@app.route("/android/test")
+def android_test_link():
+    GP_TEST_LINK = "https://play.google.com/apps/internaltest/4700157737872470324"
+    return redirect(GP_TEST_LINK)
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
