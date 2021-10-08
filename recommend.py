@@ -7,10 +7,10 @@ import sqlite3
 class Recommend:
     def __init__(self):
         self.personal = sqlite3.connect("../DATABASES/personal.sqlite3")
-        self.curs = personal.cursor()
+        self.curs = self.personal.cursor()
         self.computations = sqlite3.connect("../DATABASES/computations.sqlite3")
-        self.c_curs = computations.cursor()
-        self.fd = curs.execute("SELECT user_id, brand, size, fit_value FROM fitting").fetchall()
+        self.c_curs = self.computations.cursor()
+        self.fd = self.curs.execute("SELECT user_id, brand, size, fit_value FROM fitting").fetchall()
         self.BS_Equiv = self.bs_equiv()
 
         def bs_equiv(self):
