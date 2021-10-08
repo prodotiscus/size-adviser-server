@@ -11,24 +11,21 @@ class Recommend:
         self.computations = sqlite3.connect("../DATABASES/computations.sqlite3")
         self.c_curs = self.computations.cursor()
         self.fd = self.curs.execute("SELECT user_id, brand, size, fit_value FROM fitting").fetchall()
-        self.BS_Equiv = self.bs_equiv()
+        self.BS_Equiv = []
+        for key, grouper in groupby(self.fd, key=lambda t: t[0]):
+            f = {}
+            dp = []
+            for _tuple in grouper:
+                _, B, S, F = _tuple
+                if B in dp:
+                    continue
+                if F not in f:
+                    f[F] = []
+                f[F].append( (B, S) )
+            for Fk, tuples in f.items():
+                if len(tuples) >= 2:
+                    self.BS_Equiv.extend([rel for rel in permutations(tuples, 2)])
 
-        def bs_equiv(self):
-            BS_Equiv = []
-            for key, grouper in groupby(self.fd, key=lambda t: t[0]):
-                f = {}
-                dp = []
-                for _tuple in grouper:
-                    _, B, S, F = _tuple
-                    if B in dp:
-                        continue
-                    if F not in f:
-                        f[F] = []
-                    f[F].append( (B, S) )
-                for Fk, tuples in f.items():
-                    if len(tuples) >= 2:
-                        BS_Equiv.extend([rel for rel in permutations(tuples, 2)])
-            return BS_Equiv
 
         def user_base(self, user_id):
             for key, grouper in groupby(self.fd, key=lambda t: t[0]):
