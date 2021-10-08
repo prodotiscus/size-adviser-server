@@ -65,17 +65,17 @@ class Recommend:
             return float(self.any_to_US(brand, size_str).split()[0])
 
         def find_nearest_to(self, gender_int, conv_float):
-            s = min(
-                [
-                    x[0]
-                    for x in self.c_curs.execute(
-                        'select json_extract(systems, "$.US") from from_sheets where brand="Nike" and gender='
-                        + str(gender_int)
-                    ).fetchall()
-                ],
-                key=lambda s: abs(conv_float - float(s)),
-            )
-            return s + " " + "US"
+        s = min(
+            [
+                x[0]
+                for x in self.c_curs.execute(
+                    'select json_extract(systems, "$.US") from from_sheets where brand="Nike" and gender='
+                    + str(gender_int)
+                ).fetchall()
+            ],
+            key=lambda s: abs(conv_float - float(s)),
+        )
+        return s + " " + "US"
 
         def alg2(self, user_id, gender_int, B_a):
             E = self.get_E(B_a)
@@ -94,8 +94,8 @@ class Recommend:
                     y = self.size_str_to_int(Rel[1][0], Rel[1][1])
                 S_f = (x * y) / self.size_str_to_int(Bw, j)
                 Srt.append((abs(3 - v), S_f))
-            if not Srt:
-                return None
+                if not Srt:
+                    return None
             return self.find_nearest_to(gender_int, min(Srt, key=lambda k: k[0])[1])
 
         def terminate(self):
