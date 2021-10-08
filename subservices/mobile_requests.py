@@ -92,10 +92,11 @@ def _app_random_brand():
 
 
 def recommend_size(brand, gender_int, user_id, system=None):
-    alg1 = recommend.alg1(user_id, brand)
+    rcm = recommend.Recommend()
+    alg1 = rcm.alg1(user_id, brand)
     if alg1:
         return alg1.split(" ", 1)[::-1]
-    alg2 = recommend.alg2(user_id, gender_int, brand)
+    alg2 = rcm.alg2(user_id, gender_int, brand)
     if alg2:
         return alg2.split(" ", 1)[::-1]
     return ["US", "7"] # If cannot recommend anything, we'll say this
