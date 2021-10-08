@@ -10,7 +10,9 @@ class Recommend:
         self.curs = self.personal.cursor()
         self.computations = sqlite3.connect("../DATABASES/computations.sqlite3")
         self.c_curs = self.computations.cursor()
-        self.fd = self.curs.execute("SELECT user_id, brand, size, fit_value FROM fitting").fetchall()
+        self.fd = self.curs.execute(
+            "SELECT user_id, brand, size, fit_value FROM fitting"
+        ).fetchall()
         self.BS_Equiv = []
         for key, grouper in groupby(self.fd, key=lambda t: t[0]):
             f = {}
@@ -21,11 +23,10 @@ class Recommend:
                     continue
                 if F not in f:
                     f[F] = []
-                f[F].append( (B, S) )
+                f[F].append((B, S))
             for Fk, tuples in f.items():
                 if len(tuples) >= 2:
                     self.BS_Equiv.extend([rel for rel in permutations(tuples, 2)])
-
 
         def user_base(self, user_id):
             for key, grouper in groupby(self.fd, key=lambda t: t[0]):
@@ -45,9 +46,9 @@ class Recommend:
                 Bw_Ts = list(filter(lambda _tuple: _tuple[1] == Rel[1][0], R_M1))
                 if not Bw_Ts:
                     continue
-                Bw_Tuple = min(Bw_Ts, key=lambda k: abs(3-k[3]))
+                Bw_Tuple = min(Bw_Ts, key=lambda k: abs(3 - k[3]))
                 _, Bw, k, x = Bw_Tuple
-                Srt.append( (abs(3-x), Rel[0]) )
+                Srt.append((abs(3 - x), Rel[0]))
             if not Srt:
                 return None
             return min(Srt, key=lambda k: k[0])[1][1]
@@ -64,7 +65,16 @@ class Recommend:
             return float(self.any_to_US(brand, size_str).split()[0])
 
         def find_nearest_to(self, gender_int, conv_float):
-            s = min([x[0] for x in self.c_curs.execute('select json_extract(systems, "$.US") from from_sheets where brand="Nike" and gender='+str(gender_int)).fetchall()], key=lambda s: abs(conv_float-float(s)))
+            s = min(
+                [
+                    x[0]
+                    for x in self.c_curs.execute(
+                        'select json_extract(systems, "$.US") from from_sheets where brand="Nike" and gender='
+                        + str(gender_int)
+                    ).fetchall()
+                ],
+                key=lambda s: abs(conv_float - float(s)),
+            )
             return s + " " + "US"
 
         def alg2(self, user_id, gender_int, B_a):
@@ -77,17 +87,16 @@ class Recommend:
                 Ts = list(filter(lambda _tuple: _tuple[1] == Rel[1][0], R_M1))
                 if not Ts:
                     continue
-                Bw_Tuple = min(Ts, key=lambda k: abs(3-k[3]))
+                Bw_Tuple = min(Ts, key=lambda k: abs(3 - k[3]))
                 _, Bw, j, v = Bw_Tuple
                 if 2 <= v <= 4:
                     x = self.size_str_to_int(Rel[0][0], Rel[0][1])
                     y = self.size_str_to_int(Rel[1][0], Rel[1][1])
-                S_f = (x*y)/self.size_str_to_int(Bw, j)
-                Srt.append( (abs(3-v), S_f) )
+                S_f = (x * y) / self.size_str_to_int(Bw, j)
+                Srt.append((abs(3 - v), S_f))
             if not Srt:
                 return None
             return self.find_nearest_to(gender_int, min(Srt, key=lambda k: k[0])[1])
-
 
         def terminate(self):
             self.personal.close()
