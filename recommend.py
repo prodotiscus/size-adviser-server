@@ -94,8 +94,8 @@ class Recommend:
                     y = self.size_str_to_int(Rel[1][0], Rel[1][1])
                 S_f = (x * y) / self.size_str_to_int(Bw, j)
                 Srt.append((abs(3 - v), S_f))
-                if not Srt:
-                    return None
+            if not Srt:
+                return None
             return self.find_nearest_to(gender_int, min(Srt, key=lambda k: k[0])[1])
 
         def terminate(self):
