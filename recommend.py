@@ -64,12 +64,12 @@ class Recommend:
     def size_str_to_int(self, brand, size_str):
         return float(self.any_to_US(brand, size_str).split()[0])
 
-    def find_nearest_to(self, gender_int, conv_float):
+    def find_nearest_to(self, B_a, gender_int, conv_float):
         s = min(
             [
                 x[0]
                 for x in self.c_curs.execute(
-                    'select json_extract(systems, "$.US") from from_sheets where brand="Nike" and gender='
+                    f'select json_extract(systems, "$.US") from from_sheets where brand="{B_a}" and gender='
                     + str(gender_int)
                 ).fetchall()
             ],
@@ -96,7 +96,7 @@ class Recommend:
             Srt.append((abs(3 - v), S_f))
         if not Srt:
             return None
-        return self.find_nearest_to(gender_int, min(Srt, key=lambda k: k[0])[1])
+        return self.find_nearest_to(B_a, gender_int, min(Srt, key=lambda k: k[0])[1])
 
     def terminate(self):
         self.personal.close()
