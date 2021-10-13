@@ -86,11 +86,14 @@ class Recommend:
                 continue
             Bw_Tuple = min(Ts, key=lambda k: abs(3 - k[3]))
             _, Bw, j, v = Bw_Tuple
-            if 2 <= v <= 4:
-                x = self.size_str_to_int(Rel[0][0], Rel[0][1])
-                y = self.size_str_to_int(Rel[1][0], Rel[1][1])
-            S_f = (x * y) / self.size_str_to_int(Bw, j)
-            Srt.append((abs(3 - v), S_f))
+            try:
+                if 2 <= v <= 4:
+                    x = self.size_str_to_int(Rel[0][0], Rel[0][1])
+                    y = self.size_str_to_int(Rel[1][0], Rel[1][1])
+                S_f = (x * y) / self.size_str_to_int(Bw, j)
+                Srt.append((abs(3 - v), S_f))
+            except AttributeError:
+                pass
         if not Srt:
             return None
         return self.find_nearest_to(B_a, gender_int, min(Srt, key=lambda k: k[0])[1])
