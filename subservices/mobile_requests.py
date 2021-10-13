@@ -137,7 +137,7 @@ def _app_bound_load():
     """Used in SizeAdviserApi"""
     brand = request.args.get("brand", None)
     if brand:
-        brand = DbComputationsSession().norm_case(brand)
+        brand = ComputationsDbSession().norm_case(brand)
     gender_int = request.args.get("gender_int", None)
     if gender_int is None:
         gender_int = request.args.get("user_gender", None)
