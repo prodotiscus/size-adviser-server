@@ -95,8 +95,11 @@ class ComputationsDbSession:
             standard = "CM"
         query = "SELECT systems FROM from_sheets WHERE brand='%s' AND gender=%d " \
                 "AND json_extract(systems, '$.%s')='%s'" % (brand, gender_int, standard, size)
-
-        return json.loads(self.c.execute(query).fetchone()[0])
+        
+        try:
+            return json.loads(self.c.execute(query).fetchone()[0])
+        except TypeError:
+            raise ValueError(f"Failed on SQL query: {query}")
     
     def systems_for_gender(self, gender_int):
         query = f"SELECT brand, systems FROM from_sheets WHERE gender={gender_int}"
