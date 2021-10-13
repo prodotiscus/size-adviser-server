@@ -65,7 +65,7 @@ def _internal_get_brands(gender_int):
     if gender_int == -1:
         raise SAInternalError("run abort 400")
     return {
-        "listBrands": ComputationsDbSession().get_all_brands(gender_int)
+        "listBrands": sorted(ComputationsDbSession().get_all_brands(gender_int))
     }
 
 
