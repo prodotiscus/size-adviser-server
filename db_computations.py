@@ -15,6 +15,11 @@ def brand_of_file(filename, dirname="sheets/brands"):
     return all_rows[1][0].value
 
 
+def gd_patches(size_value):
+    size_value = size_value.rstrip(".0")
+    return size_value
+
+
 def sheet_records(dirname="sheets/brands", mgender=0):
     files = os.listdir(dirname)
     for flname in files:
@@ -35,6 +40,7 @@ def sheet_records(dirname="sheets/brands", mgender=0):
                     continue
                 if c.value:
                     record[-1][systems[j]] = c.cached_value if c.cached_value else str(c.value)
+                    record[-1][systems[j]] = gd_patches(record[-1][systems[j]])
             record[-1] = json.dumps(record[-1])
             yield record
 
