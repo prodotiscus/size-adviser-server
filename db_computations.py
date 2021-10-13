@@ -16,7 +16,8 @@ def brand_of_file(filename, dirname="sheets/brands"):
 
 
 def gd_patches(size_value):
-    size_value = size_value.rstrip(".0")
+    if size_value.endswith(".0"):
+        size_value = size_value.replace(".0", "")
     return size_value
 
 
