@@ -16,7 +16,6 @@ class Recommend:
         self.BS_Equiv = []
         for key, grouper in groupby(self.fd, key=lambda t: t[0]):
             f = {}
-            dp = []
             for _tuple in grouper:
                 _, B, S, F = _tuple
                 if B in dp:
@@ -26,7 +25,7 @@ class Recommend:
                 f[F].append((B, S))
             for Fk, tuples in f.items():
                 if len(tuples) >= 2:
-                    self.BS_Equiv.extend([rel for rel in permutations(tuples, 2)])
+                    self.BS_Equiv.extend([rel for rel in permutations(tuples, 2) if rel[0][0] != rel[1][0]])
 
     def user_base(self, user_id):
         for key, grouper in groupby(self.fd, key=lambda t: t[0]):
@@ -43,7 +42,7 @@ class Recommend:
             return None
         Srt = []
         for Rel in E:
-            Bw_Ts = list(filter(lambda _tuple: _tuple[1] == Rel[1][0], R_M1))
+            Bw_Ts = list(filter(lambda _tuple: _tuple[1] == Rel[1][0] and _tuple[2] == Rel[1][1], R_M1))
             if not Bw_Ts:
                 continue
             Bw_Tuple = min(Bw_Ts, key=lambda k: abs(3 - k[3]))
