@@ -166,7 +166,7 @@ def _app_data_for_gender():
     best_fits = f.get_user_best_fits()
 
     def _gson_conv(size_dict: Dict[str, str]) -> List[Dict[str, str]]:
-        return [{"standard": k, "size": v} for (k, v) in size_dict.items()]
+        return [{"standard": k if k != "CM" else "Cm", "size": v} for (k, v) in size_dict.items()]
 
     recommended = {}
     for brand in brands:
