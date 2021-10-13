@@ -35,6 +35,8 @@ def sheet_records(dirname="sheets/brands", mgender=0):
         for e, m in enumerate(columns[2:]):
             systems[e + 2] = m
         for row in all_rows[1:]:
+            if row[0].value is None:
+                continue
             record = [row[0].value, mgender if row[1].value == "m" else int(not mgender), {}]
             for j, c in enumerate(row):
                 if j < 2:
