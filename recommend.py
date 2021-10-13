@@ -18,8 +18,6 @@ class Recommend:
             f = {}
             for _tuple in grouper:
                 _, B, S, F = _tuple
-                if B in dp:
-                    continue
                 if F not in f:
                     f[F] = []
                 f[F].append((B, S))
