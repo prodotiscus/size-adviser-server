@@ -62,9 +62,13 @@ class ComputationsDbSession:
     def __init__(self):
         self.db = sqlite3.connect("../DATABASES/computations.sqlite3")
         self.c = self.db.cursor()
+    
+    def norm_case(self, brand_titlecased):
+        query = f"SELECT brand FROM from_sheets WHERE brand='{brand_titlecased}' COLLATE NOCASE limit 1"
+        return self.c.execute(query).fetchone()[0]
 
     def get_brand_data(self, brand, gender_int):
-        query = f"SELECT systems FROM from_sheets WHERE brand='{brand}' AND gender={gender_int}"
+        query = f"SELECT systems FROM from_sheets WHERE brand='{brand}' COLLATE NOCASE AND gender={gender_int}"
         db_brand_data = self.c.execute(query).fetchall()
         data_dict = {}
         for row in db_brand_data:
