@@ -99,7 +99,7 @@ def recommend_size(brand, gender_int, user_id, system=None):
     alg2 = rcm.alg2(user_id, gender_int, brand)
     if alg2:
         return alg2.split(" ", 1)[::-1]
-    return rcm.find_nearest_to(brand, gender_int, 7.0)
+    return rcm.find_nearest_to(brand, gender_int, 7.0).split(" ", 1)[::-1]
 
 
 def _internal_recommended_size(brand, gender_int, user_id):
