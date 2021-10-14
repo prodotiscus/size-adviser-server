@@ -34,7 +34,7 @@ def test_case_1() -> None:
   assert rcm.alg1("aef1", "Adidas") is None
   assert rcm.alg1("aef2", "Adidas") is None
   assert rcm.alg1("aef5", "Adidas") is None
-  assert rcm.alg2("aef1", "Adidas") is None
-  assert rcm.alg2("aef2", "Adidas") is None
-  assert rcm.alg2("aef5", "Adidas") is None
+  assert rcm.alg2("aef1", 0, "Adidas") is None
+  assert rcm.alg2("aef2", 0, "Adidas") is None
+  assert rcm.alg2("aef5", 0, "Adidas") is None
   
