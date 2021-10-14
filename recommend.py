@@ -5,13 +5,19 @@ import sqlite3
 
 
 class Recommend:
-    def __init__(self, gender):
-        self.personal = sqlite3.connect("../DATABASES/personal.sqlite3")
+    def __init__(self, 
+                 gender,
+                 personal_sqlite_file="../DATABASES/personal.sqlite3",
+                 comp_sqlite_file="../DATABASES/computations.sqlite3",
+                 fitting_table="fitting",
+                 firebase_table="firebase_accounts"
+                ):
+        self.personal = sqlite3.connect(personal_sqlite_file)
         self.curs = self.personal.cursor()
-        self.computations = sqlite3.connect("../DATABASES/computations.sqlite3")
+        self.computations = sqlite3.connect(comp_sqlite_file)
         self.c_curs = self.computations.cursor()
         self.fd = self.curs.execute(
-            f"SELECT user_id, brand, size, fit_value FROM fitting WHERE (SELECT user_gender FROM firebase_accounts WHERE firebase_uid=user_id)={gender}"
+            f"SELECT user_id, brand, size, fit_value FROM {fitting_table} WHERE (SELECT user_gender FROM {firebase_table} WHERE firebase_uid=user_id)={gender}"
         ).fetchall()
         self.BS_Equiv = []
         for key, grouper in groupby(self.fd, key=lambda t: t[0]):
