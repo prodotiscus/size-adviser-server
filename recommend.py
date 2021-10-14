@@ -97,7 +97,7 @@ class Recommend:
                 if 2 <= v <= 4:
                     x = self.size_str_to_int(Rel[0][0], Rel[0][1])
                     y = self.size_str_to_int(Rel[1][0], Rel[1][1])
-                S_f = (x * y) / self.size_str_to_int(Bw, j)
+                S_f = (x * self.size_str_to_int(Bw, j)) / y
                 Srt.append((abs(3 - v), S_f))
             except AttributeError:
                 pass
