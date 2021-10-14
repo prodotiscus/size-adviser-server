@@ -33,7 +33,7 @@ def test_case_1() -> None:
     """alg1 and alg2 cannot say something useful to us now"""
     assert rcm.alg0("aef1", "Adidas") == "10 US"
     assert rcm.alg0("aef2", "Adidas") == "6 US"
-    assert rcm.alg0("aef3", "Adidas") == "17 US"
+    assert rcm.alg0("aef5", "Adidas") == "17 US"
     assert rcm.alg1("aef1", "Adidas") is None
     assert rcm.alg1("aef2", "Adidas") is None
     assert rcm.alg1("aef5", "Adidas") is None
