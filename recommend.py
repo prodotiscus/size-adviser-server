@@ -38,6 +38,13 @@ class Recommend:
 
     def get_E(self, B_a):
         return list(filter(lambda rel: rel[0][0] == B_a, self.BS_Equiv))
+    
+    def alg0(self, user_id, B_a):
+        D_M1 = self.user_base(user_id)
+        try:
+            return min(filter(lambda x: x[1] == B_a and 2 <= x[3] <= 4, D_M1), key=lambda x: abs(3-x[3]))[2]
+        except ValueError:
+            return None
 
     def alg1(self, user_id, B_a):
         E = self.get_E(B_a)
@@ -46,7 +53,8 @@ class Recommend:
             return None
         Srt = []
         for Rel in E:
-            Bw_Ts = list(filter(lambda _tuple: _tuple[1] == Rel[1][0] and _tuple[2] == Rel[1][1], R_M1))
+            Bw_Ts = list(filter(lambda _tuple: _tuple[1] == Rel[1][0] and \
+                                self.any_to_US(_tuple[1], _tuple[2]) == self.any_to_US(Rel[1][0], Rel[1][1]), R_M1))
             if not Bw_Ts:
                 continue
             Bw_Tuple = min(Bw_Ts, key=lambda k: abs(3 - k[3]))
@@ -96,13 +104,26 @@ class Recommend:
                 if 2 <= v <= 4:
                     x = self.size_str_to_int(Rel[0][0], Rel[0][1])
                     y = self.size_str_to_int(Rel[1][0], Rel[1][1])
-                S_f = (x * y) / self.size_str_to_int(Bw, j)
+                S_f = (x * self.size_str_to_int(Bw, j)) / y
                 Srt.append((abs(3 - v), S_f))
             except AttributeError:
                 pass
         if not Srt:
             return None
         return self.find_nearest_to(B_a, gender_int, min(Srt, key=lambda k: k[0])[1])
+    
+    def d_m1_to_US_float(self, user_id):
+        for _tuple in self.user_base(user_id):
+            c = self.any_to_US(_tuple[1], _tuple[2])
+            if not c:
+                continue
+            yield _tuple[0], _tuple[1], float(c.rsplit(" ", 1)[0]), _tuple[3]
+    
+    def alg3(self, user_id, gender_int, B_a):
+        D_M1 = self.user_base(user_id)
+        a = sum([(0.5**abs(3-x[3]))*x[2] for x in self.d_m1_to_US_float(D_M1)])
+        b = sum([(0.5**abs(3-x[3])) for x in self.d_m1_to_US_float(D_M1)])
+        return self.find_nearest_to(B_a, gender_int, a/b)
 
     def terminate(self):
         self.personal.close()
