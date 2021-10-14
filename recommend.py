@@ -42,7 +42,7 @@ class Recommend:
     def alg0(self, user_id, B_a):
         D_M1 = self.user_base(user_id)
         try:
-            return min(filter(lambda x: x[1] == B_a, D_M1), key=lambda x: abs(3-x[3]))[2]
+            return min(filter(lambda x: x[1] == B_a and 2 <= x[3] <= 4, D_M1), key=lambda x: abs(3-x[3]))[2]
         except ValueError:
             return None
 
