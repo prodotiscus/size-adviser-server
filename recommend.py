@@ -112,8 +112,8 @@ class Recommend:
             return None
         return self.find_nearest_to(B_a, gender_int, min(Srt, key=lambda k: k[0])[1])
     
-    def d_m1_to_US_float(self, user_id):
-        for _tuple in self.user_base(user_id):
+    def d_m1_to_US_float(self, D_M1):
+        for _tuple in D_M1:
             c = self.any_to_US(_tuple[1], _tuple[2])
             if not c:
                 continue

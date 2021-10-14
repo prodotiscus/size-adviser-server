@@ -67,5 +67,23 @@ def test_case_2() -> None:
     assert rcm.alg1("aef2", "Converse") in ["27 CM", "9 US"]
     assert rcm.alg2("aef5", 0, "Converse") == "10 US"
     assert [_ for _ in filter(lambda el: el[0] == ("Converse", "27 CM") and el[1] == ("Nike", "41 EU"), rcm.get_E("Converse"))]
-    
-  
+
+
+@pytest.mark.mypy_testing
+@pytest.mark.rcm
+def test_case_3() -> None:
+    rcm = recommend.Recommend(0, "test_data/sample_db_case3.sqlite3")
+    assert rcm.alg0("aef1", "Puma") is None
+    assert rcm.alg1("aef1", "Puma") is None
+    assert rcm.alg2("aef1", 0, "Puma") is None
+    assert rcm.alg3("aef1", 0, "Puma") == "6.5 US"
+
+
+@pytest.mark.mypy_testing
+@pytest.mark.rcm
+def test_case_4() -> None:
+    rcm = recommend.Recommend(0, "test_data/sample_db_case4.sqlite3")
+    assert rcm.alg0("aef1", "Puma") is None
+    assert rcm.alg1("aef1", "Puma") is None
+    assert rcm.alg2("aef1", 0, "Puma") is None
+    assert rcm.alg3("aef1", 0, "Puma") is None
