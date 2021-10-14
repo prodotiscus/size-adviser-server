@@ -46,7 +46,8 @@ class Recommend:
             return None
         Srt = []
         for Rel in E:
-            Bw_Ts = list(filter(lambda _tuple: _tuple[1] == Rel[1][0] and _tuple[2] == Rel[1][1], R_M1))
+            Bw_Ts = list(filter(lambda _tuple: _tuple[1] == Rel[1][0] and \
+                                self.any_to_US(_tuple[1], _tuple[2]) == self.any_to_US(Rel[1][0], Rel[1][1]), R_M1))
             if not Bw_Ts:
                 continue
             Bw_Tuple = min(Bw_Ts, key=lambda k: abs(3 - k[3]))
