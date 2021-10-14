@@ -38,6 +38,13 @@ class Recommend:
 
     def get_E(self, B_a):
         return list(filter(lambda rel: rel[0][0] == B_a, self.BS_Equiv))
+    
+    def alg0(self, user_id, B_a):
+        D_M1 = self.user_base(user_id)
+        try:
+            return min(filter(lambda x: x[1] == B_a, D_M1), key=lambda x: abs(3-x[3]))
+        except ValueError:
+            return None
 
     def alg1(self, user_id, B_a):
         E = self.get_E(B_a)
