@@ -128,6 +128,8 @@ class Recommend:
             return None
         a = sum([(0.5**abs(3-x[3]))*x[2] for x in self.d_m1_to_US_float(D_M1)])
         b = sum([(0.5**abs(3-x[3])) for x in self.d_m1_to_US_float(D_M1)])
+        if a == 0 or b == 0:
+            return None
         return self.find_nearest_to(B_a, gender_int, a/b)
 
     def terminate(self):
