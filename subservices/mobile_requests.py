@@ -95,8 +95,7 @@ def recommend_size(brand, gender_int, user_id, system=None):
     rcm = recommend.Recommend(gender_int)
     alg0 = rcm.alg0(user_id, brand)
     if alg0:
-        _, b, s, f = alg0
-        return s.rsplit(" ", 1)[::-1]
+        return alg0.rsplit(" ", 1)[::-1]
     alg1 = rcm.alg1(user_id, brand)
     if alg1:
         return alg1.rsplit(" ", 1)[::-1]
