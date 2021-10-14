@@ -103,7 +103,7 @@ class ComputationsDbSession:
         try:
             return json.loads(self.c.execute(query).fetchone()[0])
         except TypeError:
-            raise ValueError(f"Failed on SQL query: {query}")
+            return {standard: size}
     
     def systems_for_gender(self, gender_int):
         query = f"SELECT brand, systems FROM from_sheets WHERE gender={gender_int}"
