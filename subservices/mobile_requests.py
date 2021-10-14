@@ -65,7 +65,7 @@ def _internal_get_brands(gender_int):
     if gender_int == -1:
         raise SAInternalError("run abort 400")
     return {
-        "listBrands": ComputationsDbSession().get_all_brands(gender_int)
+        "listBrands": sorted(ComputationsDbSession().get_all_brands(gender_int))
     }
 
 
@@ -95,11 +95,11 @@ def recommend_size(brand, gender_int, user_id, system=None):
     rcm = recommend.Recommend(gender_int)
     alg1 = rcm.alg1(user_id, brand)
     if alg1:
-        return alg1.split(" ", 1)[::-1]
+        return alg1.rsplit(" ", 1)[::-1]
     alg2 = rcm.alg2(user_id, gender_int, brand)
     if alg2:
-        return alg2.split(" ", 1)[::-1]
-    return ["US", "7"] # If cannot recommend anything, we'll say this
+        return alg2.rsplit(" ", 1)[::-1]
+    return rcm.find_nearest_to(brand, gender_int, 7.0).rsplit(" ", 1)[::-1]
 
 
 def _internal_recommended_size(brand, gender_int, user_id):
@@ -136,7 +136,12 @@ def _app_recommended_size():
 def _app_bound_load():
     """Used in SizeAdviserApi"""
     brand = request.args.get("brand", None)
-    gender_int = int(request.args.get("gender_int", 0))
+    if brand:
+        brand = ComputationsDbSession().norm_case(brand)
+    gender_int = request.args.get("gender_int", None)
+    if gender_int is None:
+        gender_int = request.args.get("user_gender", None)
+    gender_int = int(gender_int)
     user_id = request.args.get("user_id", None)
     return jsonify({
         "get_brands": _internal_get_brands(gender_int),
@@ -161,7 +166,7 @@ def _app_data_for_gender():
     best_fits = f.get_user_best_fits()
 
     def _gson_conv(size_dict: Dict[str, str]) -> List[Dict[str, str]]:
-        return [{"standard": k, "size": v} for (k, v) in size_dict.items()]
+        return [{"standard": k if k != "CM" else "Cm", "size": v} for (k, v) in size_dict.items()]
 
     recommended = {}
     for brand in brands:

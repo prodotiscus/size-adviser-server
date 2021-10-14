@@ -15,6 +15,12 @@ def brand_of_file(filename, dirname="sheets/brands"):
     return all_rows[1][0].value
 
 
+def gd_patches(size_value):
+    if size_value.endswith(".0"):
+        size_value = size_value.replace(".0", "")
+    return size_value
+
+
 def sheet_records(dirname="sheets/brands", mgender=0):
     files = os.listdir(dirname)
     for flname in files:
@@ -29,12 +35,15 @@ def sheet_records(dirname="sheets/brands", mgender=0):
         for e, m in enumerate(columns[2:]):
             systems[e + 2] = m
         for row in all_rows[1:]:
+            if row[0].value is None:
+                continue
             record = [row[0].value, mgender if row[1].value == "m" else int(not mgender), {}]
             for j, c in enumerate(row):
                 if j < 2:
                     continue
                 if c.value:
                     record[-1][systems[j]] = c.cached_value if c.cached_value else str(c.value)
+                    record[-1][systems[j]] = gd_patches(record[-1][systems[j]])
             record[-1] = json.dumps(record[-1])
             yield record
 
@@ -53,9 +62,13 @@ class ComputationsDbSession:
     def __init__(self):
         self.db = sqlite3.connect("../DATABASES/computations.sqlite3")
         self.c = self.db.cursor()
+    
+    def norm_case(self, brand_titlecased):
+        query = f"SELECT brand FROM from_sheets WHERE brand='{brand_titlecased}' COLLATE NOCASE limit 1"
+        return self.c.execute(query).fetchone()[0]
 
     def get_brand_data(self, brand, gender_int):
-        query = f"SELECT systems FROM from_sheets WHERE brand='{brand}' AND gender={gender_int}"
+        query = f"SELECT systems FROM from_sheets WHERE brand='{brand}' COLLATE NOCASE AND gender={gender_int}"
         db_brand_data = self.c.execute(query).fetchall()
         data_dict = {}
         for row in db_brand_data:
@@ -86,8 +99,11 @@ class ComputationsDbSession:
             standard = "CM"
         query = "SELECT systems FROM from_sheets WHERE brand='%s' AND gender=%d " \
                 "AND json_extract(systems, '$.%s')='%s'" % (brand, gender_int, standard, size)
-
-        return json.loads(self.c.execute(query).fetchone()[0])
+        
+        try:
+            return json.loads(self.c.execute(query).fetchone()[0])
+        except TypeError:
+            raise ValueError(f"Failed on SQL query: {query}")
     
     def systems_for_gender(self, gender_int):
         query = f"SELECT brand, systems FROM from_sheets WHERE gender={gender_int}"

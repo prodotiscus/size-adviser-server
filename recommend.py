@@ -5,28 +5,31 @@ import sqlite3
 
 
 class Recommend:
-    def __init__(self, gender):
-        self.personal = sqlite3.connect("../DATABASES/personal.sqlite3")
+    def __init__(self, 
+                 gender,
+                 personal_sqlite_file="../DATABASES/personal.sqlite3",
+                 comp_sqlite_file="../DATABASES/computations.sqlite3",
+                 fitting_table="fitting",
+                 firebase_table="firebase_accounts"
+                ):
+        self.personal = sqlite3.connect(personal_sqlite_file)
         self.curs = self.personal.cursor()
-        self.computations = sqlite3.connect("../DATABASES/computations.sqlite3")
+        self.computations = sqlite3.connect(comp_sqlite_file)
         self.c_curs = self.computations.cursor()
         self.fd = self.curs.execute(
-            f"SELECT user_id, brand, size, fit_value FROM fitting WHERE (SELECT user_gender FROM firebase_accounts WHERE firebase_uid=user_id)={gender}"
+            f"SELECT user_id, brand, size, fit_value FROM {fitting_table} WHERE (SELECT user_gender FROM {firebase_table} WHERE firebase_uid=user_id)={gender}"
         ).fetchall()
         self.BS_Equiv = []
         for key, grouper in groupby(self.fd, key=lambda t: t[0]):
             f = {}
-            dp = []
             for _tuple in grouper:
                 _, B, S, F = _tuple
-                if B in dp:
-                    continue
                 if F not in f:
                     f[F] = []
                 f[F].append((B, S))
             for Fk, tuples in f.items():
                 if len(tuples) >= 2:
-                    self.BS_Equiv.extend([rel for rel in permutations(tuples, 2)])
+                    self.BS_Equiv.extend([rel for rel in permutations(tuples, 2) if rel[0][0] != rel[1][0]])
 
     def user_base(self, user_id):
         for key, grouper in groupby(self.fd, key=lambda t: t[0]):
@@ -43,7 +46,7 @@ class Recommend:
             return None
         Srt = []
         for Rel in E:
-            Bw_Ts = list(filter(lambda _tuple: _tuple[1] == Rel[1][0], R_M1))
+            Bw_Ts = list(filter(lambda _tuple: _tuple[1] == Rel[1][0] and _tuple[2] == Rel[1][1], R_M1))
             if not Bw_Ts:
                 continue
             Bw_Tuple = min(Bw_Ts, key=lambda k: abs(3 - k[3]))
@@ -89,11 +92,14 @@ class Recommend:
                 continue
             Bw_Tuple = min(Ts, key=lambda k: abs(3 - k[3]))
             _, Bw, j, v = Bw_Tuple
-            if 2 <= v <= 4:
-                x = self.size_str_to_int(Rel[0][0], Rel[0][1])
-                y = self.size_str_to_int(Rel[1][0], Rel[1][1])
-            S_f = (x * y) / self.size_str_to_int(Bw, j)
-            Srt.append((abs(3 - v), S_f))
+            try:
+                if 2 <= v <= 4:
+                    x = self.size_str_to_int(Rel[0][0], Rel[0][1])
+                    y = self.size_str_to_int(Rel[1][0], Rel[1][1])
+                S_f = (x * y) / self.size_str_to_int(Bw, j)
+                Srt.append((abs(3 - v), S_f))
+            except AttributeError:
+                pass
         if not Srt:
             return None
         return self.find_nearest_to(B_a, gender_int, min(Srt, key=lambda k: k[0])[1])
