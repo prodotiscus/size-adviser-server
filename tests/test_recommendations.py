@@ -37,4 +37,16 @@ def test_case_1() -> None:
   assert rcm.alg2("aef1", 0, "Adidas") is None
   assert rcm.alg2("aef2", 0, "Adidas") is None
   assert rcm.alg2("aef5", 0, "Adidas") is None
+
+
+@pytest.mark.mypy_testing
+@pytest.mark.rcm
+def test_case_1b() -> None:
+    rcm = recommend.Recommend(0, "test_data/sample_db_case1.sqlite3")
+    assert rcm.alg1("aef1", "Adidas") is None
+    assert rcm.alg1("aef2", "Adidas") is None
+    assert rcm.alg1("aef5", "Adidas") is None
+    assert rcm.alg2("aef1", 0, "Adidas") is None
+    assert rcm.alg2("aef2", 0, "Adidas") is None
+    assert rcm.alg2("aef5", 0, "Adidas") is None
   
