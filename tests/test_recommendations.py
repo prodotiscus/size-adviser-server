@@ -62,7 +62,6 @@ def test_case_2() -> None:
     rcm = recommend.Recommend(0, "test_data/sample_db_case2.sqlite3")
     assert rcm.get_E("Nike") == [(('Nike', '41 EU'), ('Converse', '27 CM'))]
     assert rcm.alg1("aef2", "Converse") in ["27 CM", "9 US"]
-    assert rcm.alg1("aef2", "Converse") is None
     assert rcm.alg2("aef5", 0, "Converse") == "10 US"
     assert [_ for _ in filter(lambda el: el[0] == ("Converse", "27 CM") and el[1] == ("Nike", "41 EU"), rcm.get_E("Converse"))]
     
