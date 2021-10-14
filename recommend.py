@@ -35,12 +35,15 @@ class Recommend:
         for key, grouper in groupby(self.fd, key=lambda t: t[0]):
             if key == user_id:
                 return [_tuple for _tuple in grouper]
+        return []
 
     def get_E(self, B_a):
         return list(filter(lambda rel: rel[0][0] == B_a, self.BS_Equiv))
     
     def alg0(self, user_id, B_a):
         D_M1 = self.user_base(user_id)
+        if not D_M1:
+            return None
         try:
             return min(filter(lambda x: x[1] == B_a and 2 <= x[3] <= 4, D_M1), key=lambda x: abs(3-x[3]))[2]
         except ValueError:
@@ -121,6 +124,8 @@ class Recommend:
     
     def alg3(self, user_id, gender_int, B_a):
         D_M1 = self.user_base(user_id)
+        if not D_M1:
+            return None
         a = sum([(0.5**abs(3-x[3]))*x[2] for x in self.d_m1_to_US_float(D_M1)])
         b = sum([(0.5**abs(3-x[3])) for x in self.d_m1_to_US_float(D_M1)])
         return self.find_nearest_to(B_a, gender_int, a/b)
