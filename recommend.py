@@ -111,6 +111,19 @@ class Recommend:
         if not Srt:
             return None
         return self.find_nearest_to(B_a, gender_int, min(Srt, key=lambda k: k[0])[1])
+    
+    def d_m1_to_US_float(self, user_id):
+        for _tuple in self.user_base(user_id):
+            c = self.any_to_US(_tuple[1], _tuple[2])
+            if not c:
+                continue
+            yield _tuple[0], _tuple[1], float(c.rsplit(" ", 1)[0]), _tuple[3]
+    
+    def alg3(self, user_id, gender_int, B_a):
+        D_M1 = self.user_base(user_id)
+        a = sum([(0.5**abs(3-x[3]))*x[2] for x in self.d_m1_to_US_float(D_M1)])
+        b = sum([(0.5**abs(3-x[3])) for x in self.d_m1_to_US_float(D_M1)])
+        return self.find_nearest_to(B_a, gender_int, a/b)
 
     def terminate(self):
         self.personal.close()
